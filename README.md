@@ -80,3 +80,9 @@ The command checks provider capabilities before making model calls. It stops if 
 ## Jev decisions
 
 The gateway exposes `decide()` for Noul, Choice, and Score questions. It uses the alpha Decisions API with a pinned TypeSafe provider, ZDR and data-collection denial. Each attempt is recorded in `llm_calls`. Jev requests are not cached. The gateway does not enforce the OpenRouter monthly budget. Long state over 32,000 UTF-8 bytes is flagged in the returned result. See [the contract](docs/jev-contract.md) and [evaluation note](docs/jev-evaluation.md).
+
+### Cache and agent loop verification
+
+Run `TEST_DATABASE_URL=postgres://... bun run --filter @open-foresight/llm test` against a migrated local PostgreSQL database. The fixture server tests two identical generation calls, one upstream request, and tool-call audit records. It also prints three timings for 100 persistent cache hits and checks the median against five seconds. The trunk baseline is not applicable because it has no cache-hit path.
+
+`runAgent` budgets output tokens. Each turn reserves three times `maxOutputTokens` before calling the gateway, covering the initial request and the bounded repair and transport retry. The provider must honor the output cap. This is not a monetary or input-token limit. Tool implementations must read only the local PostgreSQL store. The API cannot prevent a caller from implementing a tool that accesses the network. Identical requests are deduplicated within one gateway instance; separate processes can issue simultaneous misses.

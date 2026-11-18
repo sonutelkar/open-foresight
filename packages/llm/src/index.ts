@@ -2,7 +2,9 @@ import { createHash } from 'node:crypto';
 import OpenAI from 'openai';
 import { z, type ZodTypeAny } from 'zod';
 import { zodToJsonSchema } from 'zod-to-json-schema';
-import { llmCalls } from '@open-foresight/db';
+import { llmCalls, llmCache } from '@open-foresight/db';
+import { eq } from 'drizzle-orm';
+export * from './loop.js';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
 const registrySchema = z.array(z.object({
@@ -59,10 +61,10 @@ const completionSchema = z.object({
   }).passthrough().optional(),
 }).passthrough();
 
-type GatewayOptions = { apiKey: string; models: ModelConfig[]; db: PostgresJsDatabase; baseURL?: string };
+type GatewayOptions = { apiKey: string; models: ModelConfig[]; db: PostgresJsDatabase; baseURL?: string; concurrency?: number };
 type StructuredRequest<T extends ZodTypeAny> = {
   runId: string; role: string; promptVersion: string; system: string; user: string;
-  schemaName: string; schema: T; inputEvidenceIds: string[]; seed?: number; maxOutputTokens?: number;
+  schemaName: string; schema: T; inputEvidenceIds: string[]; seed?: number; maxOutputTokens?: number; onAudit?: (id: string) => void;
 };
 
 const questionSchema = z.discriminatedUnion('type', [
@@ -85,13 +87,39 @@ function requestHash(params: unknown): string {
   return createHash('sha256').update(JSON.stringify(params)).digest('hex');
 }
 
-async function writeAudit(db: PostgresJsDatabase, values: typeof llmCalls.$inferInsert): Promise<void> {
-  await db.insert(llmCalls).values(values);
+async function writeAudit(db: PostgresJsDatabase, values: typeof llmCalls.$inferInsert): Promise<string> {
+  const [record] = await db.insert(llmCalls).values(values).returning({ id: llmCalls.id });
+  if (!record) throw new Error('Could not record model call');
+  return record.id;
 }
 
 /** Select one eligible provider for each configured model before accepting requests. */
 export async function createGateway(options: GatewayOptions) {
   const registry = registrySchema.parse(options.models);
+  const concurrency = options.concurrency ?? 4;
+  if (!Number.isSafeInteger(concurrency) || concurrency < 1) throw new Error('Invalid concurrency limit');
+  let active = 0;
+  const waiting: Array<() => void> = [];
+  const inFlight = new Map<string, Promise<void>>();
+  async function serializeKey<T>(key: string, fn: () => Promise<T>): Promise<T> {
+    const previous = inFlight.get(key);
+    let release!: () => void;
+    const current = new Promise<void>(resolve => { release = resolve; });
+    inFlight.set(key, current);
+    if (previous) await previous;
+    try { return await fn(); } finally {
+      release();
+      if (inFlight.get(key) === current) inFlight.delete(key);
+    }
+  }
+  async function limited<T>(fn: () => Promise<T>): Promise<T> {
+    if (active >= concurrency) await new Promise<void>(resolve => waiting.push(resolve));
+    else active++;
+    try { return await fn(); } finally {
+      const next = waiting.shift();
+      if (next) next(); else active--;
+    }
+  }
   if (!options.apiKey.trim()) throw new Error('OpenRouter API key is required');
   const client = new OpenAI({ apiKey: options.apiKey, baseURL: options.baseURL ?? 'https://openrouter.ai/api/v1', maxRetries: 0 });
   const decisionsClient = new OpenAI({ apiKey: options.apiKey, baseURL: (options.baseURL ?? 'https://openrouter.ai/api/v1').replace(/\/v1\/?$/, ''), maxRetries: 0 });
@@ -143,7 +171,7 @@ export async function createGateway(options: GatewayOptions) {
         let response: z.infer<typeof decisionResponseSchema> | undefined;
         let failure: unknown;
         try {
-          raw = await decisionsClient.post('/alpha/decisions', { body: params });
+          raw = await limited(() => decisionsClient.post('/alpha/decisions', { body: params }));
           response = decisionResponseSchema.parse(raw);
           for (const [name, question] of Object.entries(parsed.questions)) {
             const answer = response.answers[name];
@@ -173,47 +201,69 @@ export async function createGateway(options: GatewayOptions) {
         { role: 'system', content: input.system }, { role: 'user', content: input.user },
       ];
       const schema = zodToJsonSchema(input.schema, { $refStrategy: 'none' });
-      for (let attempt = 0; attempt < 2; attempt++) {
-        const params = {
-          model: config.model, ...(selected.temperature ? { temperature: 0 } : {}),
-          ...(input.seed === undefined ? {} : { seed: input.seed }),
-          ...tokenLimit, messages: [...messages],
-          response_format: { type: 'json_schema' as const, json_schema: { name: input.schemaName, strict: true, schema } },
-          provider: { order: [selected.tag], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true },
-          usage: { include: true },
-        };
-        const hash = requestHash(params);
-        const started = performance.now();
-        let raw: unknown;
-        let failure: string | undefined;
-        let value: z.infer<T> | undefined;
-        try {
-          raw = await client.chat.completions.create(params);
-          const response = completionSchema.parse(raw);
-          const content = response.choices[0]?.message.content;
-          if (content === null || content === undefined) throw new Error('Model returned no content');
-          value = input.schema.parse(JSON.parse(content));
-        } catch (error) {
-          failure = error instanceof Error ? error.message : 'Unknown model call error';
+      const cacheKey = requestHash({ capability: 'generate', role: input.role, promptVersion: input.promptVersion, inputEvidenceIds: input.inputEvidenceIds, model: config.model, provider: selected.tag, temperature: selected.temperature ? 0 : null, seed: input.seed ?? null, tokenLimit, messages, schemaName: input.schemaName, schema });
+      return serializeKey(cacheKey, async () => {
+        const [cached] = await options.db.select().from(llmCache).where(eq(llmCache.requestHash, cacheKey));
+        if (cached) {
+          const value = input.schema.parse(cached.response);
+          const auditId = await writeAudit(options.db, { runId: input.runId, role: input.role, promptVersion: input.promptVersion, model: config.model, provider: selected.tag, params: { cacheHit: true }, requestHash: cacheKey, inputEvidenceIds: input.inputEvidenceIds, response: cached.response, cost: '0', latencyMs: 0 });
+          input.onAudit?.(auditId);
+          return value;
         }
-        const latencyMs = Math.round(performance.now() - started);
-        const parsed = completionSchema.safeParse(raw);
-        const response = parsed.success ? parsed.data : undefined;
-        await writeAudit(options.db, {
-          runId: input.runId, role: input.role, promptVersion: input.promptVersion,
-          model: response?.model ?? config.model, provider: response?.provider ?? null,
-          params, requestHash: hash, inputEvidenceIds: input.inputEvidenceIds,
-          response: raw ?? null, error: failure ? { message: failure } : null,
-          tokens: response?.usage ?? null, cachedTokens: response?.usage?.prompt_tokens_details?.cached_tokens ?? null,
-          cost: response?.usage?.cost?.toString() ?? null, latencyMs,
-        });
-        if (!failure) return value;
-        // Only malformed model outputs receive a repair request; transport failures do not.
-        if (!response || attempt === 1) throw new Error(`Model call failed: ${failure}`);
-        messages.push({ role: 'assistant', content: response.choices[0]?.message.content ?? '' });
-        messages.push({ role: 'user', content: `Your previous response was invalid. Return corrected JSON matching the schema. Validation error: ${failure}` });
-      }
-      throw new Error('Model output repair failed');
+        let repairs = 0;
+        let retries = 0;
+        for (;;) {
+          const params = {
+            model: config.model, ...(selected.temperature ? { temperature: 0 } : {}),
+            ...(input.seed === undefined ? {} : { seed: input.seed }),
+            ...tokenLimit, messages: [...messages],
+            response_format: { type: 'json_schema' as const, json_schema: { name: input.schemaName, strict: true, schema } },
+            provider: { order: [selected.tag], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true },
+            usage: { include: true },
+          };
+          const hash = requestHash(params);
+          const started = performance.now();
+          let raw: unknown;
+          let failure: string | undefined;
+          let failureCause: unknown;
+          let value: z.infer<T> | undefined;
+          let cacheValue: unknown;
+          try {
+            raw = await limited(() => client.chat.completions.create(params));
+            const response = completionSchema.parse(raw);
+            const content = response.choices[0]?.message.content;
+            if (content === null || content === undefined) throw new Error('Model returned no content');
+            cacheValue = JSON.parse(content);
+            value = input.schema.parse(cacheValue);
+          } catch (error) {
+            failureCause = error;
+            failure = error instanceof Error ? error.message : 'Unknown model call error';
+          }
+          const latencyMs = Math.round(performance.now() - started);
+          const parsed = completionSchema.safeParse(raw);
+          const response = parsed.success ? parsed.data : undefined;
+          const auditId = await writeAudit(options.db, {
+            runId: input.runId, role: input.role, promptVersion: input.promptVersion,
+            model: response?.model ?? config.model, provider: response?.provider ?? null,
+            params, requestHash: hash, inputEvidenceIds: input.inputEvidenceIds,
+            response: raw ?? null, error: failure ? { message: failure } : null,
+            tokens: response?.usage ?? null, cachedTokens: response?.usage?.prompt_tokens_details?.cached_tokens ?? null,
+            cost: response?.usage?.cost?.toString() ?? null, latencyMs,
+          });
+          input.onAudit?.(auditId);
+          if (!failure) {
+            await options.db.insert(llmCache).values({ requestHash: cacheKey, response: cacheValue }).onConflictDoNothing();
+            return value;
+          }
+          if (!response && failureCause instanceof OpenAI.APIError && (failureCause.status === 429 || (failureCause.status !== undefined && failureCause.status >= 500)) && retries++ === 0) {
+            await new Promise(resolve => setTimeout(resolve, 100));
+            continue;
+          }
+          if (!response || repairs++ >= 1) throw new Error(`Model call failed: ${failure}`);
+          messages.push({ role: 'assistant', content: response.choices[0]?.message.content ?? '' });
+          messages.push({ role: 'user', content: `Your previous response was invalid. Return corrected JSON matching the schema. Validation error: ${failure}` });
+        }
+      });
     },
   };
 }

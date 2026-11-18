@@ -37,7 +37,7 @@ export const llmCalls = pgTable('llm_calls', {
 export const toolCalls = pgTable('tool_calls', {
   id: uuid('id').defaultRandom().primaryKey(),
   llmCallId: uuid('llm_call_id').notNull().references(() => llmCalls.id),
-  tool: text('tool').notNull(), args: jsonb('args').notNull(), resultIds: jsonb('result_ids').notNull(),
+  tool: text('tool').notNull(), args: jsonb('args').notNull(), resultIds: jsonb('result_ids').notNull(), error: jsonb('error'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 

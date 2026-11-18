@@ -27,7 +27,7 @@ async function fixture(mode: 'ok' | 'retry' | 'missing' | 'no-zdr', kind: 'noul'
   server.listen(0, '127.0.0.1'); await once(server, 'listening');
   const address = server.address();
   if (!address || typeof address === 'string') throw new Error('Missing server address');
-  const values = vi.fn().mockResolvedValue(undefined);
+  const values = vi.fn((_value: { params: { provider: unknown }; requestHash: string }) => ({ returning: async () => [{ id: 'audit' }] }));
   const db = { insert: vi.fn(() => ({ values })) } as unknown as PostgresJsDatabase;
   const gateway = await createGateway({ apiKey: 'fixture', models: [{ role: 'designer', model: 'test/model' }], db, baseURL: `http://127.0.0.1:${address.port}/v1` });
   const input = { runId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', role: 'jev-evaluation', promptVersion: 'v1', model: 'typesafe/jev-1.14' as const, state: saved.request.state, questions: saved.request.questions, inputEvidenceIds: ['e1'] };
