@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "suiteId": "example",
+  "metric": "exact_match_rate",
+  "value": 0.8,
+  "minimum": 0.7,
+  "maxDrop": 0.1
+}

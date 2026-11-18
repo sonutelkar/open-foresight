@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "suiteId": "example",
+  "cases": [
+    { "id": "first", "expected": "yes", "actual": "yes" },
+    { "id": "second", "expected": "no", "actual": "no" },
+    { "id": "third", "expected": "unknown", "actual": "unknown" },
+    { "id": "fourth", "expected": "yes", "actual": "no" }
+  ]
+}
