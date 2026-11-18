@@ -1,0 +1,65 @@
+{
+  "request": {
+    "model": "typesafe/jev-1.14",
+    "state": "A fictional company builds grid battery storage systems.",
+    "questions": {
+      "score": {
+        "type": "score",
+        "instructions": "How directly related is the example to energy storage?",
+        "criteria": [
+          "Unrelated",
+          "Weakly related",
+          "Somewhat related",
+          "Mostly related",
+          "Directly related"
+        ]
+      }
+    },
+    "provider": {
+      "order": [
+        "typesafe"
+      ],
+      "allow_fallbacks": false,
+      "zdr": true,
+      "data_collection": "deny",
+      "require_parameters": true
+    }
+  },
+  "response": {
+    "model": "typesafe/jev-1.14-20261014",
+    "answers": {
+      "score": {
+        "type": "score",
+        "score": 4,
+        "legend": {
+          "0": "Unrelated",
+          "1": "Weakly related",
+          "2": "Somewhat related",
+          "3": "Mostly related",
+          "4": "Directly related"
+        },
+        "probabilities": {
+          "0": 0,
+          "1": 0,
+          "2": 0,
+          "3": 0,
+          "4": 1
+        },
+        "confidence": 1
+      }
+    },
+    "usage": {
+      "input_tokens": 334,
+      "output_tokens": 17,
+      "cost": 1.4028e-05,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 1.4028e-05,
+        "upstream_inference_prompt_cost": 1.4028e-05,
+        "upstream_inference_completions_cost": 0
+      }
+    },
+    "id": "gen-dec-1795028427-8R523kHdKKAD4tBwsqJk",
+    "provider": "TypeSafe"
+  }
+}

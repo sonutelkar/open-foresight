@@ -1,0 +1,52 @@
+{
+  "request": {
+    "model": "typesafe/jev-1.14",
+    "state": "A fictional company builds grid battery storage systems.",
+    "questions": {
+      "choice": {
+        "type": "choice",
+        "instructions": "Which topic fits best?",
+        "criteria": {
+          "storage": "Energy storage",
+          "retail": "Retail sales"
+        }
+      }
+    },
+    "provider": {
+      "order": [
+        "typesafe"
+      ],
+      "allow_fallbacks": false,
+      "zdr": true,
+      "data_collection": "deny",
+      "require_parameters": true
+    }
+  },
+  "response": {
+    "model": "typesafe/jev-1.14-20261014",
+    "answers": {
+      "choice": {
+        "type": "choice",
+        "choice": "storage",
+        "probabilities": {
+          "storage": 1,
+          "retail": 0
+        },
+        "confidence": 1
+      }
+    },
+    "usage": {
+      "input_tokens": 317,
+      "output_tokens": 32,
+      "cost": 1.3314e-05,
+      "is_byok": false,
+      "cost_details": {
+        "upstream_inference_cost": 1.3314e-05,
+        "upstream_inference_prompt_cost": 1.3314e-05,
+        "upstream_inference_completions_cost": 0
+      }
+    },
+    "id": "gen-dec-1795028426-5ca9dXOfHwmF6JFd8n0i",
+    "provider": "TypeSafe"
+  }
+}

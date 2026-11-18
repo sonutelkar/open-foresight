@@ -16,7 +16,7 @@ Build the foundation and a US pilot that takes a brief through KPI approval to a
 
 ## Landing order and dependencies
 
-PR 01 starts on trunk. PRs 02, 03, and 04 depend on 01. PR 05 depends on 02 and 03. PR 06 depends on 03 and 05. PR 07 depends on 02 and 03. PR 08 depends on 07. PR 09 depends on 07 and 08. PR 10 depends on 07 and the price-source decision. PR 11 depends on 08 and 09. PR 12 depends on 05, 06, and 07. PR 13 depends on 09, 11, and 12. PR 14 depends on 03, 07, and 12. PR 15 depends on 10, 13, and 14. PR 16 depends on 14 and 15. PR 17 depends on 04 and 16 plus the pilot and live-gate decisions. Dependencies may branch independently from the indicated landed PRs. Land in numeric order unless the dependencies and shared files are reconciled.
+PR 01 starts on trunk. PRs 02, 03, and 04 depend on 01. PR 05 depends on 02 and 03. PR 05b depends on 05. PR 06 depends on 03 and 05. PR 07 depends on 02 and 03. PR 08 depends on 07. PR 09 depends on 07 and 08. PR 10 depends on 07 and the price-source decision. PR 11 depends on 08 and 09. PR 11b depends on 05b and 11. PR 12 depends on 05, 06, and 07. PR 13 depends on 09, 11, and 12. PR 13b depends on 05b and 13. PR 13c depends on 05b, 09, 11, and 13. PR 14 depends on 03, 07, and 12. PR 15 depends on 10, 13, and 14. PR 16 depends on 14 and 15. PR 17 depends on 04 and 16 plus the pilot and live-gate decisions. The later-phase Jev items depend on 05b and their respective base features. Dependencies may branch independently from the indicated landed PRs. Land in numeric order unless the dependencies and shared files are reconciled.
 
 PRs 14 and 16 change human interactions and require operator review before merge. PR 17 requires the operator's review of the pilot result. No PR requires paid API calls in automated tests.
 
@@ -68,11 +68,19 @@ For every performance check, measure the same command on trunk first, with the s
 - [ ] Live: after model and budget decisions, make a structured call to each of two configured models with fallbacks off; inspect both `llm_calls` rows. A missing credential or provider capability blocks this check.
 - [ ] Perf: measure gateway overhead with a local fixed-response server over 100 calls; fail above 5 seconds total, excluding database startup.
 
+### PR 05b. Jev decision gateway
+
+- [ ] Depends on 05. Files: `packages/llm`, `config/models.ts`, `docs/jev-contract.md`.
+- [ ] Add typed Noul, Choice, and Score decisions through OpenRouter's Decisions API. Pin the eligible provider and enforce ZDR and data-collection denial. Record every attempt in the shared audit trail. Do not cache Jev calls.
+- [ ] Unit: recorded fixtures cover each answer type, invalid answers, bounded retry, routing, privacy, and audit fields.
+- [ ] Live: run two synthetic decisions and inspect their audit rows. Confirm account privacy and the current provider catalog before sending project evidence. EU in-region routing is currently unavailable.
+- [ ] Perf: run 100 fixture decisions with audit writes; fail above 5 seconds. Record trunk as not applicable if the capability is absent.
+
 ### PR 06. Cache, limits, and agent loop
 
 - [ ] Depends on 03 and 05. Files: `packages/llm`, `packages/db`.
-- [ ] Add full-request cache keys, per-model token bucket, concurrency limits, bounded retry, and a typed tool loop with turn and budget limits.
-- [ ] Unit: prove changed inputs miss cache, hits make no request, rate limits apply, and tool, turn, and budget limits stop correctly.
+- [ ] Add full-request cache keys for generation, concurrency limits, bounded retry, and a typed tool loop with turn and budget limits. Do not cache Jev calls.
+- [ ] Unit: prove changed inputs miss cache, hits make no request, and tool, turn, concurrency, and budget limits stop correctly.
 - [ ] Live: call the local fixture endpoint twice and inspect identical outputs, one upstream request, and recorded tool calls.
 - [ ] Perf: time 100 cache hits with a local database; fail above 5 seconds.
 
@@ -118,6 +126,15 @@ For every performance check, measure the same command on trunk first, with the s
 - [ ] Live: index a recorded filing, retrieve a known quote for its security, and confirm a future filing is absent.
 - [ ] Perf: time 100 searches over a fixed 10,000-chunk local index; fail above 60 seconds. Record embedding hardware and model.
 
+### PR 11b. Jev passage relevance
+
+- [ ] Depends on 05b and 11. Files: `packages/retrieval`, `packages/evals`.
+- [ ] Add an optional Noul relevance filter or reranker over retrieved passages. Preserve company and point-in-time filtering in code.
+- [ ] Unit: recorded decisions cover relevant, irrelevant, wrong-company, and future-dated passages.
+- [ ] Live: run a recorded retrieval set and compare recall, ranking, and latency with PR 11. Inspect evidence IDs.
+- [ ] Perf: run 100 fixture searches against the same corpus as PR 11; fail above 60 seconds or on a median regression above 25% against the measured trunk baseline.
+- [ ] Enable for product use only after labelled evaluation and privacy requirements are satisfied. Record the decision and baseline.
+
 ### PR 12. Designer and framework
 
 - [ ] Depends on 05, 06, and 07. Files: `packages/agents`, `packages/prompts`, `packages/core`, `packages/db`.
@@ -133,6 +150,24 @@ For every performance check, measure the same command on trunk first, with the s
 - [ ] Unit: cover unknowns, lookback, quantitative thresholds, wrong-security evidence, missing IDs, and non-verbatim quotes.
 - [ ] Live: score recorded evidence for one stock and inspect the persisted attempt and traceable citations.
 - [ ] Perf: validate 1,000 recorded scores; fail above 30 seconds excluding model latency.
+
+### PR 13b. Jev KPI scoring and bake-off
+
+- [ ] Depends on 05b and 13. Files: `packages/agents`, `packages/evals`, `packages/core`.
+- [ ] Add optional Score questions against approved 0–4 rubrics. Keep weights and the theme score in code. Define and record the mapping from weighted scores to discrete levels and unknowns.
+- [ ] Unit: fixtures cover all levels, ambiguous evidence, unknowns, and confidence signals.
+- [ ] Live: compare Jev and the frontier Analyst on the same labelled KPI pairs and evidence. Report weighted kappa, stability, calibration, cost, and unknown rates.
+- [ ] Perf: score 100 fixture cases; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline. Exclude live provider latency.
+- [ ] Enable for product use only when the existing kappa ≥ 0.6 and stability ≥ 95% gates pass and the evidence is reviewed. The 200 labelled pairs and their owner remain open dependencies.
+
+### PR 13c. Stored-span citation verification
+
+- [ ] Depends on 05b, 09, 11, and 13. Files: `packages/retrieval`, `packages/agents`, `packages/evals`.
+- [ ] Add an optional path where code selects an exact stored span and Jev judges whether it supports the claim. Preserve source and snapshot references.
+- [ ] Unit: reject nonexistent IDs, altered spans, wrong-company sources, and future evidence.
+- [ ] Live: compare citation validity, verbatim rate, and human-rated claim support with the existing extraction path on labelled examples.
+- [ ] Perf: validate 1,000 fixture citations; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline.
+- [ ] Enable only after meeting the existing 100% evidence-ID and 98% verbatim gates and reviewing claim support.
 
 ### PR 14. Brief and KPI approval
 
@@ -170,3 +205,31 @@ For every performance check, measure the same command on trunk first, with the s
 - [ ] Obtain operator review of the provisional basket and gate evidence before merge.
 
 The phase 0 gate requires the two live model calls and a no-network cache hit. The phase 1 gate requires PR 17's live measurements and PR 09's point-in-time tests. Reviewer, gate 2, pre-screen, full-scale processing, full replay, and discovery remain later-phase work. A fixture run does not satisfy either live gate.
+
+## Later-phase Jev product features
+
+### Phase 2. Jev Reviewer second opinion
+
+- [ ] Depends on 05b, the phase 2 Reviewer, and a labelled flawed-score set. Files: `packages/agents`, `packages/evals`.
+- [ ] Add an optional structured second opinion from a different vendor. Keep explanation writing and escalation policy in code and the generative Reviewer.
+- [ ] Unit: recorded decisions cover disagreement, unsupported evidence, and escalation.
+- [ ] Live: compare catch rate and false alarms on the flawed-score set against the existing Reviewer. Meet the existing ≥ 80% catch-rate gate before enabling.
+- [ ] Perf: evaluate 100 fixture scores; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline.
+
+### Phase 2. Jev pre-screen
+
+- [ ] Depends on 05b, the phase 2 pre-screen, and labelled relevance data. Files: `packages/agents`, `packages/evals`.
+- [ ] Add an optional Noul or Choice classification step for the approximately 3,000-stock universe.
+- [ ] Unit: cover relevant, irrelevant, uncertain, and missing-evidence fixtures.
+- [ ] Live: compare recall, precision, cost, and latency with the existing pre-screen on labelled data. Meet the existing ≥ 95% recall target before enabling.
+- [ ] Perf: evaluate 100 fixture cases; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline.
+
+### Phase 4. Jev discovery guardrails
+
+- [ ] Depends on 05b, the discovery tool loop, and a labelled action set. Files: `packages/agents`, `packages/evals`.
+- [ ] Add an optional decision check for proposed discovery tool calls and returned evidence. Code retains final authority over actions.
+- [ ] Unit: recorded cases cover allowed, disallowed, and ambiguous calls and results.
+- [ ] Live: replay labelled discovery actions and review false approvals, unnecessary blocks, and audit records before enabling.
+- [ ] Perf: evaluate 100 fixture actions; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline.
+
+All Jev product uses require a verified privacy and hosting decision. Jev is not scheduled to generate Designer text, extract quotes, or write its own questions. See [the evaluation note](jev-evaluation.md).

@@ -1,0 +1,32 @@
+# Jev evaluation
+
+Jev 1.14 is an unverified candidate for structured decisions. It does not replace the generative Designer or the existing Analyst until an evaluation supports that choice. The decision adapter was exercised with synthetic live calls. Product use remains unverified.
+
+## API findings
+
+The [TypeSafe quickstart](https://docs.typesafe.ai/introduction/quickstart.md) and [System One reference](https://docs.typesafe.ai/api/system-one.md) describe a `state` and a map of named questions. Answers are keyed by question name. Choice returns a choice, option probabilities and confidence. Score returns a probability-weighted score, level probabilities and confidence; mapping that score to the project's discrete 0–4 levels requires an explicit rule. Noul returns the probability of yes, not a separate confidence field. Box returns normalized image coordinates and confidence. It always returns a box, even when the object is absent; pair it with a presence check when needed. See [OpenRouter's Jev guide](https://openrouter.ai/docs/guides/community/jev.md).
+
+OpenRouter documents two interfaces with the same key and account billing: `POST /api/alpha/decisions` and the TypeSafe SDK-compatible `POST /api/v1/systemone`. The latter uses `https://openrouter.ai/api` as the SDK base URL. The Decisions request is alpha and its schema can change. See the [Decisions reference](https://openrouter.ai/docs/api/api-reference/alphadecisions/submit-a-decisions-request.md) and [SDK guide](https://openrouter.ai/docs/guides/community/typesafe-sdk.md). The PR 05 TypeScript types are a deliberately limited, unverified internal seam, not a claim of full wire compatibility.
+
+The Decisions reference documents provider preferences including ZDR and `data_collection: deny`. On inspection, OpenRouter's [ZDR endpoint catalog](https://openrouter.ai/api/v1/endpoints/zdr) lists `typesafe/jev-1.14` from `typesafe`. This listing alone does not prove that the System One route honors those request flags or that an account is eligible. OpenRouter's [model page](https://openrouter.ai/typesafe/jev-1.14) says EU in-region routing is unavailable. Confirm the selected route, account settings, and current catalog before sending any evidence; do not send it when required controls cannot be established.
+
+The provider's speed, calibration, and accuracy claims are hypotheses. Typed output does not guarantee a correct judgment or a supported citation.
+
+## Hypotheses and tests
+
+- **Analyst, PR 13.** A Score question per KPI can apply the anchored rubric while code retains weights and the linear theme score. Compare discrete mappings and unknown handling against analyst-labelled pairs. Compare probability and confidence calibration with the existing code-computed confidence; record error and coverage as well as agreement. Jev's weighted score is not automatically a discrete rubric level.
+- **Retrieval, PR 11.** A Noul per candidate passage can improve a relevance filter or reranker. On labelled query, company, and passage pairs, compare recall and ranking against the existing hybrid retrieval baseline, including latency and cost. Check wrong-company and stale passages.
+- **Citations.** Code can select an exact stored span and ask Jev whether it supports the claim. Verify the source ID and substring deterministically, then measure citation validity and verbatim rate. Compare human-rated relevance and support with the existing extraction approach. Exact matching does not prove the passage supports a claim; this approach can miss useful spans and may require more retrieval or review.
+- **Reviewer, phase 2.** A different-vendor structured judgment could flag disagreement with the Analyst. On the flawed-score set, compare catch rate, false alarms, and cases needing an explanatory note. Jev cannot write that note.
+- **Pre-screen, phase 2.** A Noul or Choice per name could filter the universe. Compare recall, precision, cost, and latency on the relevance set, including borderline names and missing evidence.
+- **Discovery tool loop, later.** A typed judgment may flag unsafe tool calls or results. Replay a labelled set of allowed, disallowed, and ambiguous actions, then compare false approvals and unnecessary blocks. Code retains authority over execution.
+
+Designer text, quote extraction, and an agent that writes its own questions are outside this evaluation. Code supplies questions and retains control over ranking and scoring.
+
+## Bake-off
+
+Use the same point-in-time evidence and analyst-labelled KPI pairs for Jev and the configured frontier model. Freeze the dataset, rubric, model IDs, provider selections, question wording, discrete-level mapping, and unknown policy before scoring. Use the existing 200-pair set and report weighted kappa against labels, exact-level agreement, unknowns, citation outcomes, cost, and latency for both. Repeat with caching off and report level stability. Apply the existing gates of weighted kappa at least 0.6 and stability at least 95%; do not introduce a new acceptance threshold. The five-example spike is a feasibility check and cannot establish those gates.
+
+## Gateway status
+
+`generate()` is the chat capability. `decide()` uses OpenRouter's alpha Decisions API with the TypeSafe provider pinned, fallbacks disabled, ZDR required, and data collection denied. Each request attempt is audited. Jev decisions are not cached, and there is no per-model token bucket. The $50 monthly account cap must be configured in OpenRouter; the gateway does not enforce it. A successful privacy-filtered synthetic request is not independent proof of retention or regional processing.

@@ -6,14 +6,14 @@ Nov 18, 2026 · @Srivatsa Telkar
 
 Open Foresight turns an investment theme into an auditable, investable stock basket in hours, using a TypeScript harness around native LLM SDKs, open data first, and an optional EODHD adapter. It mirrors the design of Axyon Foresight: Designer, Analyst and Reviewer roles, two human approval gates, deterministic scoring, and a separate theme discovery agent. No LangChain or LangGraph.
 
-The core idea: **LLMs read and judge; code fetches, computes, scores and decides order.** Every stock score cites evidence, every run is reproducible, and every human decision is logged.
+The core idea: **LLMs read and judge; code fetches, computes, scores and decides order.** Every stock score cites evidence, replay from cached responses is a goal, and every human decision is logged.
 
 ### Goals
 
 1. Theme brief to approved KPI framework in under 10 minutes.
 2. KPI framework to scored, reviewed basket for a \~3,000-stock universe in under 4 hours.
 3. Every score traceable to cited, point-in-time evidence and a fixed rubric.
-4. Same inputs, same model versions, same data snapshot → same basket.
+4. The same inputs, model versions and data snapshot replay to the same basket from cached responses. Uncached model outputs may vary.
 5. Run on open data alone; EODHD plugs in through the same data-provider interface with no changes elsewhere.
 6. Model-agnostic through OpenRouter: one API key and one OpenAI-compatible client reach Anthropic, OpenAI, Google and open-weight models; each agent role picks its model in config.
 
@@ -37,7 +37,7 @@ The core idea: **LLMs read and judge; code fetches, computes, scores and decides
 ### Success criteria
 
 - Analyst agreement on KPI rubric levels: weighted kappa ≥ 0.6 on a labelled set of 200 stock × KPI pairs.
-- Run-to-run stability: ≥ 95% of KPI levels identical on a re-run with caching off and temperature 0.
+- Run-to-run stability: ≥ 95% of KPI levels identical on a re-run with caching off. Use temperature 0 where the pinned endpoint supports it; otherwise omit it and report the setting.
 - Citation validity: 100% of cited evidence IDs exist; ≥ 98% of quoted spans found verbatim in the source.
 - Basket recall against a reference list (an existing thematic ETF's holdings within the universe): ≥ 70%, with surplus names explainable.
 - Cost per full theme run under a set budget (target: under $30 at default settings; confirm after phase 2).
@@ -153,14 +153,14 @@ External data lands in Postgres first; workers and agents only query that local 
 
 All model calls use the official `openai` npm package pointed at `https://openrouter.ai/api/v1`, because OpenRouter's request schema closely follows the OpenAI Chat API and normalises it across models ([OpenRouter API overview](https://openrouter.ai/docs/api/reference/overview.md)). Rules for the gateway:
 
-1. **Pin the model and the provider.** Each role's config sets a model slug and a `provider.order` list with `allow_fallbacks: false`. Without pinning, the same model can be served by different hosts, which breaks reproducibility. With fallbacks off and `order` set, OpenRouter only tries the listed providers and fails if none can serve ([provider routing](https://openrouter.ai/docs/features/provider-routing)).
+1. **Pin the model and the provider.** Each role's config sets a model slug. At startup the gateway selects the lowest estimated cost eligible ZDR provider using 1,000 input and 1,000 output tokens plus any reported per-request fee and pins that provider in `provider.order` with `allow_fallbacks: false`. The estimate assumes an omitted per-request fee is zero, which is not guaranteed, and excludes other fees. Missing or invalid prompt or completion prices and invalid provided per-request fees exclude a provider; explicit zero prices remain eligible. Ties use provider tag order. Without pinning, the same model can be served by different hosts, which breaks reproducibility. With fallbacks off and `order` set, OpenRouter only tries the listed providers and fails if none can serve ([provider routing](https://openrouter.ai/docs/features/provider-routing)).
 2. **Refuse silent parameter drops.** Always send `require_parameters: true`, so providers that do not support a parameter (for example a JSON schema) are excluded instead of ignoring it ([provider routing](https://openrouter.ai/docs/features/provider-routing)).
 3. **Data protection.** Send `data_collection: "deny"` and `zdr: true`, and set the same at account level; these restrict routing to providers that do not collect data and to zero-data-retention endpoints ([provider routing](https://openrouter.ai/docs/features/provider-routing)).
 4. **Structured output.** Use `response_format: {type: "json_schema", strict: true}` built from Zod schemas, and only choose models whose providers list structured-output support ([structured outputs](https://openrouter.ai/docs/features/structured-outputs)). Always re-validate with Zod; on failure, one repair retry, then mark the item failed.
 5. **Prompt caching.** For Anthropic models, mark the long, shared system prompt and rubric with `cache_control`; record `cached_tokens` from usage.
 6. **Log what actually served the call.** Store the response's model and provider, token usage and cost on every audit row.
 
-Request shape every call uses:
+Request shape every call uses, with `temperature` included only when the pinned ZDR endpoint supports it:
 
 ```json
 {
@@ -198,7 +198,7 @@ The model slugs above are placeholders; pick current ones in `config/models.ts`.
 - One more party in the data path; mitigated by ZDR routing and account-level privacy settings.
 - Strict JSON schema support differs by model and provider; the model registry check below must run at startup.
 
-**Startup check:** the gateway calls OpenRouter's models endpoint, verifies each configured model and pinned provider exists and supports structured outputs and tools, and refuses to start otherwise.
+**Startup check:** the gateway checks OpenRouter's models, provider endpoints, and ZDR endpoints, then selects a provider with valid token prices and structured-output and tool support. It refuses to start if no eligible provider exists.
 
 ## Agents
 
@@ -424,7 +424,7 @@ Export: a single JSON bundle (plus Parquet for scores) that lets anyone rebuild 
 
 ### Reproducibility
 
-- Pinned model slug and pinned provider per role; `temperature: 0`; `seed` set where supported.
+- Pinned model slug and pinned provider per role. Set `temperature: 0` only where the pinned ZDR endpoint supports it; otherwise omit it. Set `seed` where supported. Omitting temperature does not guarantee temperature-zero reproducibility.
 - Prompt files versioned; data snapshot ID on the run; embedding model version recorded.
 - LLM response cache keyed on the full request hash. A **replay** mode rebuilds a run from cache only and must match byte for byte.
 - Stability is measured, not assumed: the eval suite re-runs pairs with cache off (see Evaluation).

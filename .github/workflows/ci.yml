@@ -44,3 +44,8 @@ jobs:
         run: |
           bun run migrate
           bun run test
+      - name: Gateway integration tests
+        working-directory: packages/llm
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/foresight_test
+        run: bun run test
