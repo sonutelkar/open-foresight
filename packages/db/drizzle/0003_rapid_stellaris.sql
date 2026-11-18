@@ -1,0 +1,2 @@
+ALTER TABLE "run_status_history" ADD COLUMN "sequence" bigserial NOT NULL;--> statement-breakpoint
+ALTER TABLE "run_status_history" ADD CONSTRAINT "run_status_history_sequence_unique" UNIQUE("sequence");
