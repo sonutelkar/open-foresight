@@ -5,10 +5,13 @@ Build the foundation and a US, EU, UK, and Switzerland pilot that takes a brief 
 ## Decisions and open questions
 
 - **Scope.** Target the US, EU, UK, and Switzerland where sufficient data is available. Report coverage gaps. SEC and OpenFIGI alone do not establish a complete European universe.
-- **Prices and liquidity.** EODHD is an optional candidate, alongside open sources. Select a source after checking prices, volume, point-in-time market-cap inputs, coverage, and applicable non-commercial terms. PR 10 and the live phase gate wait for this check.
+- **Prices and liquidity.** Decided on 2026-11-22. Prices and volume come from the EODHD EOD plan at 19.99 EUR a month. FX comes from free ECB reference rates. Market cap comes from SEC share counts for US names where a filing exists. For other names it comes from share counts and market caps observed through Yahoo Finance, read with the Python yfinance package run by uv. Apify is an optional second reader. Observed values are snapshots of their fetch day, so they serve runs for today and not backtests. The EODHD Fundamentals plan was not bought. The free FMP and Finnhub tiers returned no non-US data and are not used. Known gaps: EODHD has no Italian exchange, so ENEL.MI has no prices. TPIC.US and ROG.SW returned no bars or Yahoo data.
+- **Non-commercial use.** The EODHD personal plan and Yahoo Finance are for personal, educational use. Yahoo's terms bar automated collection. This project is educational and not commercial. Before any commercial use, replace both with licensed sources, and treat that as a blocker for the PR 17 live gate if the pilot is shown outside the project.
 - **EODHD timing.** Add its adapter early in phase 1. It must remain disabled without `EODHD_API_KEY`; the open-data path must work without it.
-- **Pilot theme and reference.** Use Smart Energy, with Robeco Smart Energy as a dated comparison. Its global portfolio and limited published holdings constrain comparison with our regional universe. Select an accessible ETF reference and freeze its holdings date before PR 17.
-- **Model, provider, and spending.** The two configured models passed a live structured-output check. Choose the per-run budget after further testing; confirm the monthly cap and account privacy settings before the live pilot. The gateway does not enforce a monetary cap.
+- **Pilot theme and reference.** Use Smart Energy, with Robeco Smart Energy as a dated comparison. Its global portfolio and limited published holdings constrain comparison with our regional universe. The ETF reference is the First Trust NASDAQ Clean Edge Smart Grid Infrastructure Index Fund (GRID), frozen at its 2026-11-20 holdings in `docs/reference/grid-holdings-2026-11-20.csv`. Its public holdings page is accessible, and the iShares Global Clean Energy file was not retrievable. About 85 percent of its weight is in US, FR, CH, DE, IT, UK and ES. Italy is 6.5 percent and has no EODHD prices. About 14 percent is in BR, JP, CA, KR, TW and HK, outside our regions. GRID is narrower than Smart Energy because it centers on grid infrastructure, so report recall against the part of GRID inside our universe.
+- **Model, provider, and spending.** The two configured models passed a live structured-output check. The monthly OpenRouter cap is 50 USD. The gateway does not enforce a monetary cap, so check usage in the OpenRouter console. Choose the per-run budget after further testing, and confirm account privacy settings before the live pilot.
+- **Embeddings.** Decided on 2026-11-22. Embed with `openai/text-embedding-3-small` through OpenRouter and `packages/llm`, pinned to the `azure` provider with `zdr` and `data_collection: deny`. A live call returned 1536 dimensions at 0.02 USD per million tokens. OpenAI's own endpoint is not ZDR eligible for this model and is excluded by those filters. This replaces the earlier plan for a pinned local model. Record the model and provider with the snapshot.
+- **Evidence coverage.** Decided on 2026-11-22. Phase 1 evidence covers SEC filings and ESEF filings from the free filings.xbrl.org index, which has filings for FR, NL, GB, ES, IT, SE and DK. The index had none for DE or CH, so those names are reported as having no evidence. A tested sample found a usable share count in 4 of 9 ESEF filings, so ESEF is for text evidence and not for shares. ESEF entities use LEIs, so PR 08b must verify a free ISIN to LEI mapping.
 - **Deployment and approval.** An analyst can review and approve KPIs. Record that an analyst approved the framework; a sign-in page is not required for the local pilot. Choose a host before the live gate. Data residency is not currently a selection priority.
 - **Gate 2 and scope.** Label the phase 1 basket provisional. Reviewer and final approval remain later work.
 - **Evaluation.** AI may produce initial labels and an analyst will skim them. Treat results as provisional. The full kappa release gate still needs an independent labelled set. Agree a provisional pilot threshold separately; the existing full release threshold remains unchanged.
@@ -16,7 +19,7 @@ Build the foundation and a US, EU, UK, and Switzerland pilot that takes a brief 
 
 ## Landing order and dependencies
 
-PR 01 starts on trunk. PRs 02, 03, and 04 depend on 01. PR 05 depends on 02 and 03. PR 05b depends on 05. PR 06 depends on 03 and 05. PR 07 depends on 02 and 03. PR 08 depends on 07. PR 09 depends on 07 and 08. PR 10 depends on 07 and the price-source decision. PR 11 depends on 08 and 09. PR 11b depends on 05b and 11. PR 12 depends on 05, 06, and 07. PR 13 depends on 09, 11, and 12. PR 13b depends on 05b and 13. PR 13c depends on 05b, 09, 11, and 13. PR 14 depends on 03, 07, and 12. PR 15 depends on 10, 13, and 14. PR 16 depends on 14 and 15. PR 17 depends on 04 and 16 plus the pilot and live-gate decisions. The later-phase Jev items depend on 05b and their respective base features. Dependencies may branch independently from the indicated landed PRs. Land in numeric order unless the dependencies and shared files are reconciled.
+PR 01 starts on trunk. PRs 02, 03, and 04 depend on 01. PR 05 depends on 02 and 03. PR 05b depends on 05. PR 06 depends on 03 and 05. PR 07 depends on 02 and 03. PR 08 depends on 07. PR 08b depends on 07 and 09. PR 09 depends on 07 and 08. PR 10 depends on 07 and the price-source decision. PR 11 depends on 08, 08b and 09. PR 11b depends on 05b and 11. PR 12 depends on 05, 06, and 07. PR 13 depends on 09, 11, and 12. PR 13b depends on 05b and 13. PR 13c depends on 05b, 09, 11, and 13. PR 14 depends on 03, 07, and 12. PR 15 depends on 10, 13, and 14. PR 16 depends on 14 and 15. PR 17 depends on 04 and 16 plus the pilot and live-gate decisions. The later-phase Jev items depend on 05b and their respective base features. Dependencies may branch independently from the indicated landed PRs. Land in numeric order unless the dependencies and shared files are reconciled.
 
 PRs 14 and 16 change human interactions and require operator review before merge. PR 17 requires the operator's review of the pilot result. No PR requires paid API calls in automated tests.
 
@@ -102,6 +105,14 @@ For every performance check, measure the same command on trunk first, with the s
 - [ ] Live: ingest a recorded filing and amended fact, then query their dates and raw references.
 - [ ] Perf: ingest a fixed 50-company fixture; fail above 120 seconds.
 
+### PR 08b. ESEF filings
+
+- [ ] Depends on 07 and 09. Files: `packages/data/providers/esef`, `packages/db`.
+- [ ] Ingest filings and their report text from the filings.xbrl.org index for FR, NL, GB, ES, IT, SE and DK. Keep the index `published` date as the point-in-time date, the entity LEI, and the raw source reference. Map LEIs to security IDs through ISINs, after verifying a free ISIN to LEI source. Report DE and CH as having no evidence.
+- [ ] Unit: recorded index and filing fixtures cover a missing published date, an unmapped LEI, repeat sync, and late additions.
+- [ ] Live: ingest one recorded filing for each covered country, then query its dates, LEI and security ID.
+- [ ] Perf: ingest a fixed 50-filing fixture; fail above 120 seconds.
+
 ### PR 09. Point-in-time snapshots
 
 - [ ] Depends on 07, 08, and snapshot decision. Files: `packages/db`, `packages/data`, `packages/core`.
@@ -120,11 +131,11 @@ For every performance check, measure the same command on trunk first, with the s
 
 ### PR 11. Evidence retrieval
 
-- [ ] Depends on 08 and 09. Files: `packages/retrieval`, `packages/db`, local embedding service config.
-- [ ] Chunk filings by section, retain source offsets, embed with a pinned local model, and combine text and vector results by reciprocal rank.
+- [ ] Depends on 08, 08b and 09. Files: `packages/retrieval`, `packages/db`, `packages/llm`.
+- [ ] Chunk SEC and ESEF filings by section, retain source offsets, embed with the pinned OpenRouter model from the embeddings decision, and combine text and vector results by reciprocal rank. Audit each embedding batch.
 - [ ] Unit: check chunk boundaries, fusion, security isolation, snapshot membership, and as-of filtering.
 - [ ] Live: index a recorded filing, retrieve a known quote for its security, and confirm a future filing is absent.
-- [ ] Perf: time 100 searches over a fixed 10,000-chunk local index; fail above 60 seconds. Record embedding hardware and model.
+- [ ] Perf: time 100 searches over a fixed 10,000-chunk local index with recorded query vectors; fail above 60 seconds. Exclude provider latency, and record the embedding model and provider.
 
 ### PR 11b. Jev passage relevance
 

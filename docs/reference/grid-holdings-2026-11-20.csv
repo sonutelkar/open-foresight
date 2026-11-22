@@ -1,0 +1,133 @@
+security_name,identifier,cusip,classification,shares,market_value_usd,weight_pct
+"Quanta Services, Inc.",PWR,74762E102,Engineering and Contracting Services,1540462,861164471.86,8.94
+Johnson Controls International Plc,JCI,G51502105,Electronic Equipment: Control and Filter,6551798,852913063.64,8.86
+ABB Ltd,ABBN.SW,H0010V101,Electrical Components,9564477,736302912.18,7.64
+Eaton Corporation Plc,ETN,G29183103,Diversified Industrials,2327059,724483278.47,7.52
+Schneider Electric SE,SU.FP,F86921107,Electrical Components,2732853,674357463.92,7.00
+National Grid Plc,NG/.LN,G6S9A7120,Multi-utilities,29477625,470375334.21,4.88
+E.ON SE,EOAN.GY,D24914133,Multi-utilities,22615029,458893399.56,4.76
+Prysmian SpA,PRY.IM,T7630L105,Electrical Components,3348988,364920469.85,3.79
+Hubbell Incorporated,HUBB,443510607,Electrical Components,636723,257019606.18,2.67
+"Tesla, Inc.",TSLA,88160R101,Automobiles,635423,219741981.86,2.28
+nVent Electric plc,NVT,G6700G107,Electrical Components,2138651,217800217.84,2.26
+TERNA - Rete Elettrica Nazionale SpA,TRN.IM,T9471R100,Conventional Electricity,20429396,211300168.38,2.19
+Hydro One Limited,H.CT,448811208,Conventional Electricity,4618050,184651202.99,1.92
+"Cisco Systems, Inc.",CSCO,17275R102,Telecommunications Equipment,1972758,178810785.12,1.86
+NVIDIA Corporation,NVDA,67066G104,Semiconductors,1058981,132933884.93,1.38
+SAP SE,SAP.GY,D66992104,Software,614888,122564443.49,1.27
+Texas Instruments Incorporated,TXN,882508104,Semiconductors,457110,120562762.50,1.25
+Belimo Holding AG,BEAN.SE,H07171129,Building: Climate Control,133962,115229964.79,1.20
+Siemens AG,SIE.GY,D69671218,Diversified Industrials,395863,108435899.05,1.13
+SPIE S.A.,SPIE.FP,F8691R101,Engineering and Contracting Services,2262332,107956535.92,1.12
+International Business Machines Corporation,IBM,459200101,Computer Services,471567,105838497.48,1.10
+Red Electrica Corporacion S.A.,RED.SM,E42807110,Conventional Electricity,5892312,104750204.90,1.09
+Elia Group SA/NV,ELI.BB,B35656105,Conventional Electricity,728509,100275684.74,1.04
+Oracle Corporation,ORCL,68389X105,Software,982994,99469162.86,1.03
+Equatorial Energia SA,EQTL3.BZ,P3773H104,Conventional Electricity,16391172,90780771.77,0.94
+GE Vernova Inc.,GEV,36828A101,Diversified Industrials,125739,87933054.91,0.91
+"Analog Devices, Inc.",ADI,032654105,Semiconductors,239768,82940546.56,0.86
+NKT A/S,NKT.DC,K7037A107,Electrical Components,741020,83036975.50,0.86
+Iberdrola S.A.,IBE.SM,E6165F166,Conventional Electricity,3302084,81811652.76,0.85
+"HD Hyundai Electric Co., Ltd.",267260.KS,Y3R1DD103,Electrical Components,298564,79830712.71,0.83
+"Hitachi, Ltd.",6501.JP,J20454112,Diversified Industrials,2578320,74987909.85,0.78
+Nexans S.A.,NEX.FP,F65277109,Electrical Components,565336,73671049.13,0.76
+Companhia Paranaense de Energia-Copel,CPLE3.BZ,P30557105,Alternative Electricity,27818741,71134979.43,0.74
+"LS Electric Co., Ltd.",010120.KS,Y5355Q105,Electronic Components,915414,68626145.31,0.71
+"Fortune Electric Co., Ltd.",1519.TT,Y26168107,Electrical Components,4159618,51125887.08,0.53
+"Forgent Power Solutions, Inc. (Class A)",FPS,34631F102,Electrical Components,2789803,50216454.00,0.52
+"Itron, Inc.",ITRI,465741106,Electronic Equipment: Gauges and Meters,490392,47636678.88,0.49
+Enel SpA,ENEL.IM,T3679P115,Conventional Electricity,4402392,45099765.56,0.47
+Energisa SA (Units),ENGI11.BZ,P3769S114,Conventional Electricity,5575643,45466031.27,0.47
+MYR Group Inc.,MYRG,55405W104,Engineering and Contracting Services,183430,45437445.30,0.47
+Emerson Electric Co.,EMR,291011104,Electronic Equipment: Other,295566,44609776.38,0.46
+Honeywell International Inc.,HON,438516205,Diversified Industrials,167944,35711612.16,0.37
+Infineon Technologies AG,IFX.GY,D35415104,Semiconductors,691989,33753550.89,0.35
+Transmissora Alianca de Energia Electrica S.A. (Unit),TAEE11.BZ,P9T5CD126,Conventional Electricity,5029785,34012551.96,0.35
+Mitsubishi Electric Corporation,6503.JP,J43873116,Diversified Industrials,1204200,31835578.52,0.33
+"Enphase Energy, Inc.",ENPH,29355A107,Renewable Energy Equipment,1537653,30184128.39,0.31
+NXP Semiconductors N.V.,NXPI,N6596X109,Semiconductors,120696,28381664.40,0.29
+"Sigenergy Technology Co., Ltd. (Class H)",6656.HK,Y7T3Q2108,Renewable Energy Equipment,3467420,27605342.84,0.29
+Alupar Investimento S.A (Unit),ALUP11.BZ,P0R676126,Conventional Electricity,4812663,26622017.89,0.28
+Stella-Jones Inc.,SJ.CT,85853F105,Forestry,595273,26946053.08,0.28
+Engie S.A.,ENGI.FP,F7629A107,Multi-utilities,941798,24861814.76,0.26
+Voltronic Power Technology Corp.,6409.TT,Y937BE103,Electrical Components,1167639,23655787.09,0.25
+Meidensha Corporation,6508.JP,J41594102,Electrical Components,615399,22786065.36,0.24
+Panasonic Holdings Corporation,6752.JP,J6354Y104,Consumer Electronics,1397870,22571434.32,0.23
+Cenergy Holdings SA,CENER.GA,B1R3JD102,Electrical Components,926756,21369080.43,0.22
+Isa Energia Brasil SA (Preference),ISAE4.BZ,P30576113,Conventional Electricity,4889852,21443289.71,0.22
+Landis+Gyr Group AG,LAND.SE,H893NZ107,Electronic Equipment: Gauges and Meters,332178,21139148.15,0.22
+Legrand S.A.,LR.FP,F56196185,Electrical Components,150633,20795417.60,0.22
+SSE Plc,SSE.LN,G8842P102,Conventional Electricity,646075,21443154.74,0.22
+"REN - Redes Energeticas Nacionais, SGPS, S.A.",RENE.PL,X70955103,Conventional Electricity,4658120,19774064.34,0.21
+Shihlin Electric & Engineering Corporation,1503.TT,Y7745Q100,Electrical Components,4708210,19996967.55,0.21
+Daihen Corporation,6622.JP,J09114109,Electrical Components,1703500,18194961.17,0.19
+"Taihan Cable & Solution Co., Ltd.",001440.KS,Y8373R105,Electrical Components,1567908,18620502.66,0.19
+Fortis Inc.,FTS.CN,349553107,Conventional Electricity,291063,17213697.65,0.18
+BYD Company Limited (Class H),1211.HK,Y1023R104,Automobiles,2098652,16321509.64,0.17
+Hammond Power Solutions Inc.,HPS/A.CT,408549103,Electrical Components,132742,15812859.35,0.16
+"Sanil Electric Co., Ltd.",062040.KS,Y7T0PL103,Electronic Equipment: Other,209477,15081458.54,0.16
+Astor Enerji A.S.,ASTOR.TI,M1505L115,Machinery: Industrial,4935475,14038733.42,0.15
+Renesas Electronics Corporation,6723.JP,J4881V107,Semiconductors,1012000,14172092.04,0.15
+"SolarEdge Technologies, Inc.",SEDG,83417M104,Renewable Energy Equipment,796471,14551525.17,0.15
+"Willdan Group, Inc.",WLDN,96924N100,Engineering and Contracting Services,203838,14079090.66,0.15
+Fujikura Ltd.,5803.JP,J14784128,Electrical Components,1010900,13496442.53,0.14
+"PowerX, Inc.",485A.JP,J6391R104,Electrical Components,1462400,13582285.00,0.14
+American Superconductor Corporation,AMSC,030111207,Renewable Energy Equipment,655286,12633914.08,0.13
+"Iljin Electric Co., Ltd.",103590.KS,Y3878F102,Electrical Components,339870,12546703.09,0.13
+SMA Solar Technology AG,S92.GR,D7008K108,Renewable Energy Equipment,277602,12774411.88,0.13
+"Sumitomo Electric Industries, Ltd.",5802.JP,J77411114,Auto Parts,1700700,12016561.52,0.12
+US Dollar,$USD,,Other,10638423,10638422.81,0.11
+WEG S.A.,WEGE3.BZ,P9832B129,Machinery: Industrial,1200272,10331025.65,0.11
+R&S Group Holding AG,RSGN.SE,H9232B116,Electronic Equipment: Other,427909,9574612.09,0.10
+"Samsung SDI Co., Ltd.",006400.KS,Y74866107,Electrical Components,33524,9493342.26,0.10
+"EDP - Energias de Portugal, S.A.",EDP.PL,X67925119,Alternative Electricity,1573381,8348326.56,0.09
+"Ta Ya Electric Wire & Cable Co., Ltd.",1609.TT,Y8548S103,Electrical Components,11421507,8506324.44,0.09
+Wasion Holdings Limited,3393.HK,G9463P108,Electronic Equipment: Gauges and Meters,7269555,8492587.48,0.09
+"Allis Electric Co., Ltd.",1514.TT,Y0089Q109,Electrical Components,4052078,7929900.25,0.08
+AXIA Energia SA,AXIA3.BZ,P22835113,Alternative Electricity,939716,7276833.17,0.08
+PFISTERER Holding SE,PFS0.GY,D6S83H113,Electronic Equipment: Other,115803,6860571.65,0.07
+Pound Sterling,$GBP,,Other,5044068,6598144.71,0.07
+"WESCO International, Inc.",WCC,95082P105,Electrical Components,24989,7047897.56,0.07
+"Energy Vault Holdings, Inc.",NRGV,29280W109,Renewable Energy Equipment,1983664,5494749.28,0.06
+Generac Holdings Inc.,GNRC,368736104,Machinery: Engines,29592,5717766.24,0.06
+Preformed Line Products Company,PLPC,740444104,Electrical Components,22758,5616219.24,0.06
+The AES Corporation,AES,00130H105,Conventional Electricity,357713,5372849.26,0.06
+Trimble Inc.,TRMB,896239100,Electronic Equipment: Gauges and Meters,108936,5514340.32,0.06
+"Advantech Co., Ltd.",2395.TT,Y0017P108,Computer Hardware,317307,4732923.77,0.05
+"Contemporary Amperex Technology Co., Ltd. (Class H)",3750.HK,Y1R48E113,Electrical Components,115696,4846719.34,0.05
+"Fluence Energy, Inc. (Class A)",FLNC,34379V103,Renewable Energy Equipment,1311873,4539080.58,0.05
+"Fuji Electric Co., Ltd.",6504.JP,J14112106,Electrical Components,84500,5037702.24,0.05
+"Littelfuse, Inc.",LFUS,537008104,Electrical Components,12305,4400021.90,0.05
+"MasTec, Inc.",MTZ,576323109,Engineering and Contracting Services,32943,4767181.53,0.05
+Verbund AG,VER.AV,A91460104,Alternative Electricity,67905,5066431.83,0.05
+"Advanced Energy Industries, Inc.",AEIS,007973100,Semiconductors,19392,3687970.56,0.04
+"Furukawa Electric Co., Ltd.",5801.JP,J16464117,Electrical Components,378300,3509670.79,0.04
+LS Eco Energy Ltd.,229640.KS,Y5S4B9102,Electrical Components,133637,3412986.11,0.04
+NGK Corp.,5333.JP,J49076110,Electrical Components,150125,3802246.14,0.04
+"Osaki Electric Co., Ltd.",6644.JP,J62965116,Electronic Equipment: Gauges and Meters,620600,3765367.01,0.04
+STMicroelectronics N.V.,STM,861012102,Semiconductors,108483,4242770.13,0.04
+"Takaoka Toko Co., Ltd.",6617.JP,J80551104,Electrical Components,154100,3909103.90,0.04
+"Valmont Industries, Inc.",VMI,920253101,Diversified Industrials,10003,3857756.98,0.04
+Alfen Beheer BV,ALFEN.NA,N0227W101,Electrical Components,316352,2898876.81,0.03
+Brazilian Real,$BRL,,Other,14808527,2492850.17,0.03
+ESCO Technologies Inc.,ESE,296315104,Diversified Industrials,11808,2485347.84,0.03
+Europower Enerji ve Otomasyon Teknolojileri Sanayi ve Ticaret AS,EUPWR.TI,M4117J114,Electrical Components,3839932,2458225.31,0.03
+Hyosung Heavy Industries Corporation,298040.KS,Y3R1E4102,Electronic Components,2549,2932309.94,0.03
+Japanese Yen,$JPY,,Other,475473934,2998322.20,0.03
+Azbil Corporation,6845.JP,J0370G106,Electronic Equipment: Gauges and Meters,259000,2344522.49,0.02
+AZZ Inc.,AZZ,002474104,Paints and Coatings,13703,1608321.11,0.02
+BKW AG,BKW.SW,H10053108,Conventional Electricity,11137,1620911.15,0.02
+EnerSys,ENS,29275Y102,Electrical Components,16639,2069059.65,0.02
+Tantalus Systems Holding Inc.,GRID.CT,87601F106,Electronic Components,638027,1778410.49,0.02
+Belden Inc.,BDC,077454106,Electrical Components,14247,1321979.13,0.01
+Chung-Hsin Electric and Machinery Manufacturing Corp.,1513.TT,Y1612A108,Electrical Components,243965,918408.62,0.01
+Digi International Inc.,DGII,253798102,Telecommunications Equipment,17299,883978.90,0.01
+GS Yuasa Corporation,6674.JP,J1770L109,Auto Parts,57835,1359173.33,0.01
+Primoris Services Corporation,PRIM,74164F103,Construction,25462,1364763.20,0.01
+South Korean Won,$KRW,,Other,1482271991,1101054.05,0.01
+"Tatung Co., Ltd.",2371.TT,Y8548J103,Electrical Components,1140146,776557.39,0.01
+Canadian Dollar,$CAD,,Other,166522,116027.10,0.00
+Euro,$EUR,,Other,757,829.54,0.00
+New Taiwan Dollar,$TWD,,Other,7361995,223266.66,0.00
+New Turkish Lira,$TRY,,Other,5668144,112118.59,0.00
+Swiss Franc,$CHF,,Other,775,922.29,0.00
