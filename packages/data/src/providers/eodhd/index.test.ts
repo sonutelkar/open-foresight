@@ -5,6 +5,8 @@ import { afterAll, describe, expect, it } from 'vitest';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { createSnapshot, priceBars, secFacts, secSourceDocuments } from '@open-foresight/db';
+import { fxToUsdAsOf } from '../../fx.js';
+import { createEcbFxProvider } from '../ecb/index.js';
 import type { UniverseRules } from '@open-foresight/core';
 import { buildUniverse } from '../../universe.js';
 import { createEodhdProvider } from './index.js';
@@ -12,8 +14,9 @@ import { createEodhdProvider } from './index.js';
 type Recorded = { symbols: Record<string, Array<Record<string, unknown>> | { httpStatus: number }> };
 const fixtures = new URL('../../../fixtures/eodhd/', import.meta.url);
 const recorded = JSON.parse(await readFile(new URL('eod-bars.json', fixtures), 'utf8')) as Recorded;
-const universe = JSON.parse(await readFile(new URL('universe-50.json', fixtures), 'utf8')) as { asOf: string; fxToUsd: Record<string, number>; listings: Array<{ symbol: string; cik?: string; sharesOutstanding?: number }> };
-const rules: UniverseRules = { regions: ['US', 'EU', 'UK', 'CH'], minMarketCapUsd: 1e9, minAdvUsd: 5e6, maxStaleDays: 5, advWindow: 20, minAdvBars: 10, fxToUsd: universe.fxToUsd, excluded: { 'KO.US': 'analyst exclusion' } };
+const ecbCsv = await readFile(new URL('../ecb/exr-2024-11.csv', fixtures), 'utf8');
+const universe = JSON.parse(await readFile(new URL('universe-50.json', fixtures), 'utf8')) as { asOf: string; listings: Array<{ symbol: string; cik?: string; sharesOutstanding?: number }> };
+const ruleSet = (fxToUsd: Record<string, number>): UniverseRules => ({ regions: ['US', 'EU', 'UK', 'CH'], minMarketCapUsd: 1e9, minAdvUsd: 5e6, maxStaleDays: 5, advWindow: 20, minAdvBars: 10, fxToUsd, excluded: { 'KO.US': 'analyst exclusion' } });
 
 describe('EODHD adapter without a key', () => {
   it('is disabled', () => {
@@ -68,7 +71,10 @@ integration('EODHD prices and universe on Postgres', () => {
     if (!source) throw new Error('no source');
     for (const l of universe.listings) if (l.cik && l.sharesOutstanding) await db.insert(secFacts).values({ key: `universe-50/${l.cik}`, cik: l.cik, accession: '0000000000-24-000001', taxonomy: 'dei', concept: 'EntityCommonStockSharesOutstanding', unit: 'shares', value: String(l.sharesOutstanding), periodEnd: '2024-09-30', filedAt: '2024-11-01', form: '10-Q', raw: {}, sourceId: source.id, sourcePointer: '/p', ingestedAt: new Date('2024-11-02T00:00:00Z') });
 
+    await createEcbFxProvider({ db, fetch: async () => new Response(ecbCsv), now: () => new Date('2024-11-13T00:00:00Z') }).sync({ currencies: ['USD', 'GBP', 'CHF', 'DKK', 'SEK', 'NOK'], from: '2024-11-01', to: '2024-11-12' });
     const snapshot = await createSnapshot({ db });
+    const fx = await fxToUsdAsOf({ db, snapshotId: snapshot.id, asOf: universe.asOf, currencies: ['USD', 'EUR', 'GBP', 'CHF', 'DKK'] });
+    const rules = ruleSet(fx);
     const decisions = await buildUniverse({ db, snapshotId: snapshot.id, asOf: universe.asOf, listings: universe.listings, rules });
     process.stdout.write(`${decisions.map(d => `${d.symbol.padEnd(11)} ${d.included ? 'IN ' : 'OUT'} cap=${d.marketCapUsd === null ? '-' : (d.marketCapUsd / 1e9).toFixed(2) + 'bn'} adv=${d.advUsd === null ? '-' : (d.advUsd / 1e6).toFixed(1) + 'm'} ${d.reasons.join(',')}`).join('\n')}\n`);
     expect(decisions).toHaveLength(50);
@@ -77,10 +83,11 @@ integration('EODHD prices and universe on Postgres', () => {
     expect(by.get('AAPL.US')).toMatchObject({ included: true, reasons: [], region: 'US' });
     expect(by.get('KO.US')?.reasons).toEqual(['excluded_by_rule']);
     expect(by.get('ZZZZ.US')?.reasons).toEqual(['no_price', 'market_cap_unavailable', 'adv_unavailable']);
-    expect(by.get('ENEL.MI')?.reasons).toEqual(['no_price', 'market_cap_unavailable', 'adv_unavailable']);
+    expect(by.get('ENEL.MI')?.reasons).toEqual(['unsupported_exchange', 'no_price', 'market_cap_unavailable', 'adv_unavailable']);
     expect(by.get('TPIC.US')?.reasons).toContain('below_min_market_cap');
     for (const d of decisions.filter(d => d.region !== 'US' && d.lastBarDate)) expect(d.reasons).toContain('market_cap_unavailable');
-    expect(by.get('VWS.CO')?.reasons).toContain('fx_unavailable');
+    expect(by.get('VWS.CO')?.reasons).toEqual(['market_cap_unavailable']);
+    expect(by.get('VWS.CO')?.advUsd).toBeGreaterThan(0);
     expect(by.get('VOD.LSE')?.advUsd).toBeGreaterThan(5e6);
 
     // Same snapshot, earlier date: later bars are invisible.

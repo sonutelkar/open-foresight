@@ -129,3 +129,11 @@ export const priceBars = pgTable('price_bars', {
   uniqueIndex('price_bars_version').on(table.source, table.symbol, table.date, table.contentHash),
   index('price_bars_lookup').on(table.symbol, table.date),
 ]);
+
+export const fxRates = pgTable('fx_rates', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  source: text('source').notNull(), currency: text('currency').notNull(), date: date('date').notNull(),
+  /** Units of `currency` per one euro. */
+  perEur: numeric('per_eur').notNull(),
+  ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('fx_rates_version').on(table.source, table.currency, table.date, table.perEur)]);

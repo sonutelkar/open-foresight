@@ -1,12 +1,6 @@
 {
- "note": "Constructed. sharesOutstanding are rounded approximations chosen for this test, not SEC-recorded values, and the CIKs are synthetic. fxToUsd rates are approximate 2024-11-08 values. Prices in eod-bars.json are recorded from EODHD.",
+ "note": "Constructed. sharesOutstanding are rounded approximations chosen for this test, not SEC-recorded values, and the CIKs are synthetic. Prices in eod-bars.json are recorded from EODHD and FX comes from the recorded ECB file in ../ecb.",
  "asOf": "2024-11-08",
- "fxToUsd": {
-  "USD": 1,
-  "GBP": 1.29,
-  "EUR": 1.08,
-  "CHF": 1.16
- },
  "listings": [
   {
    "symbol": "AAPL.US",

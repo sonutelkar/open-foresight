@@ -11,7 +11,8 @@ export const exchanges: Readonly<Record<string, Exchange>> = {
   PA: { region: 'EU', currency: 'EUR', quoteScale: 1 },
   AS: { region: 'EU', currency: 'EUR', quoteScale: 1 },
   MC: { region: 'EU', currency: 'EUR', quoteScale: 1 },
-  MI: { region: 'EU', currency: 'EUR', quoteScale: 1 },
+  ST: { region: 'EU', currency: 'SEK', quoteScale: 1 },
+  OL: { region: 'EU', currency: 'NOK', quoteScale: 1 },
   BR: { region: 'EU', currency: 'EUR', quoteScale: 1 },
   HE: { region: 'EU', currency: 'EUR', quoteScale: 1 },
   LS: { region: 'EU', currency: 'EUR', quoteScale: 1 },
@@ -93,4 +94,16 @@ export function screenUniverse(candidates: Candidate[], rules: UniverseRules, as
     else if (advUsd !== null && advUsd < rules.minAdvUsd) reasons.push('below_min_adv');
     return { symbol: c.symbol, included: reasons.length === 0, reasons, region: exchange?.region ?? null, marketCapUsd, advUsd, lastBarDate: c.lastBarDate };
   });
+}
+
+/**
+ * USD per one unit of each currency, from rates quoted as units of currency per euro.
+ * Needs the USD rate. A currency with no rate is left out, so the screen reports `fx_unavailable` for it.
+ */
+export function fxToUsd(perEur: Record<string, number>): Record<string, number> {
+  const usd = perEur.USD;
+  if (usd === undefined || !(usd > 0)) return {};
+  const out: Record<string, number> = { USD: 1, EUR: usd };
+  for (const [currency, rate] of Object.entries(perEur)) if (currency !== 'USD' && currency !== 'EUR' && rate > 0) out[currency] = usd / rate;
+  return out;
 }

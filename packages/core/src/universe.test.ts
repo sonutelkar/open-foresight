@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deriveMetrics, exchangeOf, screenUniverse, type Bar, type Metrics, type UniverseRules } from './universe.js';
+import { deriveMetrics, exchangeOf, fxToUsd, screenUniverse, type Bar, type Metrics, type UniverseRules } from './universe.js';
 
 const rules: UniverseRules = { regions: ['US', 'EU', 'UK', 'CH'], minMarketCapUsd: 1e9, minAdvUsd: 5e6, maxStaleDays: 5, advWindow: 3, minAdvBars: 2, fxToUsd: { USD: 1, GBP: 1.25, EUR: 1.1 }, excluded: { 'BAD.US': 'sanctioned' } };
 const bars = (rows: Array<[string, number, number | null]>): Bar[] => rows.map(([date, close, volume]) => ({ date, close, volume }));
@@ -68,5 +68,20 @@ describe('screenUniverse', () => {
   it('treats the stale limit as inclusive', () => {
     expect(decide('AAPL.US', { lastBarDate: '2024-02-25' }).reasons).toEqual([]);
     expect(decide('AAPL.US', { lastBarDate: '2024-02-24' }).reasons).toEqual(['stale_price']);
+  });
+});
+
+describe('fxToUsd', () => {
+  it('converts euro-quoted rates into USD per unit', () => {
+    const out = fxToUsd({ USD: 1.08, GBP: 0.84, CHF: 0.9 });
+    expect(out.USD).toBe(1);
+    expect(out.EUR).toBe(1.08);
+    expect(out.GBP).toBeCloseTo(1.08 / 0.84);
+    expect(out.CHF).toBeCloseTo(1.2);
+  });
+  it('returns nothing without a usable USD rate and skips bad rates', () => {
+    expect(fxToUsd({ GBP: 0.84 })).toEqual({});
+    expect(fxToUsd({ USD: 0 })).toEqual({});
+    expect(fxToUsd({ USD: 1.1, GBP: 0 })).toEqual({ USD: 1, EUR: 1.1 });
   });
 });
