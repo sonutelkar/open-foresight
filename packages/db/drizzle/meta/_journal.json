@@ -78,6 +78,13 @@
       "when": 1795369252445,
       "tag": "0010_share_class_figi",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1795371451318,
+      "tag": "0011_market_cap_observations",
+      "breakpoints": true
     }
   ]
 }

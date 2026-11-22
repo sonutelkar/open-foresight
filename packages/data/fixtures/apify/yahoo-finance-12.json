@@ -1,0 +1,399 @@
+{
+ "recordedAt": "2026-11-22T18:06:00Z",
+ "actor": "architjn/yahoo-finance 1.1.1",
+ "note": "Real actor output for 12 tickers, trimmed to ticker, resolved_symbol, stock_info and price_info (history, news and other sections dropped). Two items (ROG.SW and ALO.PA) were recorded from a later 49-ticker run and carry the string \"N/A\" for market cap, which the actor uses for values Yahoo did not return.",
+ "items": [
+  {
+   "ticker": "AAPL",
+   "resolved_symbol": "AAPL",
+   "stock_info": {
+    "symbol": "AAPL",
+    "name": "Apple Inc.",
+    "quote_type": "EQUITY",
+    "sector": "Technology",
+    "industry": "Consumer Electronics",
+    "market_cap": 4978144444416,
+    "current_price": 342.56,
+    "previous_close": 349.21,
+    "day_high": 354.3,
+    "day_low": 340.56,
+    "volume": 80450240,
+    "pe_ratio": 38.146996,
+    "dividend_yield": 0.32,
+    "beta": 1.089
+   },
+   "price_info": {
+    "symbol": "AAPL",
+    "current_price": 342.56,
+    "previous_close": 349.21,
+    "change": -6.649999999999977,
+    "change_percent": -1.9042982732453189,
+    "timestamp": "2026-11-22T18:06:36.164679"
+   }
+  },
+  {
+   "ticker": "SAP.DE",
+   "resolved_symbol": "SAP.DE",
+   "stock_info": {
+    "symbol": "SAP.DE",
+    "name": "SAP SE",
+    "quote_type": "EQUITY",
+    "sector": "Technology",
+    "industry": "Software - Application",
+    "market_cap": 212004241408,
+    "current_price": 183.68,
+    "previous_close": 187.02,
+    "day_high": 185.94,
+    "day_low": 181.64,
+    "volume": 3536426,
+    "pe_ratio": 27.051546,
+    "dividend_yield": 1.36,
+    "beta": 0.702
+   },
+   "price_info": {
+    "symbol": "SAP.DE",
+    "current_price": 183.68,
+    "previous_close": 187.02,
+    "change": -3.3400000000000034,
+    "change_percent": -1.7859052507753197,
+    "timestamp": "2026-11-22T18:06:37.968756"
+   }
+  },
+  {
+   "ticker": "SIE.DE",
+   "resolved_symbol": "SIE.DE",
+   "stock_info": {
+    "symbol": "SIE.DE",
+    "name": "Siemens Aktiengesellschaft",
+    "quote_type": "EQUITY",
+    "sector": "Industrials",
+    "industry": "Specialty Industrial Machinery",
+    "market_cap": 194607284224,
+    "current_price": 254.65,
+    "previous_close": 266.9,
+    "day_high": 260.85,
+    "day_low": 254.5,
+    "volume": 1534024,
+    "pe_ratio": 23.732527,
+    "dividend_yield": 2.1,
+    "beta": 1.336
+   },
+   "price_info": {
+    "symbol": "SIE.DE",
+    "current_price": 254.65,
+    "previous_close": 266.9,
+    "change": -12.249999999999972,
+    "change_percent": -4.58973398276507,
+    "timestamp": "2026-11-22T18:06:40.018484"
+   }
+  },
+  {
+   "ticker": "MC.PA",
+   "resolved_symbol": "MC.PA",
+   "stock_info": {
+    "symbol": "MC.PA",
+    "name": "LVMH Mo\u00ebt Hennessy - Louis Vuitton, Soci\u00e9t\u00e9 Europ\u00e9enne",
+    "quote_type": "EQUITY",
+    "sector": "Consumer Cyclical",
+    "industry": "Luxury Goods",
+    "market_cap": 187396194304,
+    "current_price": 381.95,
+    "previous_close": 391.9,
+    "day_high": 390.15,
+    "day_low": 381.15,
+    "volume": 779369,
+    "pe_ratio": 17.408842,
+    "dividend_yield": 3.4,
+    "beta": 0.896
+   },
+   "price_info": {
+    "symbol": "MC.PA",
+    "current_price": 381.95,
+    "previous_close": 391.9,
+    "change": -9.949999999999989,
+    "change_percent": -2.5389129880071417,
+    "timestamp": "2026-11-22T18:06:41.777847"
+   }
+  },
+  {
+   "ticker": "ASML.AS",
+   "resolved_symbol": "ASML.AS",
+   "stock_info": {
+    "symbol": "ASML.AS",
+    "name": "ASML Holding N.V.",
+    "quote_type": "EQUITY",
+    "sector": "Technology",
+    "industry": "Semiconductor Equipment & Materials",
+    "market_cap": 450167898112,
+    "current_price": 1168,
+    "previous_close": 1288.2,
+    "day_high": 1229.8,
+    "day_low": 1163.6,
+    "volume": 1460177,
+    "pe_ratio": 33.39051,
+    "dividend_yield": 0.64,
+    "beta": 1.333
+   },
+   "price_info": {
+    "symbol": "ASML.AS",
+    "current_price": 1168,
+    "previous_close": 1288.2,
+    "change": -120.20000000000005,
+    "change_percent": -9.330849247011336,
+    "timestamp": "2026-11-22T18:06:43.641907"
+   }
+  },
+  {
+   "ticker": "NESN.SW",
+   "resolved_symbol": "NESN.SW",
+   "stock_info": {
+    "symbol": "NESN.SW",
+    "name": "Nestl\u00e9 S.A.",
+    "quote_type": "EQUITY",
+    "sector": "Consumer Defensive",
+    "industry": "Packaged Foods",
+    "market_cap": 220053422080,
+    "current_price": 85.55,
+    "previous_close": 84.45,
+    "day_high": 85.76,
+    "day_low": 84.95,
+    "volume": 4728818,
+    "pe_ratio": 29.602076,
+    "dividend_yield": 3.62,
+    "beta": 0.477
+   },
+   "price_info": {
+    "symbol": "NESN.SW",
+    "current_price": 85.55,
+    "previous_close": 84.45,
+    "change": 1.0999999999999943,
+    "change_percent": 1.3025458851391287,
+    "timestamp": "2026-11-22T18:06:47.164980"
+   }
+  },
+  {
+   "ticker": "NOVN.SW",
+   "resolved_symbol": "NOVN.SW",
+   "stock_info": {
+    "symbol": "NOVN.SW",
+    "name": "Novartis AG",
+    "quote_type": "EQUITY",
+    "sector": "Healthcare",
+    "industry": "Drug Manufacturers - General",
+    "market_cap": 241290559488,
+    "current_price": 127.76,
+    "previous_close": 127.24,
+    "day_high": 128.74,
+    "day_low": 127.28,
+    "volume": 4144754,
+    "pe_ratio": 30.63789,
+    "dividend_yield": 2.9,
+    "beta": 0.453
+   },
+   "price_info": {
+    "symbol": "NOVN.SW",
+    "current_price": 127.76,
+    "previous_close": 127.24,
+    "change": 0.5200000000000102,
+    "change_percent": 0.40867651681861855,
+    "timestamp": "2026-11-22T18:06:50.704317"
+   }
+  },
+  {
+   "ticker": "VOD.L",
+   "resolved_symbol": "VOD.L",
+   "stock_info": {
+    "symbol": "VOD.L",
+    "name": "Vodafone Group Public Limited Company",
+    "quote_type": "EQUITY",
+    "sector": "Communication Services",
+    "industry": "Telecom Services",
+    "market_cap": 25103218688,
+    "current_price": 108.35,
+    "previous_close": 109.45,
+    "day_high": 109.85,
+    "day_low": 108,
+    "volume": 46915602,
+    "pe_ratio": "N/A",
+    "dividend_yield": 3.65,
+    "beta": 0.321
+   },
+   "price_info": {
+    "symbol": "VOD.L",
+    "current_price": 108.35,
+    "previous_close": 109.45,
+    "change": -1.1000000000000085,
+    "change_percent": -1.0050251256281486,
+    "timestamp": "2026-11-22T18:06:54.557621"
+   }
+  },
+  {
+   "ticker": "SHEL.L",
+   "resolved_symbol": "SHEL.L",
+   "stock_info": {
+    "symbol": "SHEL.L",
+    "name": "Shell plc",
+    "quote_type": "EQUITY",
+    "sector": "Energy",
+    "industry": "Oil & Gas Integrated",
+    "market_cap": 201786523648,
+    "current_price": 3574.5,
+    "previous_close": 3574.5,
+    "day_high": 3587.5,
+    "day_low": 3435.175,
+    "volume": 10518993,
+    "pe_ratio": 8.142369,
+    "dividend_yield": 3.34,
+    "beta": -0.248
+   },
+   "price_info": {
+    "symbol": "SHEL.L",
+    "current_price": 3574.5,
+    "previous_close": 3574.5,
+    "change": 0,
+    "change_percent": 0,
+    "timestamp": "2026-11-22T18:06:58.518385"
+   }
+  },
+  {
+   "ticker": "DSV.CO",
+   "resolved_symbol": "DSV.CO",
+   "stock_info": {
+    "symbol": "DSV.CO",
+    "name": "DSV A/S",
+    "quote_type": "EQUITY",
+    "sector": "Industrials",
+    "industry": "Integrated Freight & Logistics",
+    "market_cap": 328140390400,
+    "current_price": 1375.5,
+    "previous_close": 1420,
+    "day_high": 1410,
+    "day_low": 1367.5,
+    "volume": 620519,
+    "pe_ratio": 41.022964,
+    "dividend_yield": 0.51,
+    "beta": 0.973
+   },
+   "price_info": {
+    "symbol": "DSV.CO",
+    "current_price": 1375.5,
+    "previous_close": 1420,
+    "change": -44.5,
+    "change_percent": -3.1338028169014085,
+    "timestamp": "2026-11-22T18:07:01.754960"
+   }
+  },
+  {
+   "ticker": "VOLV-B.ST",
+   "resolved_symbol": "VOLV-B.ST",
+   "stock_info": {
+    "symbol": "VOLV-B.ST",
+    "name": "AB Volvo (publ)",
+    "quote_type": "EQUITY",
+    "sector": "Industrials",
+    "industry": "Farm & Heavy Construction Machinery",
+    "market_cap": 637893869568,
+    "current_price": 313.7,
+    "previous_close": 320.2,
+    "day_high": 315.6,
+    "day_low": 310.6,
+    "volume": 5477737,
+    "pe_ratio": 16.330038,
+    "dividend_yield": 2.71,
+    "beta": 1.016
+   },
+   "price_info": {
+    "symbol": "VOLV-B.ST",
+    "current_price": 313.7,
+    "previous_close": 320.2,
+    "change": -6.5,
+    "change_percent": -2.0299812617114306,
+    "timestamp": "2026-11-22T18:07:06.353569"
+   }
+  },
+  {
+   "ticker": "ENEL.MI",
+   "resolved_symbol": "ENEL.MI",
+   "stock_info": {
+    "symbol": "ENEL.MI",
+    "name": "Enel SpA",
+    "quote_type": "EQUITY",
+    "sector": "Utilities",
+    "industry": "Utilities - Diversified",
+    "market_cap": 93412974592,
+    "current_price": 9.416,
+    "previous_close": 9.453,
+    "day_high": 9.455,
+    "day_low": 9.27,
+    "volume": 22520408,
+    "pe_ratio": 21.400002,
+    "dividend_yield": 5.2,
+    "beta": 0.836
+   },
+   "price_info": {
+    "symbol": "ENEL.MI",
+    "current_price": 9.416,
+    "previous_close": 9.453,
+    "change": -0.036999999999999034,
+    "change_percent": -0.39141013434887373,
+    "timestamp": "2026-11-22T18:07:10.123747"
+   }
+  },
+  {
+   "ticker": "ROG.SW",
+   "resolved_symbol": "ROG.SW",
+   "stock_info": {
+    "symbol": "ROG.SW",
+    "name": "N/A",
+    "quote_type": "N/A",
+    "sector": "N/A",
+    "industry": "N/A",
+    "market_cap": "N/A",
+    "current_price": "N/A",
+    "previous_close": "N/A",
+    "day_high": "N/A",
+    "day_low": "N/A",
+    "volume": "N/A",
+    "pe_ratio": "N/A",
+    "dividend_yield": "N/A",
+    "beta": "N/A"
+   },
+   "price_info": {
+    "symbol": "ROG.SW",
+    "current_price": 0,
+    "previous_close": 0,
+    "change": "N/A",
+    "change_percent": "N/A",
+    "timestamp": "2026-11-22T18:13:09.913707"
+   }
+  },
+  {
+   "ticker": "ALO.PA",
+   "resolved_symbol": "ALO.PA",
+   "stock_info": {
+    "symbol": "ALO.PA",
+    "name": "Alstom SA",
+    "quote_type": "EQUITY",
+    "sector": "Industrials",
+    "industry": "Railroads",
+    "market_cap": "N/A",
+    "current_price": 8.38,
+    "previous_close": 8.9,
+    "day_high": 8.831,
+    "day_low": 8.38,
+    "volume": 3624255,
+    "pe_ratio": "N/A",
+    "dividend_yield": 0,
+    "beta": 1.097
+   },
+   "price_info": {
+    "symbol": "ALO.PA",
+    "current_price": 8.38,
+    "previous_close": 8.9,
+    "change": -0.5199999999999996,
+    "change_percent": -5.842696629213478,
+    "timestamp": "2026-11-22T18:12:27.662696"
+   }
+  }
+ ]
+}

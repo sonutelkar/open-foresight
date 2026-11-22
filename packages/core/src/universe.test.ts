@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { deriveMetrics, exchangeOf, fxToUsd, screenUniverse, type Bar, type Metrics, type UniverseRules } from './universe.js';
+import { deriveMetrics, exchangeOf, fxToUsd, screenUniverse, yahooSymbol, type Bar, type Metrics, type UniverseRules } from './universe.js';
 
 const rules: UniverseRules = { regions: ['US', 'EU', 'UK', 'CH'], minMarketCapUsd: 1e9, minAdvUsd: 5e6, maxStaleDays: 5, advWindow: 3, minAdvBars: 2, fxToUsd: { USD: 1, GBP: 1.25, EUR: 1.1 }, excluded: { 'BAD.US': 'sanctioned' } };
 const bars = (rows: Array<[string, number, number | null]>): Bar[] => rows.map(([date, close, volume]) => ({ date, close, volume }));
@@ -21,7 +21,7 @@ describe('deriveMetrics', () => {
     expect(m.advLocal).toBe(1);
   });
   it('has no price or cap when no bar exists on or before the date', () => {
-    expect(deriveMetrics({ ...base, asOf: '2024-01-01', bars: bars([['2024-03-01', 10, 1]]) })).toEqual({ lastBarDate: null, lastClose: null, advLocal: null, marketCapLocal: null });
+    expect(deriveMetrics({ ...base, asOf: '2024-01-01', bars: bars([['2024-03-01', 10, 1]]) })).toEqual({ lastBarDate: null, lastClose: null, advLocal: null, marketCapLocal: null, marketCapSource: null });
   });
   it('scales pence quotes into pounds', () => {
     expect(deriveMetrics({ ...base, quoteScale: 0.01, asOf: '2024-03-01', bars: bars([['2024-03-01', 7218, 10]]) }).lastClose).toBeCloseTo(72.18);
@@ -42,7 +42,7 @@ describe('exchangeOf', () => {
 });
 
 describe('screenUniverse', () => {
-  const ok: Metrics = { lastBarDate: '2024-03-01', lastClose: 10, advLocal: 6e6, marketCapLocal: 2e9 };
+  const ok: Metrics = { lastBarDate: '2024-03-01', lastClose: 10, advLocal: 6e6, marketCapLocal: 2e9, marketCapSource: 'shares_x_close' };
   const decide = (symbol: string, over: Partial<Metrics> = {}) => screenUniverse([{ symbol, ...ok, ...over }], rules, '2024-03-01')[0]!;
   it('includes a name that passes every rule', () => {
     expect(decide('AAPL.US')).toMatchObject({ included: true, reasons: [], region: 'US', marketCapUsd: 2e9, advUsd: 6e6 });
@@ -59,7 +59,7 @@ describe('screenUniverse', () => {
   it('separates missing data from low values', () => {
     expect(decide('SAP.XETRA', { marketCapLocal: null }).reasons).toEqual(['market_cap_unavailable']);
     expect(decide('SAP.XETRA', { advLocal: null }).reasons).toEqual(['adv_unavailable']);
-    expect(decide('ZZZ.US', { lastBarDate: null, lastClose: null, advLocal: null, marketCapLocal: null }).reasons).toEqual(['no_price', 'market_cap_unavailable', 'adv_unavailable']);
+    expect(decide('ZZZ.US', { lastBarDate: null, lastClose: null, advLocal: null, marketCapLocal: null, marketCapSource: null }).reasons).toEqual(['no_price', 'market_cap_unavailable', 'adv_unavailable']);
   });
   it('flags unsupported exchanges, disallowed regions and missing FX', () => {
     expect(decide('X.TO').reasons).toContain('unsupported_exchange');
@@ -83,5 +83,29 @@ describe('fxToUsd', () => {
     expect(fxToUsd({ GBP: 0.84 })).toEqual({});
     expect(fxToUsd({ USD: 0 })).toEqual({});
     expect(fxToUsd({ USD: 1.1, GBP: 0 })).toEqual({ USD: 1, EUR: 1.1 });
+  });
+});
+
+describe('yahooSymbol', () => {
+  it('maps EODHD symbols to Yahoo tickers', () => {
+    expect(yahooSymbol('AAPL.US')).toBe('AAPL');
+    expect(yahooSymbol('BRK-B.US')).toBe('BRK-B');
+    expect(yahooSymbol('SAP.XETRA')).toBe('SAP.DE');
+    expect(yahooSymbol('VOD.LSE')).toBe('VOD.L');
+    expect(yahooSymbol('VOLV-B.ST')).toBe('VOLV-B.ST');
+    expect(yahooSymbol('ENEL.MI')).toBeUndefined();
+  });
+});
+
+describe('observed market cap', () => {
+  const base = { quoteScale: 1, advWindow: 3, minAdvBars: 2, asOf: '2024-03-01', bars: bars([['2024-03-01', 10, 100], ['2024-02-29', 10, 100]]) };
+  it('is used only when shares are missing, and says so', () => {
+    expect(deriveMetrics({ ...base, sharesOutstanding: 50, observedMarketCap: 999 })).toMatchObject({ marketCapLocal: 500, marketCapSource: 'shares_x_close' });
+    expect(deriveMetrics({ ...base, sharesOutstanding: null, observedMarketCap: 999 })).toMatchObject({ marketCapLocal: 999, marketCapSource: 'observed' });
+    expect(deriveMetrics({ ...base, sharesOutstanding: null })).toMatchObject({ marketCapLocal: null, marketCapSource: null });
+  });
+  it('prefers observed shares times the as-of close over an observed cap', () => {
+    expect(deriveMetrics({ ...base, sharesOutstanding: null, observedShares: 30, observedMarketCap: 999 })).toMatchObject({ marketCapLocal: 300, marketCapSource: 'observed_shares_x_close' });
+    expect(deriveMetrics({ ...base, sharesOutstanding: 50, observedShares: 30 })).toMatchObject({ marketCapLocal: 500, marketCapSource: 'shares_x_close' });
   });
 });

@@ -154,3 +154,14 @@ export const exchangeListings = pgTable('exchange_listings', {
   shareClasses: jsonb('share_classes').notNull(),
   observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
 }, table => [uniqueIndex('exchange_listings_identity').on(table.source, table.symbol)]);
+
+/** A market cap seen on one date. It is a snapshot of that day, not a historical series. */
+export const marketCapObservations = pgTable('market_cap_observations', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  source: text('source').notNull(),
+  /** EODHD style symbol, such as SAP.XETRA. */
+  symbol: text('symbol').notNull(), sourceSymbol: text('source_symbol').notNull(),
+  /** In the listing currency. London caps are in pounds even though prices are in pence. Null when the source gave only shares. */
+  marketCap: numeric('market_cap'), sharesOutstanding: numeric('shares_outstanding'), price: numeric('price'), currency: text('currency'),
+  observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
+}, table => [index('market_cap_observations_lookup').on(table.symbol, table.observedAt)]);

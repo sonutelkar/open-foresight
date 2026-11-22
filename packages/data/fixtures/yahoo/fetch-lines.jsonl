@@ -1,0 +1,9 @@
+{"symbol": "AAPL.US", "yahoo": "AAPL", "shares": 14532182000.0, "marketCap": 4978144230441.04, "price": 342.55999755859375, "currency": "USD"}
+{"symbol": "SAP.XETRA", "yahoo": "SAP.DE", "shares": 1154204232.0, "marketCap": 212004224880.11572, "price": 183.67999267578125, "currency": "EUR"}
+{"symbol": "NESN.SW", "yahoo": "NESN.SW", "shares": 2572220000.0, "marketCap": 220053428849.79248, "price": 85.55000305175781, "currency": "CHF"}
+{"symbol": "VOD.LSE", "yahoo": "VOD.L", "shares": 23168639889.0, "marketCap": 2510322096620.6113, "price": 108.3499984741211, "currency": "GBp"}
+{"symbol": "SHEL.LSE", "yahoo": "SHEL.L", "shares": 5645167459.0, "marketCap": 20178651082195.5, "price": 3574.5, "currency": "GBp"}
+{"symbol": "DSV.CO", "yahoo": "DSV.CO", "shares": 238560813.0, "marketCap": 328140398281.5, "price": 1375.5, "currency": "DKK"}
+{"symbol": "ENEL.MI", "yahoo": "ENEL.MI", "shares": 9920663654.0, "marketCap": 93412972599.11954, "price": 9.416000366210938, "currency": "EUR"}
+{"symbol": "ROG.SW", "yahoo": "ROG.SW", "error": "KeyError: 'currentTradingPeriod'"}
+{"symbol": "ZZZZ.US", "yahoo": "ZZZZ", "error": "KeyError: 'currentTradingPeriod'"}

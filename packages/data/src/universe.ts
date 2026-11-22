@@ -1,5 +1,5 @@
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { factsAsOf, pricesAsOf } from '@open-foresight/db';
+import { factsAsOf, marketCapsAsOf, pricesAsOf } from '@open-foresight/db';
 import { deriveMetrics, exchangeOf, screenUniverse, type Decision, type UniverseRules } from '@open-foresight/core';
 
 export type UniverseListing = { symbol: string; cik?: string };
@@ -7,9 +7,11 @@ export type UniverseListing = { symbol: string; cik?: string };
 /**
  * Screens listings as of a date against a frozen snapshot.
  * Prices come from price_bars. US shares outstanding come from the SEC `dei` fact filed most recently on or before `asOf`.
- * Names without shares have no market cap and are excluded with that reason.
+ * Without filing shares, observed shares times the as-of close is used, then an observed market cap. Both must be observed within
+ * `maxMarketCapAgeDays` on or before the as-of date, and the decision says which was used.
+ * Names with neither have no market cap and are excluded with that reason.
  */
-export async function buildUniverse(input: { db: PostgresJsDatabase; snapshotId: string; asOf: string; listings: UniverseListing[]; rules: UniverseRules }): Promise<Decision[]> {
+export async function buildUniverse(input: { db: PostgresJsDatabase; snapshotId: string; asOf: string; listings: UniverseListing[]; rules: UniverseRules; /** How old an observed market cap may be. Default 7 days. */ maxMarketCapAgeDays?: number }): Promise<Decision[]> {
   const { db, snapshotId, asOf, rules } = input;
   const lookback = Math.max(rules.advWindow * 2 + 14, rules.maxStaleDays + 1);
   const bars = await pricesAsOf({ db, snapshotId, asOf, symbols: input.listings.map(l => l.symbol), lookbackDays: lookback });
@@ -26,9 +28,10 @@ export async function buildUniverse(input: { db: PostgresJsDatabase; snapshotId:
     const best = shares.get(f.cik);
     if (!best || f.periodEnd > best.periodEnd || (f.periodEnd === best.periodEnd && f.filedAt > best.filedAt)) shares.set(f.cik, { periodEnd: f.periodEnd, filedAt: f.filedAt, value: Number(f.value) });
   }
+  const observed = new Map((await marketCapsAsOf({ db, snapshotId, asOf, symbols: input.listings.map(l => l.symbol), maxAgeDays: input.maxMarketCapAgeDays ?? 7 })).map(r => [r.symbol, r]));
   const candidates = input.listings.map(l => ({
     symbol: l.symbol,
-    ...deriveMetrics({ bars: bySymbol.get(l.symbol) ?? [], asOf, quoteScale: exchangeOf(l.symbol)?.quoteScale ?? 1, sharesOutstanding: l.cik ? shares.get(l.cik)?.value ?? null : null, advWindow: rules.advWindow, minAdvBars: rules.minAdvBars }),
+    ...deriveMetrics({ bars: bySymbol.get(l.symbol) ?? [], asOf, quoteScale: exchangeOf(l.symbol)?.quoteScale ?? 1, sharesOutstanding: l.cik ? shares.get(l.cik)?.value ?? null : null, observedShares: observed.get(l.symbol)?.sharesOutstanding ?? null, observedMarketCap: observed.get(l.symbol)?.marketCap ?? null, advWindow: rules.advWindow, minAdvBars: rules.minAdvBars }),
   }));
   return screenUniverse(candidates, rules, asOf);
 }
