@@ -271,3 +271,19 @@ export const kpiScores = pgTable('kpi_scores', {
   confidence: numeric('confidence').notNull(), valid: boolean('valid').notNull(), errors: jsonb('errors').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [uniqueIndex('kpi_scores_attempt').on(table.runId, table.securityId, table.kpiId, table.attempt)]);
+
+/**
+ * The framework a PM approved at gate 1, frozen. Scores reference it. It never changes.
+ * `framework` is what was approved, after any edits, and `sourceDraftId` is the model draft it started from.
+ */
+export const kpiFrameworkVersions = pgTable('kpi_framework_versions', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().references(() => runs.id),
+  version: integer('version').notNull(),
+  sourceDraftId: uuid('source_draft_id').notNull().references(() => kpiFrameworkDrafts.id),
+  framework: jsonb('framework').notNull(), exclusions: jsonb('exclusions').notNull(),
+  /** True when the approved framework differs from the draft. */
+  edited: boolean('edited').notNull(),
+  approvedBy: text('approved_by').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [uniqueIndex('kpi_framework_versions_run_version').on(table.runId, table.version)]);

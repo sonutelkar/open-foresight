@@ -147,3 +147,26 @@ export function bucketLevel(value: number, thresholds: readonly [number, number,
   if (!Number.isFinite(value)) throw new Error('Cannot bucket a non finite value');
   return thresholds.filter(t => value >= t).length as 0 | 1 | 2 | 3 | 4;
 }
+
+/**
+ * Turns an approved or edited framework back into the draft shape that `validateFramework` checks.
+ * Use it to validate a PM's edits with the same rules as a model draft. Anything missing or unexpected is left for
+ * `validateFramework` to report as a shape error, so this never throws and never repairs input.
+ */
+export function frameworkToDraft(input: unknown): unknown {
+  if (!input || typeof input !== 'object') return input;
+  const f = input as Record<string, unknown>;
+  const kpis = Array.isArray(f.kpis) ? f.kpis.map(k => {
+    if (!k || typeof k !== 'object') return k;
+    const o = k as Record<string, unknown>;
+    const r = o.rubric && typeof o.rubric === 'object' ? o.rubric as { levels?: Record<string, unknown>; unknown?: unknown } : null;
+    const lv = r?.levels ?? {};
+    return {
+      id: o.id, name: o.name, definition: o.definition, subThemeId: o.subThemeId, method: o.method, sources: o.sources,
+      rubric: r ? { level0: lv['0'], level1: lv['1'], level2: lv['2'], level3: lv['3'], level4: lv['4'], unknownRule: r.unknown } : null,
+      thresholds: o.thresholds ?? null, extraction: o.extraction ?? null, quantQuery: o.quantQuery ?? null,
+      lookbackDays: o.lookbackDays, weightPercent: o.weightPercent, isGate: o.isGate,
+    };
+  }) : f.kpis;
+  return { subThemes: f.subThemes, kpis, rationale: f.rationale };
+}

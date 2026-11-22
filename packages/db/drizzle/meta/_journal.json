@@ -113,6 +113,13 @@
       "when": 1795379538838,
       "tag": "0015_kpi_scores",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1795380898811,
+      "tag": "0016_kpi_framework_versions",
+      "breakpoints": true
     }
   ]
 }

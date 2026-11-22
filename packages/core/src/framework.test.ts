@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { availableQuantIds, bucketLevel, constrainedDraftSchema, frameworkDraftSchema, validateFramework, type FrameworkDraft } from './framework.js';
+import { availableQuantIds, bucketLevel, constrainedDraftSchema, frameworkToDraft, frameworkDraftSchema, validateFramework, type FrameworkDraft } from './framework.js';
 import { enabledSources, quantCatalog, sourceCatalog, sourceIds } from './sources.js';
 
 const golden = JSON.parse(readFileSync(new URL('../fixtures/framework/valid-draft.json', import.meta.url), 'utf8')) as FrameworkDraft;
@@ -173,3 +173,33 @@ describe('catalogs and bucketing', () => {
   });
 });
 
+
+describe('frameworkToDraft', () => {
+  it('round trips a validated framework through the validator unchanged', () => {
+    const first = validateFramework(golden, { availableSources: all });
+    if (!first.ok) throw new Error('golden must be valid');
+    const again = validateFramework(frameworkToDraft(first.framework), { availableSources: all });
+    expect(again.ok).toBe(true);
+    if (again.ok) expect(again.framework).toEqual(first.framework);
+  });
+  it('lets the validator check a PM edit with the same rules', () => {
+    const first = validateFramework(golden, { availableSources: all });
+    if (!first.ok) throw new Error('golden must be valid');
+    const edited = structuredClone(first.framework);
+    edited.kpis[0]!.weightPercent = 35;
+    const r = validateFramework(frameworkToDraft(edited), { availableSources: all });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.map(e => e.code)).toEqual(['weight_total']);
+    const rubric = structuredClone(first.framework);
+    const judgement = rubric.kpis.find(k => k.method === 'judgement');
+    if (judgement && judgement.method === 'judgement') judgement.rubric.levels['2'] = '';
+    const r2 = validateFramework(frameworkToDraft(rubric), { availableSources: all });
+    expect(!r2.ok && r2.errors.map(e => e.code)).toEqual(['incomplete_rubric']);
+  });
+  it('passes non objects through and leaves missing parts to the validator', () => {
+    expect(frameworkToDraft(null)).toBeNull();
+    expect(frameworkToDraft('x')).toBe('x');
+    expect(validateFramework(frameworkToDraft({ kpis: 'many' }), { availableSources: all }).ok).toBe(false);
+    expect(validateFramework(frameworkToDraft({ subThemes: [], kpis: [null], rationale: 'x' }), { availableSources: all }).ok).toBe(false);
+  });
+});
