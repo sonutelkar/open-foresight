@@ -1,4 +1,4 @@
-import { bigserial, date, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
+import { bigserial, date, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex, vector } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -196,3 +196,40 @@ export const snapshotEsefFilings = pgTable('snapshot_esef_filings', {
   snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
   filingId: uuid('filing_id').notNull().references(() => esefFilings.id),
 }, table => [primaryKey({ columns: [table.snapshotId, table.filingId] })]);
+
+/** Dimensions of the pinned embedding model, openai/text-embedding-3-small. */
+export const EMBEDDING_DIMENSIONS = 1536;
+
+/**
+ * A passage of a filing with its exact source offsets and embedding.
+ * Chunks never change. A new extractor, chunker or embedding model writes rows under a new `indexVersion`.
+ * Full-text search uses a generated `tsv` column added in the migration, which drizzle does not model.
+ * There is no vector index. Every search is scoped to one security, so Postgres scans that issuer's chunks exactly.
+ * That keeps results deterministic. Add an HNSW index only if a search across securities is introduced.
+ */
+export const documentChunks = pgTable('document_chunks', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  /** `sec_filing` or `esef_filing`. */
+  docKind: text('doc_kind').notNull(), docId: uuid('doc_id').notNull(),
+  /** `cik:0000320193` or `lei:549300...`. A filing belongs to an issuer. */
+  issuerKey: text('issuer_key').notNull(),
+  availableOn: date('available_on').notNull(),
+  section: text('section').notNull(), ordinal: integer('ordinal').notNull(),
+  startOffset: integer('start_offset').notNull(), endOffset: integer('end_offset').notNull(),
+  text: text('text').notNull(),
+  embedding: vector('embedding', { dimensions: EMBEDDING_DIMENSIONS }).notNull(),
+  indexVersion: text('index_version').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [
+  uniqueIndex('document_chunks_identity').on(table.docKind, table.docId, table.indexVersion, table.ordinal),
+  index('document_chunks_issuer').on(table.indexVersion, table.issuerKey, table.availableOn),
+]);
+
+/** Every embedding request, including failures. Index time embeddings have no run, so they are not in llm_calls. */
+export const embeddingBatches = pgTable('embedding_batches', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  model: text('model').notNull(), provider: text('provider'), purpose: text('purpose').notNull(),
+  inputCount: integer('input_count').notNull(), inputHash: text('input_hash').notNull(),
+  tokens: integer('tokens'), cost: numeric('cost'), latencyMs: integer('latency_ms'), error: jsonb('error'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});

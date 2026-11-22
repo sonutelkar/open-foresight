@@ -1,6 +1,7 @@
 // Records real ESEF index, GLEIF and report responses for one issuer (A.P. Moller - Maersk).
 // Usage: bun scripts/record-esef-fixtures.ts
-// No key is needed. The report is cut to its opening 6 KB plus a 200 KB window from the first text block. The cut is marked with a comment.
+// No key is needed. The excerpt keeps the root element, replaces the 450 KB style head, and keeps a 200 KB window from the first text block.
+// The cut is marked with a comment. The real report has its hidden ix:header at the end, which the excerpt leaves out.
 import { writeFile } from 'node:fs/promises';
 
 const lei = '549300D2K6PKKKXVNN73';
@@ -14,7 +15,8 @@ const reverse = await text(`https://api.gleif.org/api/v1/lei-records?${new URLSe
 const reportUrl = JSON.parse(index).data[0].attributes.report_url as string;
 const full = await text(`https://filings.xbrl.org${reportUrl}`);
 const start = Math.max(0, full.indexOf('<ix:nonNumeric') - 500);
-const excerpt = `${full.slice(0, 6000)}\n<!-- excerpt: bytes 6000 to ${start} of the report were removed -->\n${full.slice(start, start + 200_000)}`;
+const prefix = `${full.slice(0, full.indexOf('<head>'))}<head><!-- style removed --></head><body>`;
+const excerpt = `${prefix}\n<!-- excerpt: bytes 0 to ${start} of the report were removed -->\n${full.slice(start, start + 200_000)}`;
 await writeFile(new URL('index.json', dir), index);
 await writeFile(new URL('gleif-isins.json', dir), isins);
 await writeFile(new URL('gleif-reverse.json', dir), reverse);

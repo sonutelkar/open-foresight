@@ -36,14 +36,15 @@ export function createSecSecurityProvider(options: {
   secUrl?: string;
   openFigiUrl?: string;
   now?: () => Date;
-}): DataProvider {
+}): DataProvider<{ /** Sync only these tickers. */ tickers?: string[] } | void> {
   if (!options.userAgent.trim()) throw new Error('SEC user agent is required');
   const fetcher = options.fetch ?? fetch;
   return {
     id: 'sec_openfigi', capabilities: ['securities'],
-    async sync() {
+    async sync(input) {
       const raw = await requestJson(fetcher, options.secUrl ?? 'https://www.sec.gov/files/company_tickers_exchange.json', { headers: { 'User-Agent': options.userAgent, accept: 'application/json' } });
-      const listings = parseSecListings(raw);
+      const only = input && input.tickers ? new Set(input.tickers.map(t => t.toUpperCase())) : undefined;
+      const listings = parseSecListings(raw).filter(row => !only || only.has(row.ticker.toUpperCase()));
       const tickerIssuers = new Map<string, Set<string>>();
       for (const listing of listings) {
         const issuers = tickerIssuers.get(listing.ticker) ?? new Set<string>();

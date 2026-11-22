@@ -267,3 +267,4 @@ export async function createGateway(options: GatewayOptions) {
     },
   };
 }
+export * from './embed.js';
