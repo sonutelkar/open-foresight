@@ -7,10 +7,12 @@ export type Rubric = { levels: Record<Level, string>; unknown: string };
 export type SubTheme = { id: string; name: string; description: string };
 type Base = { id: string; name: string; definition: string; subThemeId: string; sources: SourceId[]; lookbackDays: number; weightPercent: number; isGate: boolean };
 type Thresholds = [number, number, number, number];
+/** The number a model extracts for an `extract_then_quant` KPI, and its unit. Thresholds use the same unit. */
+export type Extraction = { target: string; unit: 'fraction' | 'usd' | 'count' };
 /** A validated KPI. Each scoring method carries exactly the fields it needs, so a half specified KPI cannot exist. */
 export type Kpi =
   | (Base & { method: 'quant'; quantQuery: QuantId; thresholds: Thresholds })
-  | (Base & { method: 'extract_then_quant'; thresholds: Thresholds; rubric: Rubric })
+  | (Base & { method: 'extract_then_quant'; thresholds: Thresholds; rubric: Rubric; extraction: Extraction })
   | (Base & { method: 'judgement'; rubric: Rubric });
 export type Framework = { subThemes: SubTheme[]; kpis: Kpi[]; rationale: string };
 
@@ -19,10 +21,11 @@ const idPattern = /^[a-z][a-z0-9_]{2,39}$/;
 
 /** What a model returns. Every field is present, with null where a method does not use it. Sources stay free text so a bad one is reported, not rejected. */
 const draftRubric = z.object({ level0: z.string(), level1: z.string(), level2: z.string(), level3: z.string(), level4: z.string(), unknownRule: z.string() }).strict();
+const draftExtraction = z.object({ target: z.string(), unit: z.enum(['fraction', 'usd', 'count']) }).strict();
 const draftKpi = z.object({
   id: z.string(), name: z.string(), definition: z.string(), subThemeId: z.string(),
   method: z.enum(['quant', 'extract_then_quant', 'judgement']),
-  sources: z.array(z.string()), rubric: draftRubric.nullable(), thresholds: z.array(z.number()).nullable(), quantQuery: z.string().nullable(),
+  sources: z.array(z.string()), rubric: draftRubric.nullable(), thresholds: z.array(z.number()).nullable(), extraction: draftExtraction.nullable(), quantQuery: z.string().nullable(),
   lookbackDays: z.number().int(), weightPercent: z.number().int(), isGate: z.boolean(),
 }).strict();
 export const frameworkDraftSchema = z.object({
@@ -47,7 +50,8 @@ export type FrameworkErrorCode =
   | 'shape' | 'sub_theme_count' | 'kpi_count' | 'duplicate_id' | 'bad_id' | 'unknown_sub_theme' | 'empty_sub_theme'
   | 'no_sources' | 'unknown_source' | 'unavailable_source' | 'missing_quant_source' | 'lookback'
   | 'weight' | 'weight_total' | 'factor_weight' | 'gate_count' | 'incomplete_rubric' | 'unexpected_rubric'
-  | 'bad_thresholds' | 'unexpected_thresholds' | 'unknown_quant_query' | 'unexpected_quant_query' | 'text_too_short';
+  | 'bad_thresholds' | 'unexpected_thresholds' | 'threshold_unit' | 'missing_extraction' | 'unexpected_extraction'
+  | 'unknown_quant_query' | 'unexpected_quant_query' | 'text_too_short';
 export type FrameworkError = { code: FrameworkErrorCode; path: string; message: string };
 export type FrameworkResult = { ok: true; framework: Framework } | { ok: false; errors: FrameworkError[] };
 
@@ -105,18 +109,28 @@ export function validateFramework(input: unknown, context: { availableSources: r
       else for (const needed of quantCatalog[k.quantQuery as QuantId].sources) if (!k.sources.includes(needed)) fail('missing_quant_source', `${at}.sources`, `Quant function "${k.quantQuery}" reads source "${needed}", so KPI "${k.id}" must list it.`);
       if (!ascending) fail('bad_thresholds', `${at}.thresholds`, `Quant KPI "${k.id}" needs exactly 4 strictly increasing thresholds that map its value to levels 0 to 4.`);
       if (k.rubric) fail('unexpected_rubric', `${at}.rubric`, `Quant KPI "${k.id}" must not have a rubric. Use null.`);
+      if (k.extraction) fail('unexpected_extraction', `${at}.extraction`, `Quant KPI "${k.id}" must not have an extraction. Use null.`);
     } else {
       if (!rubricComplete) fail('incomplete_rubric', `${at}.rubric`, `KPI "${k.id}" needs an anchored rubric with levels 0 to 4 and an unknown rule, each at least 10 characters.`);
       if (k.quantQuery) fail('unexpected_quant_query', `${at}.quantQuery`, `Non-quant KPI "${k.id}" must not name a quant function. Use null.`);
       if (k.method === 'extract_then_quant' && !ascending) fail('bad_thresholds', `${at}.thresholds`, `KPI "${k.id}" extracts a number, so it needs exactly 4 strictly increasing thresholds.`);
       if (k.method === 'judgement' && k.thresholds) fail('unexpected_thresholds', `${at}.thresholds`, `Judgement KPI "${k.id}" must not have thresholds. Use null.`);
+      if (k.method === 'judgement' && k.extraction) fail('unexpected_extraction', `${at}.extraction`, `Judgement KPI "${k.id}" must not have an extraction. Use null.`);
+      if (k.method === 'extract_then_quant') {
+        if (!k.extraction || shortText(k.extraction.target, 15)) fail('missing_extraction', `${at}.extraction`, `KPI "${k.id}" extracts a number, so it needs an extraction with a target of at least 15 characters and a unit (fraction, usd or count).`);
+        else if (ascending && k.thresholds) {
+          const unit = k.extraction.unit;
+          if (unit === 'fraction' && k.thresholds.some(t => t < 0 || t > 1)) fail('threshold_unit', `${at}.thresholds`, `KPI "${k.id}" has unit fraction, so thresholds must be between 0 and 1. Write 30 percent as 0.3.`);
+          if (unit !== 'fraction' && k.thresholds.some(t => t < 0)) fail('threshold_unit', `${at}.thresholds`, `KPI "${k.id}" has unit ${unit}, so thresholds must not be negative.`);
+        }
+      }
     }
     if (errors.length === before) {
       const base: Base = { id: k.id, name: k.name.trim(), definition: k.definition.trim(), subThemeId: k.subThemeId, sources: k.sources as SourceId[], lookbackDays: k.lookbackDays, weightPercent: k.weightPercent, isGate: k.isGate };
       const thresholds = k.thresholds as Thresholds | null;
       const toRubric = (r: NonNullable<typeof rubric>): Rubric => ({ levels: { '0': r.level0.trim(), '1': r.level1.trim(), '2': r.level2.trim(), '3': r.level3.trim(), '4': r.level4.trim() }, unknown: r.unknownRule.trim() });
       if (k.method === 'quant' && thresholds && k.quantQuery) valid.push({ ...base, method: 'quant', quantQuery: k.quantQuery as QuantId, thresholds });
-      else if (k.method === 'extract_then_quant' && thresholds && rubric) valid.push({ ...base, method: 'extract_then_quant', thresholds, rubric: toRubric(rubric) });
+      else if (k.method === 'extract_then_quant' && thresholds && rubric && k.extraction) valid.push({ ...base, method: 'extract_then_quant', thresholds, rubric: toRubric(rubric), extraction: { target: k.extraction.target.trim(), unit: k.extraction.unit } });
       else if (k.method === 'judgement' && rubric) valid.push({ ...base, method: 'judgement', rubric: toRubric(rubric) });
     }
   });

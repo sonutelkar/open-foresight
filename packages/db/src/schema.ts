@@ -248,3 +248,26 @@ export const kpiFrameworkDrafts = pgTable('kpi_framework_drafts', {
   framework: jsonb('framework'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [uniqueIndex('kpi_framework_drafts_attempt').on(table.runId, table.attempt)]);
+
+/**
+ * One scoring attempt for a security on a KPI. Attempts are never edited.
+ * `valid` is false when validation failed, and then `level` is `unknown` and `errors` says why.
+ * Quant scores have no model call. A score with no retrieved evidence also has none.
+ */
+export const kpiScores = pgTable('kpi_scores', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().references(() => runs.id),
+  frameworkDraftId: uuid('framework_draft_id').notNull().references(() => kpiFrameworkDrafts.id),
+  snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
+  securityId: uuid('security_id').notNull().references(() => securities.id),
+  symbol: text('symbol').notNull(), kpiId: text('kpi_id').notNull(), asOf: date('as_of').notNull(),
+  attempt: integer('attempt').notNull(), method: text('method').notNull(),
+  promptVersion: text('prompt_version'), llmCallId: uuid('llm_call_id').references(() => llmCalls.id),
+  level: text('level').notNull(), extractedValue: numeric('extracted_value'), unit: text('unit'),
+  quantValue: numeric('quant_value'), quantInputs: jsonb('quant_inputs'),
+  citations: jsonb('citations').notNull(), rationale: text('rationale').notNull(), conflicts: jsonb('conflicts').notNull(),
+  /** The passages offered to the model, with their labels, so every citation can be traced back. */
+  evidence: jsonb('evidence').notNull(), raw: jsonb('raw'),
+  confidence: numeric('confidence').notNull(), valid: boolean('valid').notNull(), errors: jsonb('errors').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [uniqueIndex('kpi_scores_attempt').on(table.runId, table.securityId, table.kpiId, table.attempt)]);

@@ -91,6 +91,15 @@ integration('retrieval on Postgres', () => {
     const newer = await createSnapshot({ db });
     expect((await retriever.search({ snapshotId: newer.id, asOf: '2024-12-31', securityId: secA, query: 'hydrogen turbines late arriving', limit: 20 })).some(h => h.docId === late)).toBe(true);
 
+    // The lookback and document kind filters narrow the same eligible set.
+    const since = await retriever.search({ snapshotId: snapshot.id, asOf: '2024-12-31', securityId: secA, query: 'alpha quarterly gigafactory update', since: '2024-07-01', limit: 20 });
+    expect(since.length).toBeGreaterThan(0);
+    expect(since.every(h => h.availableOn >= '2024-07-01')).toBe(true);
+    expect(await retriever.search({ snapshotId: snapshot.id, asOf: '2024-12-31', securityId: secA, query: 'alpha', since: '2024-12-01' })).toEqual([]);
+    expect(await retriever.search({ snapshotId: snapshot.id, asOf: '2024-12-31', securityId: secA, query: 'alpha quarterly', docKinds: ['esef_filing'] })).toEqual([]);
+    expect((await retriever.search({ snapshotId: snapshot.id, asOf: '2024-12-31', securityId: secA, query: 'alpha quarterly', docKinds: ['sec_filing'] })).length).toBeGreaterThan(0);
+    expect(await retriever.search({ snapshotId: snapshot.id, asOf: '2024-12-31', securityId: secA, query: 'alpha', docKinds: [] })).toEqual([]);
+
     // ESEF text is found through the security's LEI and its offsets reproduce the text.
     const esefSnapshot = await createSnapshot({ db });
     const gHits = await retriever.search({ snapshotId: esefSnapshot.id, asOf: '2026-12-31', securityId: secC.id, query: 'market environment review', limit: 5 });

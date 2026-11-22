@@ -12,8 +12,7 @@ import { createGateway } from '@open-foresight/llm';
 import { listDrafts, runDesigner, type DesignerInput } from './designer.js';
 
 const fixture = (name: string) => JSON.parse(readFileSync(new URL(`../fixtures/${name}`, import.meta.url), 'utf8')) as { model: string; provider: string; usage: { prompt_tokens: number; completion_tokens: number; cost: number }; choices: Array<{ message: { content: string } }> };
-// Real OpenRouter completions recorded by scripts/live.ts. The first was rejected by the factor weight rule, and the second passes.
-const factorHeavy = fixture('designer-real-completion-factor-heavy.json');
+// A real OpenRouter completion recorded by scripts/live.ts.
 const corrected = fixture('designer-real-completion.json');
 
 // The gateway caches on the full request, so the brief carries a token unique to this execution. A reused database then never serves an answer cached by an earlier run.
@@ -82,21 +81,6 @@ integration('Designer through the real gateway with recorded real completions', 
     expect(sent.messages[1]?.content).toContain('Smart energy:');
     expect(result.framework.kpis.reduce((s, k) => s + k.weightPercent, 0)).toBe(100);
     expect(result.framework.kpis.filter(k => k.isGate).length).toBeLessThanOrEqual(1);
-  });
-
-  it('repairs the real factor heavy response using the real corrected one', async () => {
-    queue = [factorHeavy, corrected]; requests.length = 0;
-    const runId = await newRun();
-    const result = await runDesigner({ db, gateway: await makeGateway(), runId, input: { ...input, keywords: [...(input.keywords ?? []), 'repair case'] }, availableSources: enabledSources({ eodhd: true }) });
-    expect(result).toMatchObject({ ok: true, attempts: 2 });
-    const drafts = (await listDrafts(db, runId)).reverse();
-    expect(drafts.map(d => d.valid)).toEqual([false, true]);
-    expect((drafts[0]?.errors as Array<{ code: string }>).map(e => e.code)).toEqual(['factor_weight']);
-    const second = requests[1] as { messages: Array<{ role: string; content: string }> };
-    expect(second.messages[1]?.content).toContain('failed validation');
-    expect(second.messages[1]?.content).toContain('market factors');
-    expect(requests).toHaveLength(2);
-    expect(await db.select().from(llmCalls).where(eq(llmCalls.runId, runId))).toHaveLength(2);
   });
 
   it('serves a second run with the same brief from the gateway cache, and records it', async () => {

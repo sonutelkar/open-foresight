@@ -15,6 +15,7 @@
       "version": "0.0.0",
       "dependencies": {
         "@open-foresight/core": "workspace:*",
+        "@open-foresight/data": "workspace:*",
         "@open-foresight/db": "workspace:*",
         "@open-foresight/llm": "workspace:*",
         "@open-foresight/prompts": "workspace:*",
@@ -22,6 +23,7 @@
         "zod": "3.25.76",
       },
       "devDependencies": {
+        "@open-foresight/retrieval": "workspace:*",
         "@types/node": "22.15.30",
         "postgres": "3.4.7",
       },

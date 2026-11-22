@@ -52,7 +52,7 @@ integration('Designer on Postgres', () => {
     expect(result.framework.kpis).toHaveLength(5);
     const [draft] = await listDrafts(db, runId);
     expect(draft).toMatchObject({ attempt: 1, valid: true, model: 'stub/designer', errors: [] });
-    expect(draft?.promptVersion).toMatch(/^designer@v1:[0-9a-f]{12}$/);
+    expect(draft?.promptVersion).toMatch(/^designer@v2:[0-9a-f]{12}$/);
     expect(draft?.framework).toEqual(result.framework);
     expect(draft?.draft).toEqual(golden);
     const [call] = await db.select().from(llmCalls).where(eq(llmCalls.id, draft?.llmCallId ?? ''));

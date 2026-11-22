@@ -1,40 +1,148 @@
 {
   "subThemes": [
-    { "id": "grid_hardware", "name": "Grid hardware and automation", "description": "Equipment that moves, protects and automates electricity networks, such as transformers, switchgear and control systems." },
-    { "id": "efficiency", "name": "Energy efficiency and demand", "description": "Products and software that cut energy use in buildings and industry, or shift demand in response to grid signals." },
-    { "id": "storage_flex", "name": "Storage and flexibility", "description": "Batteries, inverters and balancing services that let grids absorb variable renewable supply." }
+    {
+      "id": "grid_hardware",
+      "name": "Grid hardware and automation",
+      "description": "Equipment that moves, protects and automates electricity networks, such as transformers, switchgear and control systems."
+    },
+    {
+      "id": "efficiency",
+      "name": "Energy efficiency and demand",
+      "description": "Products and software that cut energy use in buildings and industry, or shift demand in response to grid signals."
+    },
+    {
+      "id": "storage_flex",
+      "name": "Storage and flexibility",
+      "description": "Batteries, inverters and balancing services that let grids absorb variable renewable supply."
+    }
   ],
   "kpis": [
     {
-      "id": "grid_revenue_share", "name": "Grid and automation revenue share", "subThemeId": "grid_hardware", "method": "extract_then_quant",
+      "id": "grid_revenue_share",
+      "name": "Grid and automation revenue share",
+      "subThemeId": "grid_hardware",
+      "method": "extract_then_quant",
       "definition": "Share of the latest annual revenue earned from electrical grid equipment, grid automation and related services.",
-      "sources": ["sec_filings", "esef_filings"],
-      "rubric": { "level0": "No disclosed grid or automation revenue.", "level1": "Grid products are mentioned but under 10 percent of revenue.", "level2": "Grid products are 10 to 25 percent of revenue.", "level3": "Grid products are 25 to 50 percent of revenue, with a segment figure.", "level4": "Grid products are over 50 percent of revenue, with a segment figure.", "unknownRule": "Answer unknown when the filing gives no revenue split that identifies grid products." },
-      "thresholds": [0.01, 0.1, 0.25, 0.5], "quantQuery": null, "lookbackDays": 400, "weightPercent": 30, "isGate": true
+      "sources": [
+        "sec_filings",
+        "esef_filings"
+      ],
+      "rubric": {
+        "level0": "No disclosed grid or automation revenue.",
+        "level1": "Grid products are mentioned but under 10 percent of revenue.",
+        "level2": "Grid products are 10 to 25 percent of revenue.",
+        "level3": "Grid products are 25 to 50 percent of revenue, with a segment figure.",
+        "level4": "Grid products are over 50 percent of revenue, with a segment figure.",
+        "unknownRule": "Answer unknown when the filing gives no revenue split that identifies grid products."
+      },
+      "thresholds": [
+        0.01,
+        0.1,
+        0.25,
+        0.5
+      ],
+      "quantQuery": null,
+      "lookbackDays": 400,
+      "weightPercent": 30,
+      "isGate": true,
+      "extraction": {
+        "target": "Revenue from grid equipment, grid automation and related services divided by total revenue for the latest fiscal year, from the segment or product revenue note.",
+        "unit": "fraction"
+      }
     },
     {
-      "id": "rd_intensity", "name": "R&D intensity", "subThemeId": "efficiency", "method": "quant",
+      "id": "rd_intensity",
+      "name": "R&D intensity",
+      "subThemeId": "efficiency",
+      "method": "quant",
       "definition": "Research and development expense divided by revenue, as a proxy for investment in new energy technology.",
-      "sources": ["sec_facts"], "rubric": null, "thresholds": [0.01, 0.03, 0.06, 0.1], "quantQuery": "rd_intensity", "lookbackDays": 400, "weightPercent": 15, "isGate": false
+      "sources": [
+        "sec_facts"
+      ],
+      "rubric": null,
+      "thresholds": [
+        0.01,
+        0.03,
+        0.06,
+        0.1
+      ],
+      "quantQuery": "rd_intensity",
+      "lookbackDays": 400,
+      "weightPercent": 15,
+      "isGate": false,
+      "extraction": null
     },
     {
-      "id": "storage_commitment", "name": "Storage and flexibility commitment", "subThemeId": "storage_flex", "method": "judgement",
+      "id": "storage_commitment",
+      "name": "Storage and flexibility commitment",
+      "subThemeId": "storage_flex",
+      "method": "judgement",
       "definition": "How strongly the company commits capital and products to batteries, inverters or grid balancing, beyond statements of intent.",
-      "sources": ["sec_filings", "esef_filings"],
-      "rubric": { "level0": "No storage or flexibility activity is described.", "level1": "Storage is named as an opportunity with no commitment.", "level2": "A pilot or small product line exists without capital figures.", "level3": "A commercial product or project is described with some figures.", "level4": "Storage is a core business with capital committed and revenue figures.", "unknownRule": "Answer unknown when the text gives too little to separate intent from commitment." },
-      "thresholds": null, "quantQuery": null, "lookbackDays": 730, "weightPercent": 25, "isGate": false
+      "sources": [
+        "sec_filings",
+        "esef_filings"
+      ],
+      "rubric": {
+        "level0": "No storage or flexibility activity is described.",
+        "level1": "Storage is named as an opportunity with no commitment.",
+        "level2": "A pilot or small product line exists without capital figures.",
+        "level3": "A commercial product or project is described with some figures.",
+        "level4": "Storage is a core business with capital committed and revenue figures.",
+        "unknownRule": "Answer unknown when the text gives too little to separate intent from commitment."
+      },
+      "thresholds": null,
+      "quantQuery": null,
+      "lookbackDays": 730,
+      "weightPercent": 25,
+      "isGate": false,
+      "extraction": null
     },
     {
-      "id": "efficiency_products", "name": "Efficiency product exposure", "subThemeId": "efficiency", "method": "judgement",
+      "id": "efficiency_products",
+      "name": "Efficiency product exposure",
+      "subThemeId": "efficiency",
+      "method": "judgement",
       "definition": "Extent to which core products reduce customer energy use, such as drives, controls and building automation.",
-      "sources": ["sec_filings", "esef_filings"],
-      "rubric": { "level0": "No product linked to energy savings.", "level1": "Energy savings are a minor marketing point.", "level2": "Some products have stated energy savings.", "level3": "Most products are sold on measured energy savings.", "level4": "The company is defined by efficiency products with measured savings." , "unknownRule": "Answer unknown when product descriptions do not mention energy use at all." },
-      "thresholds": null, "quantQuery": null, "lookbackDays": 730, "weightPercent": 20, "isGate": false
+      "sources": [
+        "sec_filings",
+        "esef_filings"
+      ],
+      "rubric": {
+        "level0": "No product linked to energy savings.",
+        "level1": "Energy savings are a minor marketing point.",
+        "level2": "Some products have stated energy savings.",
+        "level3": "Most products are sold on measured energy savings.",
+        "level4": "The company is defined by efficiency products with measured savings.",
+        "unknownRule": "Answer unknown when product descriptions do not mention energy use at all."
+      },
+      "thresholds": null,
+      "quantQuery": null,
+      "lookbackDays": 730,
+      "weightPercent": 20,
+      "isGate": false,
+      "extraction": null
     },
     {
-      "id": "market_cap_scale", "name": "Scale by market capitalisation", "subThemeId": "grid_hardware", "method": "quant",
+      "id": "market_cap_scale",
+      "name": "Scale by market capitalisation",
+      "subThemeId": "grid_hardware",
+      "method": "quant",
       "definition": "Market capitalisation in US dollars, to favour companies large enough to deliver at grid scale.",
-      "sources": ["market_cap"], "rubric": null, "thresholds": [1000000000, 5000000000, 20000000000, 80000000000], "quantQuery": "market_cap_usd", "lookbackDays": 30, "weightPercent": 10, "isGate": false
+      "sources": [
+        "market_cap"
+      ],
+      "rubric": null,
+      "thresholds": [
+        1000000000,
+        5000000000,
+        20000000000,
+        80000000000
+      ],
+      "quantQuery": "market_cap_usd",
+      "lookbackDays": 30,
+      "weightPercent": 10,
+      "isGate": false,
+      "extraction": null
     }
   ],
   "rationale": "Grid equipment is the core of smart energy, so it carries the largest weight and is the gate. Efficiency and storage are scored on rubrics. Two quant KPIs add scale and investment."

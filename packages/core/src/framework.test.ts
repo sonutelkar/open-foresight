@@ -85,6 +85,23 @@ describe('validateFramework', () => {
     expect(codes(h)).toEqual(['bad_thresholds']);
   });
 
+  it('requires an extraction with a unit for extract_then_quant KPIs and keeps thresholds in that unit', () => {
+    const missing = clone(); missing.kpis[0]!.extraction = null;
+    expect(codes(missing)).toEqual(['missing_extraction']);
+    const brief = clone(); brief.kpis[0]!.extraction = { target: 'Too short', unit: 'fraction' };
+    expect(codes(brief)).toEqual(['missing_extraction']);
+    const onQuant = clone(); onQuant.kpis[1]!.extraction = golden.kpis[0]!.extraction;
+    expect(codes(onQuant)).toEqual(['unexpected_extraction']);
+    const onJudgement = clone(); onJudgement.kpis[2]!.extraction = golden.kpis[0]!.extraction;
+    expect(codes(onJudgement)).toEqual(['unexpected_extraction']);
+    const percent = clone(); percent.kpis[0]!.thresholds = [5, 15, 30, 50];
+    expect(codes(percent)).toEqual(['threshold_unit']);
+    const usd = clone(); usd.kpis[0]!.extraction = { target: golden.kpis[0]!.extraction!.target, unit: 'usd' }; usd.kpis[0]!.thresholds = [1e8, 5e8, 1e9, 5e9];
+    expect(codes(usd)).toEqual([]);
+    const negative = clone(); negative.kpis[0]!.extraction = { target: golden.kpis[0]!.extraction!.target, unit: 'count' }; negative.kpis[0]!.thresholds = [-1, 1, 2, 3];
+    expect(codes(negative)).toEqual(['threshold_unit']);
+  });
+
   it('checks counts, ids, sub-themes, lookback and text length', () => {
     const few = clone(); few.kpis = few.kpis.slice(0, 2); few.kpis[0]!.weightPercent = 60; few.kpis[1]!.weightPercent = 40;
     expect(codes(few)).toContain('kpi_count');

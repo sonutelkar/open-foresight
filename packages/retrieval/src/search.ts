@@ -15,6 +15,10 @@ export type SearchInput = {
   db: PostgresJsDatabase; snapshotId: string; asOf: string; securityId: string; query: string;
   /** Without a vector only full-text results are returned. */
   queryEmbedding?: number[]; indexVersion: string; limit?: number; candidates?: number;
+  /** Only passages available on or after this date, for a lookback window. */
+  since?: string;
+  /** Only these kinds of document. */
+  docKinds?: DocKind[];
 };
 
 type Row = { id: string; doc_kind: DocKind; doc_id: string; issuer_key: string; section: string; start_offset: number; end_offset: number; text: string; available_on: string };
@@ -31,10 +35,14 @@ export async function search(input: SearchInput): Promise<Hit[]> {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(input.asOf) || Number.isNaN(Date.parse(`${input.asOf}T00:00:00Z`))) throw new Error('asOf must be a valid YYYY-MM-DD date');
   if (!Number.isInteger(limit) || limit < 1 || limit > 100 || !Number.isInteger(candidates) || candidates < limit || candidates > 500) throw new Error('Invalid search limits');
   if (input.queryEmbedding && input.queryEmbedding.length === 0) throw new Error('Empty query embedding');
+  if (input.since !== undefined && (!/^\d{4}-\d{2}-\d{2}$/.test(input.since) || Number.isNaN(Date.parse(`${input.since}T00:00:00Z`)))) throw new Error('since must be a valid YYYY-MM-DD date');
+  if (input.docKinds && input.docKinds.length === 0) return [];
   const keys = await issuerKeysForSecurity(input.db, input.securityId);
   if (keys.length === 0) return [];
   const keyList = sql.join(keys.map(k => sql`${k}`), sql`, `);
-  const eligible = sql`dc.index_version = ${input.indexVersion} and dc.issuer_key in (${keyList}) and dc.available_on <= ${input.asOf}::date
+  const sinceFilter = input.since ? sql`and dc.available_on >= ${input.since}::date` : sql``;
+  const kindFilter = input.docKinds ? sql`and dc.doc_kind in (${sql.join(input.docKinds.map(k => sql`${k}`), sql`, `)})` : sql``;
+  const eligible = sql`dc.index_version = ${input.indexVersion} and dc.issuer_key in (${keyList}) and dc.available_on <= ${input.asOf}::date ${sinceFilter} ${kindFilter}
     and ((dc.doc_kind = 'sec_filing' and dc.doc_id in (select filing_id from snapshot_filings where snapshot_id = ${input.snapshotId}::uuid))
       or (dc.doc_kind = 'esef_filing' and dc.doc_id in (select filing_id from snapshot_esef_filings where snapshot_id = ${input.snapshotId}::uuid)))`;
   const tsquery = orTsQuery(input.query);
