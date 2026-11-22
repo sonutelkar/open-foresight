@@ -188,3 +188,29 @@ Run `TEST_DATABASE_URL=postgres://... bun run --cwd packages/data test` for the 
 **Evidence coverage.** Evidence exists for SEC filers and for the ESEF countries FR, NL, GB, ES, IT, SE and DK. A security with neither has no evidence, and Germany and Switzerland have none.
 
 Run `TEST_DATABASE_URL=postgres://... bun run --cwd packages/retrieval test` for the tests. The performance test builds 10,000 chunks of 1536 dimension clustered vectors across ten issuers, runs 100 searches for one security, and compares the vector ranking for 20 queries with a JavaScript cosine oracle. It excludes embedding latency by using recorded query vectors. To check the live path, run `SEC_USER_AGENT=... OPENROUTER_API_KEY=... TEST_DATABASE_URL=postgres://... bun packages/retrieval/scripts/live.ts sec` from the repository root. It downloads two real Apple 10-K filings, indexes them with real embeddings, and checks a known quote, offsets, and the as-of rules. The `esef` argument runs the same checks on the real ESEF reports in the database. Index and search timings depend on the embedding provider, which is not measured here.
+
+## Designer and KPI framework
+
+The Designer turns a theme brief into a validated KPI framework for a run. It lives in three packages: framework types and validation in `@open-foresight/core`, the versioned prompt in `@open-foresight/prompts`, and the agent in `@open-foresight/agents`.
+
+**Framework shape.** A framework has 2 to 5 sub-themes and 3 to 8 KPIs. A validated KPI is one of three kinds, and each carries exactly the fields its method needs.
+
+- `quant` names a registered quant function and has exactly 4 strictly increasing thresholds. It has no rubric.
+- `extract_then_quant` has a complete rubric and exactly 4 thresholds. A model extracts the number and code buckets it with `bucketLevel`, where the level is how many thresholds the value has reached.
+- `judgement` has a complete rubric and no thresholds.
+
+A complete rubric has levels 0 to 4 and an unknown rule. Each KPI also has sources, a lookback of 30 to 3650 days, a whole percent weight and a gate flag. Weights sum to exactly 100, which departs from the spec's fractions and matches the gate 1 screen. At most one KPI is a gate. KPIs that use the market factor functions (size, liquidity and momentum) may carry at most 20 percent of the weight together, because they describe a stock and not its exposure to a theme.
+
+**Sources and quant functions.** `sourceCatalog` lists what a KPI may name. `enabledSources({ eodhd })` returns the ones enabled for a run, and `prices` needs the EODHD adapter. `quantCatalog` lists the quant functions. It is the contract for the Analyst ticket, which implements each function.
+
+**Validation.** `validateFramework` returns every violation with a code, a path and a message. This lets one repair request name all of them. Codes cover shape, counts, ids, unknown and unavailable sources, missing quant sources, lookback, weights, the weight total, the market factor cap, gate count, rubrics and thresholds.
+
+**Prompt.** `loadPrompt('designer', 'v1')` reads `packages/prompts/prompts/designer/v1.md`. Its `promptVersion` is the name, the version and 12 characters of the file hash, such as `designer@v1:7ca0679cc9a8`, so an edited prompt always shows. `render` fails on a missing or unused variable. Change a prompt by adding a new version file.
+
+**Agent.** `runDesigner` renders the prompt with only the enabled sources and quant functions, and asks the gateway for strict structured output. The schema limits sources and quant functions to the enabled ones. An invalid draft is repaired once, and the second request lists every error. A run that already has a valid draft returns it without a model call unless `regenerate` is set. Each attempt is saved in the append-only `kpi_framework_drafts` table with the raw model output, the validation errors, the prompt version and the `llm_calls` row of its model call. The Designer does not move the run's status. Freezing a framework as a `kpi_framework_versions` row after PM approval belongs to the brief and approval ticket.
+
+**Known limits.** The framework has no field for the unit of an extracted value. The prompt asks for fractions from 0 to 1 and dollars, and the definition names the number to extract, but code does not check it. The Analyst ticket should add a structured unit with its extraction contract. Quant functions are names until that ticket implements them.
+
+Run `TEST_DATABASE_URL=postgres://... bun run --cwd packages/agents test` for the tests. They include a replay of recorded real completions through the real gateway code and a 100 draft timing check that excludes model latency. To run the real model, run `OPENROUTER_API_KEY=... TEST_DATABASE_URL=postgres://... bun packages/agents/scripts/live.ts --record` from the repository root. It uses the pinned designer model from `config/models.ts`, a Smart Energy brief and a sample universe that does not come from the pilot reference ETF, then prints the draft and its audit row. A run costs roughly 0.1 USD and takes under a minute.
+
+Three real runs with the pinned designer model shaped the rules. All three returned a valid framework on the first attempt, in 33 to 49 seconds for 0.09 to 0.12 USD each. The first put 30 percent of the weight on size, liquidity and momentum KPIs, so the prompt and the market factor cap were added. The second bucketed revenue shares in fractions where the first had used percents, so the prompt now fixes the unit. The third followed both rules. `fixtures/designer-real-completion.json` is that third response, and `fixtures/designer-real-completion-factor-heavy.json` is the first, kept because the current rules reject it with `factor_weight`. The recorded model served the call through Google, on the cheapest ZDR provider the gateway pinned at startup.

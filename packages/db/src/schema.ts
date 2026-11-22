@@ -1,4 +1,4 @@
-import { bigserial, date, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex, vector } from 'drizzle-orm/pg-core';
+import { bigserial, boolean, date, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex, vector } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -233,3 +233,18 @@ export const embeddingBatches = pgTable('embedding_batches', {
   tokens: integer('tokens'), cost: numeric('cost'), latencyMs: integer('latency_ms'), error: jsonb('error'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
+
+/**
+ * One Designer attempt for a run. Attempts are never edited. A PM edit at gate 1 becomes a new version later.
+ * `draft` is the model's raw output, `errors` lists what validation found, and `framework` is set only when it passed.
+ */
+export const kpiFrameworkDrafts = pgTable('kpi_framework_drafts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().references(() => runs.id),
+  attempt: integer('attempt').notNull(),
+  promptVersion: text('prompt_version').notNull(), model: text('model').notNull(),
+  llmCallId: uuid('llm_call_id').notNull().references(() => llmCalls.id),
+  draft: jsonb('draft').notNull(), errors: jsonb('errors').notNull(), valid: boolean('valid').notNull(),
+  framework: jsonb('framework'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [uniqueIndex('kpi_framework_drafts_attempt').on(table.runId, table.attempt)]);
