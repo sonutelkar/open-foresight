@@ -18,6 +18,7 @@
       "name": "@open-foresight/data",
       "version": "0.0.0",
       "dependencies": {
+        "@open-foresight/core": "workspace:*",
         "@open-foresight/db": "workspace:*",
         "drizzle-orm": "0.45.4",
         "zod": "3.25.76",

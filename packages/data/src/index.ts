@@ -155,3 +155,5 @@ export async function findSecurityMapping(db: PostgresJsDatabase, listingId: str
 }
 
 export * from "./providers/sec-edgar/index.js";
+export * from './providers/eodhd/index.js';
+export * from './universe.js';

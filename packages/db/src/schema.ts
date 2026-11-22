@@ -1,4 +1,4 @@
-import { bigserial, date, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
+import { bigserial, date, index, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -117,3 +117,15 @@ export const snapshotFacts = pgTable('snapshot_facts', {
   snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
   factId: uuid('fact_id').notNull().references(() => secFacts.id),
 }, table => [primaryKey({ columns: [table.snapshotId, table.factId] })]);
+
+export const priceBars = pgTable('price_bars', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  source: text('source').notNull(), symbol: text('symbol').notNull(), date: date('date').notNull(),
+  open: numeric('open'), high: numeric('high'), low: numeric('low'), close: numeric('close').notNull(),
+  adjustedClose: numeric('adjusted_close'), volume: numeric('volume'),
+  contentHash: text('content_hash').notNull(), raw: jsonb('raw').notNull(),
+  ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
+}, table => [
+  uniqueIndex('price_bars_version').on(table.source, table.symbol, table.date, table.contentHash),
+  index('price_bars_lookup').on(table.symbol, table.date),
+]);

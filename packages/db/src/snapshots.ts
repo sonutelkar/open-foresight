@@ -1,4 +1,4 @@
-import { and, asc, eq, lte, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, lte, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { dataSnapshots, secFacts, secFilings, snapshotFacts, snapshotFilings } from './schema.js';
 
@@ -42,12 +42,12 @@ export async function filingsAsOf(input: { db: PostgresJsDatabase; snapshotId: s
  * For each cik, concept, unit and period, the snapshot fact most recently filed on or before `asOf`.
  * A restatement filed after `asOf` is invisible; one filed before it supersedes the original.
  */
-export async function factsAsOf(input: { db: PostgresJsDatabase; snapshotId: string; asOf: string; cik?: string }) {
+export async function factsAsOf(input: { db: PostgresJsDatabase; snapshotId: string; asOf: string; cik?: string; ciks?: string[]; taxonomy?: string; concept?: string }) {
   checkAsOf(input.asOf);
   return input.db.selectDistinctOn(
     [secFacts.cik, secFacts.taxonomy, secFacts.concept, secFacts.unit, secFacts.periodStart, secFacts.periodEnd],
     { id: secFacts.id, cik: secFacts.cik, taxonomy: secFacts.taxonomy, concept: secFacts.concept, unit: secFacts.unit, value: secFacts.value, periodStart: secFacts.periodStart, periodEnd: secFacts.periodEnd, filedAt: secFacts.filedAt, accession: secFacts.accession, sourceId: secFacts.sourceId, sourcePointer: secFacts.sourcePointer },
   ).from(snapshotFacts).innerJoin(secFacts, eq(secFacts.id, snapshotFacts.factId))
-    .where(and(eq(snapshotFacts.snapshotId, input.snapshotId), lte(secFacts.filedAt, input.asOf), input.cik ? eq(secFacts.cik, input.cik) : undefined))
+    .where(and(eq(snapshotFacts.snapshotId, input.snapshotId), lte(secFacts.filedAt, input.asOf), input.cik ? eq(secFacts.cik, input.cik) : undefined, input.ciks ? inArray(secFacts.cik, input.ciks) : undefined, input.taxonomy ? eq(secFacts.taxonomy, input.taxonomy) : undefined, input.concept ? eq(secFacts.concept, input.concept) : undefined))
     .orderBy(secFacts.cik, secFacts.taxonomy, secFacts.concept, secFacts.unit, secFacts.periodStart, secFacts.periodEnd, sql`${secFacts.filedAt} desc`, sql`${secFacts.accession} desc`, sql`${secFacts.id} desc`);
 }

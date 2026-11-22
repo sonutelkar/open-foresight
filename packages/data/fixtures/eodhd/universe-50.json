@@ -1,0 +1,213 @@
+{
+ "note": "Constructed. sharesOutstanding are rounded approximations chosen for this test, not SEC-recorded values, and the CIKs are synthetic. fxToUsd rates are approximate 2024-11-08 values. Prices in eod-bars.json are recorded from EODHD.",
+ "asOf": "2024-11-08",
+ "fxToUsd": {
+  "USD": 1,
+  "GBP": 1.29,
+  "EUR": 1.08,
+  "CHF": 1.16
+ },
+ "listings": [
+  {
+   "symbol": "AAPL.US",
+   "cik": "9000000001",
+   "sharesOutstanding": 15100000000.0
+  },
+  {
+   "symbol": "MSFT.US",
+   "cik": "9000000002",
+   "sharesOutstanding": 7430000000.0
+  },
+  {
+   "symbol": "NVDA.US",
+   "cik": "9000000003",
+   "sharesOutstanding": 24500000000.0
+  },
+  {
+   "symbol": "AMZN.US",
+   "cik": "9000000004",
+   "sharesOutstanding": 10500000000.0
+  },
+  {
+   "symbol": "GOOGL.US",
+   "cik": "9000000005",
+   "sharesOutstanding": 12200000000.0
+  },
+  {
+   "symbol": "XOM.US",
+   "cik": "9000000006",
+   "sharesOutstanding": 4400000000.0
+  },
+  {
+   "symbol": "JPM.US",
+   "cik": "9000000007",
+   "sharesOutstanding": 2800000000.0
+  },
+  {
+   "symbol": "JNJ.US",
+   "cik": "9000000008",
+   "sharesOutstanding": 2400000000.0
+  },
+  {
+   "symbol": "PG.US",
+   "cik": "9000000009",
+   "sharesOutstanding": 2350000000.0
+  },
+  {
+   "symbol": "KO.US",
+   "cik": "9000000010",
+   "sharesOutstanding": 4300000000.0
+  },
+  {
+   "symbol": "ENPH.US",
+   "cik": "9000000011",
+   "sharesOutstanding": 135000000.0
+  },
+  {
+   "symbol": "FSLR.US",
+   "cik": "9000000012",
+   "sharesOutstanding": 107000000.0
+  },
+  {
+   "symbol": "RUN.US",
+   "cik": "9000000013",
+   "sharesOutstanding": 225000000.0
+  },
+  {
+   "symbol": "PLUG.US",
+   "cik": "9000000014",
+   "sharesOutstanding": 850000000.0
+  },
+  {
+   "symbol": "BE.US",
+   "cik": "9000000015",
+   "sharesOutstanding": 230000000.0
+  },
+  {
+   "symbol": "SEDG.US",
+   "cik": "9000000016",
+   "sharesOutstanding": 57000000.0
+  },
+  {
+   "symbol": "NEE.US",
+   "cik": "9000000017",
+   "sharesOutstanding": 2050000000.0
+  },
+  {
+   "symbol": "AES.US",
+   "cik": "9000000018",
+   "sharesOutstanding": 710000000.0
+  },
+  {
+   "symbol": "ARRY.US",
+   "cik": "9000000019",
+   "sharesOutstanding": 150000000.0
+  },
+  {
+   "symbol": "SHLS.US",
+   "cik": "9000000020",
+   "sharesOutstanding": 170000000.0
+  },
+  {
+   "symbol": "CLNE.US",
+   "cik": "9000000021",
+   "sharesOutstanding": 220000000.0
+  },
+  {
+   "symbol": "FCEL.US",
+   "cik": "9000000022",
+   "sharesOutstanding": 22000000.0
+  },
+  {
+   "symbol": "AMRC.US",
+   "cik": "9000000023",
+   "sharesOutstanding": 50000000.0
+  },
+  {
+   "symbol": "TPIC.US",
+   "cik": "9000000024",
+   "sharesOutstanding": 30000000.0
+  },
+  {
+   "symbol": "STEM.US",
+   "cik": "9000000025",
+   "sharesOutstanding": 160000000.0
+  },
+  {
+   "symbol": "SAP.XETRA"
+  },
+  {
+   "symbol": "SIE.XETRA"
+  },
+  {
+   "symbol": "RWE.XETRA"
+  },
+  {
+   "symbol": "EOAN.XETRA"
+  },
+  {
+   "symbol": "ASML.AS"
+  },
+  {
+   "symbol": "MC.PA"
+  },
+  {
+   "symbol": "SU.PA"
+  },
+  {
+   "symbol": "ALO.PA"
+  },
+  {
+   "symbol": "ENGI.PA"
+  },
+  {
+   "symbol": "ENEL.MI"
+  },
+  {
+   "symbol": "IBE.MC"
+  },
+  {
+   "symbol": "NOKIA.HE"
+  },
+  {
+   "symbol": "VWS.CO"
+  },
+  {
+   "symbol": "VOD.LSE"
+  },
+  {
+   "symbol": "SSE.LSE"
+  },
+  {
+   "symbol": "NG.LSE"
+  },
+  {
+   "symbol": "BP.LSE"
+  },
+  {
+   "symbol": "SHEL.LSE"
+  },
+  {
+   "symbol": "ITM.LSE"
+  },
+  {
+   "symbol": "NESN.SW"
+  },
+  {
+   "symbol": "ROG.SW"
+  },
+  {
+   "symbol": "NOVN.SW"
+  },
+  {
+   "symbol": "ABBN.SW"
+  },
+  {
+   "symbol": "SIKA.SW"
+  },
+  {
+   "symbol": "ZZZZ.US",
+   "cik": "9000000099"
+  }
+ ]
+}
