@@ -165,3 +165,34 @@ export const marketCapObservations = pgTable('market_cap_observations', {
   marketCap: numeric('market_cap'), sharesOutstanding: numeric('shares_outstanding'), price: numeric('price'), currency: text('currency'),
   observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
 }, table => [index('market_cap_observations_lookup').on(table.symbol, table.observedAt)]);
+
+/** ISINs GLEIF lists for a legal entity. One LEI can list equity and debt ISINs. */
+export const leiIsins = pgTable('lei_isins', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  lei: text('lei').notNull(), isin: text('isin').notNull(), source: text('source').notNull(),
+  observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('lei_isins_identity').on(table.lei, table.isin, table.source), index('lei_isins_isin').on(table.isin)]);
+
+/** An ESEF annual report from the filings.xbrl.org index. A filing belongs to an issuer, so it carries a LEI and no security. */
+export const esefFilings = pgTable('esef_filings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  fxoId: text('fxo_id').notNull(), lei: text('lei').notNull(), entityName: text('entity_name').notNull(),
+  country: text('country').notNull(), periodEnd: date('period_end').notNull(),
+  /** The index `published` date when present, else the date the index added it. The later date is the safe one. */
+  availableOn: date('available_on').notNull(), availableSource: text('available_source').notNull(),
+  publishedAt: timestamp('published_at', { withTimezone: true }), dateAddedAt: timestamp('date_added_at', { withTimezone: true }).notNull(),
+  reportUrl: text('report_url').notNull(), packageSha256: text('package_sha256').notNull(),
+  ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('esef_filings_version').on(table.fxoId, table.packageSha256), index('esef_filings_lei').on(table.lei)]);
+
+/** The raw XHTML report. Text is extracted from it when it is chunked, so offsets stay tied to a known extractor. */
+export const esefDocuments = pgTable('esef_documents', {
+  filingId: uuid('filing_id').primaryKey().references(() => esefFilings.id),
+  sha256: text('sha256').notNull(), body: text('body').notNull(),
+  fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull(),
+});
+
+export const snapshotEsefFilings = pgTable('snapshot_esef_filings', {
+  snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
+  filingId: uuid('filing_id').notNull().references(() => esefFilings.id),
+}, table => [primaryKey({ columns: [table.snapshotId, table.filingId] })]);

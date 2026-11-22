@@ -118,3 +118,4 @@ export * from './openfigi.js';
 export * from './providers/eodhd/listings.js';
 export * from './providers/apify/index.js';
 export * from './providers/yahoo/index.js';
+export * from './providers/esef/index.js';

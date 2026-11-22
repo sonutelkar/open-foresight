@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, lte, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { dataSnapshots, secFacts, secFilings, snapshotFacts, snapshotFilings } from './schema.js';
+import { dataSnapshots, esefFilings, exchangeListings, leiIsins, secFacts, secFilings, snapshotEsefFilings, snapshotFacts, snapshotFilings } from './schema.js';
 
 const isoDate = /^\d{4}-\d{2}-\d{2}$/;
 function checkAsOf(asOf: string): void {
@@ -10,10 +10,10 @@ function checkAsOf(asOf: string): void {
 }
 
 /**
- * Freezes the filings and facts ingested at or before `ingestedCutoff` (default now).
+ * Freezes the SEC filings, SEC facts and ESEF filings ingested at or before `ingestedCutoff` (default now).
  * Records ingested later, including late arrivals with old filing dates, are not members.
  */
-export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCutoff?: Date }): Promise<{ id: string; filings: number; facts: number }> {
+export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCutoff?: Date }): Promise<{ id: string; filings: number; facts: number; esefFilings: number }> {
   const cutoff = input.ingestedCutoff ?? new Date();
   if (Number.isNaN(cutoff.getTime()) || cutoff.getTime() > Date.now()) throw new Error('Snapshot cutoff must be a valid time not in the future');
   return input.db.transaction(async tx => {
@@ -25,7 +25,10 @@ export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCu
     const facts = await tx.insert(snapshotFacts)
       .select(tx.select({ snapshotId: sql<string>`${snapshot.id}::uuid`.as('snapshot_id'), factId: secFacts.id }).from(secFacts).where(lte(secFacts.ingestedAt, cutoff)))
       .returning({ id: snapshotFacts.factId });
-    return { id: snapshot.id, filings: filings.length, facts: facts.length };
+    const esef = await tx.insert(snapshotEsefFilings)
+      .select(tx.select({ snapshotId: sql<string>`${snapshot.id}::uuid`.as('snapshot_id'), filingId: esefFilings.id }).from(esefFilings).where(lte(esefFilings.ingestedAt, cutoff)))
+      .returning({ id: snapshotEsefFilings.filingId });
+    return { id: snapshot.id, filings: filings.length, facts: facts.length, esefFilings: esef.length };
   });
 }
 
@@ -50,4 +53,27 @@ export async function factsAsOf(input: { db: PostgresJsDatabase; snapshotId: str
   ).from(snapshotFacts).innerJoin(secFacts, eq(secFacts.id, snapshotFacts.factId))
     .where(and(eq(snapshotFacts.snapshotId, input.snapshotId), lte(secFacts.filedAt, input.asOf), input.cik ? eq(secFacts.cik, input.cik) : undefined, input.ciks ? inArray(secFacts.cik, input.ciks) : undefined, input.taxonomy ? eq(secFacts.taxonomy, input.taxonomy) : undefined, input.concept ? eq(secFacts.concept, input.concept) : undefined))
     .orderBy(secFacts.cik, secFacts.taxonomy, secFacts.concept, secFacts.unit, secFacts.periodStart, secFacts.periodEnd, sql`${secFacts.filedAt} desc`, sql`${secFacts.accession} desc`, sql`${secFacts.id} desc`);
+}
+
+/** Snapshot ESEF filings available on or before `asOf`, oldest first. */
+export async function esefFilingsAsOf(input: { db: PostgresJsDatabase; snapshotId: string; asOf: string; lei?: string; leis?: string[] }) {
+  checkAsOf(input.asOf);
+  return input.db.select({ id: esefFilings.id, fxoId: esefFilings.fxoId, lei: esefFilings.lei, entityName: esefFilings.entityName, country: esefFilings.country, periodEnd: esefFilings.periodEnd, availableOn: esefFilings.availableOn, availableSource: esefFilings.availableSource })
+    .from(snapshotEsefFilings).innerJoin(esefFilings, eq(esefFilings.id, snapshotEsefFilings.filingId))
+    .where(and(eq(snapshotEsefFilings.snapshotId, input.snapshotId), lte(esefFilings.availableOn, input.asOf), input.lei ? eq(esefFilings.lei, input.lei) : undefined, input.leis ? inArray(esefFilings.lei, input.leis) : undefined))
+    .orderBy(asc(esefFilings.availableOn), asc(esefFilings.fxoId));
+}
+
+/**
+ * Resolved securities for each LEI, through the ISINs GLEIF lists for it and the listings already linked to securities.
+ * An issuer with several share classes has several securities. A LEI with none is absent from the result.
+ */
+export async function securityIdsForLeis(input: { db: PostgresJsDatabase; leis: string[] }): Promise<Map<string, string[]>> {
+  const out = new Map<string, string[]>();
+  if (input.leis.length === 0) return out;
+  const rows = await input.db.selectDistinct({ lei: leiIsins.lei, securityId: exchangeListings.securityId })
+    .from(leiIsins).innerJoin(exchangeListings, eq(exchangeListings.isin, leiIsins.isin))
+    .where(and(inArray(leiIsins.lei, input.leis), eq(exchangeListings.status, 'resolved')));
+  for (const row of rows) if (row.securityId) out.set(row.lei, [...(out.get(row.lei) ?? []), row.securityId]);
+  return out;
 }
