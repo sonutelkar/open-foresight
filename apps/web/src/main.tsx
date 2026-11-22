@@ -21,7 +21,7 @@ function App() {
   return (
     <>
       <nav className="topbar">
-        <a className="brand" href="#/">Open Foresight</a>
+        <a className="brand" href="#/"><span className="brand-mark" aria-hidden />Open Foresight</a>
         <div className="approver" aria-label="Approver">
           <label>Analyst <input data-testid="analyst" value={auth.analyst} onChange={e => update({ analyst: e.target.value })} placeholder="Your name" autoComplete="off" maxLength={80} /></label>
           <label>Approver token <input data-testid="token" type="password" value={auth.token} onChange={e => update({ token: e.target.value })} placeholder="From the server" autoComplete="off" /></label>

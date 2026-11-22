@@ -84,6 +84,10 @@ check('the gate shows 3 to 8 KPIs', kpiCount >= 3 && kpiCount <= 8, `${kpiCount}
 check('the weights start at 100 percent', (await page.getByTestId('weight-total').innerText()) === '100%');
 check('approve is enabled for the drafted framework', await page.getByTestId('approve-button').isEnabled());
 await page.screenshot({ path: `${shots}pr14-4-gate.png`, fullPage: true });
+await page.setViewportSize({ width: 390, height: 844 });
+await page.screenshot({ path: `${shots}pr14-8-gate-mobile.png`, fullPage: true });
+check('the gate has no horizontal scroll on a phone width', await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1));
+await page.setViewportSize({ width: 1360, height: 900 });
 
 // 3. Edit a rubric, then break the framework in each way and confirm approval stays blocked.
 let editedKpi = -1;
