@@ -6,7 +6,6 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { enabledSources, validateFramework, type FrameworkDraft } from '@open-foresight/core';
 import { humanDecisions, kpiFrameworkDrafts, kpiFrameworkVersions, llmCalls, runs } from '@open-foresight/db';
-import type { DesignerInput, DesignerResult } from '@open-foresight/agents';
 import { createApp, type AppDeps } from './app.js';
 
 const golden = JSON.parse(readFileSync(new URL('../../../packages/core/fixtures/framework/valid-draft.json', import.meta.url), 'utf8')) as FrameworkDraft;
@@ -31,18 +30,18 @@ integration('API on Postgres', () => {
   const db = drizzle(client);
   afterAll(async () => { await client.end(); });
 
-  const designed: DesignerInput[] = [];
-  let mode: 'ok' | 'invalid' | 'throw' = 'ok';
-  /** Stands in for the Designer. Like the real one it saves a valid draft with its audit row. */
-  const design: AppDeps['design'] = async ({ runId, input }) => {
-    designed.push(input);
-    if (mode === 'throw') throw new Error('The model service is down');
-    if (mode === 'invalid') return { ok: false, errors: [{ code: 'weight_total', path: 'kpis', message: 'Weights must sum to 100 percent, got 90.' }], draftId: randomUUID(), attempts: 2 } satisfies DesignerResult;
+  const queued: string[] = [];
+  let queueDown = false;
+  const enqueue: AppDeps['enqueue'] = async runId => { if (queueDown) throw new Error('The queue is down'); queued.push(runId); };
+  /** Stands in for the worker's first stages: the universe, then the Designer, which saves a valid draft with its audit row. */
+  async function workerReachesGate1(runId: string) {
+    await db.update(runs).set({ status: 'universe_built' }).where(eq(runs.id, runId));
+    await db.update(runs).set({ status: 'designing' }).where(eq(runs.id, runId));
     const [call] = await db.insert(llmCalls).values({ runId, role: 'designer', promptVersion: 'designer@v2:test', model: 'stub/designer', provider: 'stub', params: {}, requestHash: randomUUID(), inputEvidenceIds: [] }).returning({ id: llmCalls.id });
-    const [draft] = await db.insert(kpiFrameworkDrafts).values({ runId, attempt: 1, promptVersion: 'designer@v2:test', model: 'stub/designer', llmCallId: call!.id, draft: golden, errors: [], valid: true, framework }).returning({ id: kpiFrameworkDrafts.id });
-    return { ok: true, framework, draftId: draft!.id, attempts: 1, reused: false };
-  };
-  const make = () => createApp({ db, token: TOKEN, availableSources: sources, today: () => '2026-11-22', design });
+    await db.insert(kpiFrameworkDrafts).values({ runId, attempt: 1, promptVersion: 'designer@v2:test', model: 'stub/designer', llmCallId: call!.id, draft: golden, errors: [], valid: true, framework });
+    await db.update(runs).set({ status: 'awaiting_kpi_approval' }).where(eq(runs.id, runId));
+  }
+  const make = () => createApp({ db, token: TOKEN, availableSources: sources, today: () => '2026-11-22', enqueue });
   const post = (app: ReturnType<typeof make>['app'], path: string, body: unknown, over: Record<string, string> = {}) =>
     app.request(path, { method: 'POST', headers: { ...headers, ...over }, body: typeof body === 'string' ? body : JSON.stringify(body) });
   const runCount = async () => Number((await db.select({ n: count() }).from(runs))[0]?.n);
@@ -51,7 +50,7 @@ integration('API on Postgres', () => {
     const res = await post(api.app, '/api/runs', brief);
     expect(res.status).toBe(202);
     const { runId } = await res.json() as { runId: string };
-    await api.idle();
+    await workerReachesGate1(runId);
     return { api, runId };
   }
   const approve = (api: ReturnType<typeof make>, runId: string, body: unknown, over: Record<string, string> = {}) => post(api.app, `/api/runs/${runId}/approve`, body, over);
@@ -79,6 +78,7 @@ integration('API on Postgres', () => {
   it('blocks invalid briefs with field errors and creates no run', async () => {
     const { app } = make();
     const before = await runCount();
+    const queuedBefore = queued.length;
     const bad = async (over: Record<string, unknown>) => { const r = await post(app, '/api/runs', { ...brief, ...over }); return { status: r.status, body: await r.json() as { errors?: Array<{ field: string; code: string }> } }; };
     const short = await bad({ brief: 'Too short.' });
     expect(short.status).toBe(422);
@@ -90,32 +90,37 @@ integration('API on Postgres', () => {
     const big = JSON.stringify({ ...brief, brief: 'x'.repeat(1_100_000) });
     expect((await post(app, '/api/runs', big, { 'content-length': String(big.length) })).status).toBe(413);
     expect(await runCount()).toBe(before);
-    expect(designed).toHaveLength(0);
+    expect(queued).toHaveLength(queuedBefore);
   });
 
-  it('takes a valid brief to gate 1 through the state machine and records the placeholder universe', async () => {
-    mode = 'ok';
-    const { api, runId } = await readyRun();
-    const body = await (await api.app.request(`/api/runs/${runId}`)).json() as { status: string; history: Array<{ status: string }>; settings: { universe: { status: string }; createdBy: string; brief: string }; draft: { framework: { kpis: unknown[] }; promptVersion: string } | null; attempts: unknown[] };
+  it('creates a run in draft and queues it for the worker, which takes it to gate 1', async () => {
+    const api = make();
+    const res = await post(api.app, '/api/runs', brief);
+    expect(res.status).toBe(202);
+    const { runId, status } = await res.json() as { runId: string; status: string };
+    expect(status).toBe('draft');
+    expect(queued.at(-1)).toBe(runId);
+    const fresh = await (await api.app.request(`/api/runs/${runId}`)).json() as { status: string; settings: { createdBy: string; brief: string; exclusions: string[] }; draft: unknown; basket: unknown };
+    expect(fresh).toMatchObject({ status: 'draft', draft: null, basket: null, settings: { createdBy: 'Ada Analyst', brief: brief.brief, exclusions: ['pure EV makers'] } });
+    await workerReachesGate1(runId);
+    const body = await (await api.app.request(`/api/runs/${runId}`)).json() as { status: string; history: Array<{ status: string }>; draft: { framework: { kpis: unknown[] }; promptVersion: string } };
     expect(body.status).toBe('awaiting_kpi_approval');
     expect(body.history.map(h => h.status)).toEqual(['draft', 'universe_built', 'designing', 'awaiting_kpi_approval']);
-    expect(body.settings.universe.status).toBe('placeholder');
-    expect(body.settings.createdBy).toBe('Ada Analyst');
-    expect(body.draft?.framework.kpis).toHaveLength(5);
-    expect(body.draft?.promptVersion).toBe('designer@v2:test');
-    expect(designed.at(-1)).toMatchObject({ regions: ['US', 'EU'], exposureStyle: 'broad', asOf: '2026-11-20', universeSample: [], exclusions: ['pure EV makers'] });
-    expect(designed.at(-1)?.brief).toBe(brief.brief);
+    expect(body.draft.framework.kpis).toHaveLength(5);
+    expect(body.draft.promptVersion).toBe('designer@v2:test');
   });
 
-  it('marks the run failed when the Designer cannot produce a valid framework or throws', async () => {
-    for (const m of ['invalid', 'throw'] as const) {
-      mode = m;
-      const { api, runId } = await readyRun();
-      const body = await (await api.app.request(`/api/runs/${runId}`)).json() as { status: string; settings: { designError: string[] } };
-      expect(body.status).toBe('failed');
-      expect(body.settings.designError.join(' ')).toMatch(m === 'invalid' ? /weight_total/ : /model service is down/);
-    }
-    mode = 'ok';
+  it('still creates the run when the queue is down, leaving it for the worker sweep', async () => {
+    queueDown = true;
+    try {
+      const api = make();
+      const before = queued.length;
+      const res = await post(api.app, '/api/runs', brief);
+      expect(res.status).toBe(202);
+      const { runId } = await res.json() as { runId: string };
+      expect(queued).toHaveLength(before);
+      expect((await db.select({ s: runs.status }).from(runs).where(eq(runs.id, runId)))[0]?.s).toBe('draft');
+    } finally { queueDown = false; }
   });
 
   it('rejects every kind of invalid approval and leaves no version, decision or status change', async () => {
@@ -144,10 +149,13 @@ integration('API on Postgres', () => {
   });
 
   it('refuses to approve a run that is not at gate 1', async () => {
-    mode = 'throw';
-    const { api, runId } = await readyRun();
-    mode = 'ok';
-    expect((await approve(api, runId, { framework })).status).toBe(409);
+    const api = make();
+    const { runId } = await (await post(api.app, '/api/runs', brief)).json() as { runId: string };
+    const before = queued.length;
+    const res = await approve(api, runId, { framework });
+    expect(res.status).toBe(409);
+    expect(((await res.json()) as { error: string }).error).toContain('draft');
+    expect(queued).toHaveLength(before);
   });
 
   it('freezes an unedited framework, records the decision against the version and advances the run', async () => {
@@ -165,9 +173,12 @@ integration('API on Postgres', () => {
     expect(decision).toMatchObject({ userId: 'Ada Analyst', stage: 'awaiting_kpi_approval', target: created.versionId, action: 'approve', reason: 'Looks right' });
     const [run] = await db.select().from(runs).where(eq(runs.id, runId));
     expect(run).toMatchObject({ status: 'prescreening', frameworkVersion: created.versionId });
+    // The approval queued the run again for the worker: once when it was created, once now. A blocked approval queues nothing.
+    expect(queued.filter(id => id === runId)).toHaveLength(2);
     // The frozen version never changes, and a second approval is blocked.
     await expect(client.unsafe('DELETE FROM kpi_framework_versions')).rejects.toThrow('append-only');
     expect((await approve(api, runId, { framework })).status).toBe(409);
+    expect(queued.filter(id => id === runId)).toHaveLength(2);
     expect(await db.select().from(kpiFrameworkVersions).where(eq(kpiFrameworkVersions.runId, runId))).toHaveLength(1);
   });
 
@@ -201,7 +212,7 @@ integration('API on Postgres', () => {
       expect(res.status).toBe(202);
       ids.push(((await res.json()) as { runId: string }).runId);
     }
-    await api.idle();
+    for (const id of ids) await workerReachesGate1(id);
     const approvals: number[] = [];
     for (const id of ids) {
       const t = performance.now();

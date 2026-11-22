@@ -186,3 +186,6 @@ table.frozen td.num, table.frozen th.num { text-align: right; font-variant-numer
   .actionbar { bottom: 8px; }
   .approver input { width: 8.5rem; }
 }
+
+/* Rank column of the basket table: left aligned, with room before the name. */
+.frozen th.rank, .frozen td.rank { text-align: left; width: 2.75rem; color: var(--muted, #6b6b6b); font-variant-numeric: tabular-nums; }

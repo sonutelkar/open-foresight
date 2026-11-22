@@ -1,5 +1,6 @@
 // Live check of PR 14 in a real browser: Chromium drives the real web app, the real API, Postgres and the real Designer model.
-// Start the API first: DATABASE_URL=... OPENROUTER_API_KEY=... APPROVAL_TOKEN=... bun apps/api/src/server.ts
+// Start the API (DATABASE_URL, APPROVAL_TOKEN) and the worker (DATABASE_URL, OPENROUTER_API_KEY) first. The worker takes the run to gate 1.
+// Approving starts scoring against the stored names, so use a store with few names, or expect paid model calls. The scoring result is checked by browser-live-run.ts.
 // Usage: APPROVAL_TOKEN=... DB_NAME=foresight_pr14_live [BASE_URL=http://127.0.0.1:8787] bun scripts/browser-live.ts
 // It saves screenshots to docs/screenshots and exits non-zero if any check fails.
 import { execFileSync } from 'node:child_process';
@@ -142,8 +143,8 @@ check('database: one frozen version for the run, marked edited', psql(`select co
 check('database: the version holds the edited rubric and the exclusions', psql(`select (framework::text like '%Reviewed and tightened by the analyst%')::text || '|' || (exclusions::text like '%pure fossil fuel producers%')::text from kpi_framework_versions where id = '${versionId}'`) === 'true|true');
 check('database: the model draft is unchanged', psql(`select (draft::text like '%Reviewed and tightened%')::text from kpi_framework_drafts where run_id = '${runId}' and valid`) === 'false');
 check('database: one decision, attributed, targeting the version', psql(`select user_id || '|' || stage || '|' || action || '|' || (target = '${versionId}')::text from human_decisions where run_id = '${runId}'`) === 'Ada Analyst|awaiting_kpi_approval|approve|true');
-check('database: the run moved on and points at the version', psql(`select status || '|' || (framework_version = '${versionId}')::text from runs where id = '${runId}'`) === 'prescreening|true');
-check('database: the status history is complete and ordered', psql(`select string_agg(status::text, ' > ' order by sequence) from run_status_history where run_id = '${runId}'`) === 'draft > universe_built > designing > awaiting_kpi_approval > prescreening');
+check('database: the run moved on and points at the version', psql(`select status || '|' || (framework_version = '${versionId}')::text from runs where id = '${runId}'`) === 'prescreening|true' || /^(prescreening|analysing|packaging|done|failed)\|true$/.test(psql(`select status || '|' || (framework_version = '${versionId}')::text from runs where id = '${runId}'`)));
+check('database: the status history is complete and ordered', psql(`select string_agg(status::text, ' > ' order by sequence) from run_status_history where run_id = '${runId}'`) === 'draft > universe_built > designing > awaiting_kpi_approval > prescreening' || psql(`select string_agg(status::text, ' > ' order by sequence) from run_status_history where run_id = '${runId}'`).startsWith('draft > universe_built > designing > awaiting_kpi_approval > prescreening'));
 check('database: the Designer call is audited with its prompt version', /^designer@v2:[0-9a-f]{12}\|anthropic\/claude-opus-5\.5$/.test(psql(`select prompt_version || '|' || model from llm_calls where run_id = '${runId}' and role = 'designer' limit 1`)));
 
 // 6. A second approval and a wrong token are refused by the server.

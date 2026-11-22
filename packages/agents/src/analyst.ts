@@ -122,16 +122,21 @@ export async function scoreKpi(ctx: AnalystContext, kpi: Kpi): Promise<ScoreOutc
   return asOutcome(row, false);
 }
 
-/** Scores every KPI of a framework for one security, a few at a time. */
+/**
+ * Scores every KPI of a framework for one security, a few at a time.
+ * After one KPI fails no new KPI starts, and the call waits for the ones in flight before it throws, so nothing keeps running or saving after it rejects.
+ */
 export async function scoreFramework(ctx: AnalystContext, framework: Framework, options: { concurrency?: number } = {}): Promise<ScoreOutcome[]> {
   const concurrency = Math.max(1, Math.min(options.concurrency ?? 3, 8));
   const out: ScoreOutcome[] = new Array(framework.kpis.length);
   let next = 0;
+  let failure: { error: unknown } | undefined;
   await Promise.all(Array.from({ length: Math.min(concurrency, framework.kpis.length) }, async () => {
-    while (next < framework.kpis.length) {
+    while (next < framework.kpis.length && !failure) {
       const i = next++;
-      out[i] = await scoreKpi(ctx, framework.kpis[i]!);
+      try { out[i] = await scoreKpi(ctx, framework.kpis[i]!); } catch (error) { failure ??= { error }; }
     }
   }));
+  if (failure) throw failure.error;
   return out;
 }

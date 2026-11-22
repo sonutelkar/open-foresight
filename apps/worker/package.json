@@ -1,0 +1,13 @@
+{
+  "name": "@open-foresight/worker",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "bun src/main.ts", "typecheck": "tsc --noEmit", "test": "vitest run --passWithNoTests" },
+  "dependencies": {
+    "@open-foresight/agents": "workspace:*", "@open-foresight/core": "workspace:*", "@open-foresight/data": "workspace:*", "@open-foresight/db": "workspace:*",
+    "@open-foresight/llm": "workspace:*", "@open-foresight/retrieval": "workspace:*",
+    "drizzle-orm": "0.45.4", "pg-boss": "12.39.0", "postgres": "3.4.7"
+  },
+  "devDependencies": { "@types/node": "22.15.30" }
+}
