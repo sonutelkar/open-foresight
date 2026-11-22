@@ -1,4 +1,4 @@
-import { bigserial, date, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
+import { bigserial, date, integer, jsonb, numeric, pgEnum, pgTable, primaryKey, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -101,3 +101,19 @@ export const secFacts = pgTable('sec_facts', {
   sourcePointer: text('source_pointer').notNull(),
   ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
 });
+
+export const dataSnapshots = pgTable('data_snapshots', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  ingestedCutoff: timestamp('ingested_cutoff', { withTimezone: true }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const snapshotFilings = pgTable('snapshot_filings', {
+  snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
+  filingId: uuid('filing_id').notNull().references(() => secFilings.id),
+}, table => [primaryKey({ columns: [table.snapshotId, table.filingId] })]);
+
+export const snapshotFacts = pgTable('snapshot_facts', {
+  snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
+  factId: uuid('fact_id').notNull().references(() => secFacts.id),
+}, table => [primaryKey({ columns: [table.snapshotId, table.factId] })]);
