@@ -1,18 +1,18 @@
 # Phase 0 and 1 plan
 
-Build the foundation and a US pilot that takes a brief through KPI approval to a 50-stock basket. Each numbered item is one PR. Stop after each check. This plan is not approval to implement.
+Build the foundation and a US, EU, UK, and Switzerland pilot that takes a brief through KPI approval to a 50-stock basket, subject to sufficient data coverage. Each numbered item is one PR. Stop after each check. This plan is not approval to implement.
 
-## Decisions that block work
+## Decisions and open questions
 
-- **US scope.** The roadmap says US only, while the open questions ask US or US plus Europe. Use US as the planning assumption. A different choice changes PRs 7, 8, and 10.
-- **Prices and liquidity.** Select an EOD source with acceptable terms, US coverage, historical prices, volume, and a defensible market-cap input. Stooq and exchange files are candidates, not confirmed solutions. PR 10 and the live phase gate wait for this decision and a coverage probe.
-- **EODHD timing.** The data section says phase 1, while the roadmap says phase 3. Decide before scheduling an adapter. This plan does not silently include it in phase 1. Open data remains the default either way.
-- **Pilot theme and reference.** Choose at least one of the three pilot themes and its reference ETF. PR 17's live gate cannot be evaluated without it. The remaining themes and 200 labels are needed for later evals, not the phase 1 basket.
-- **Model, provider, and spending.** Choose accessible structured-output models and pinned providers, an OpenRouter run budget and monthly cap. PR 5's paid live check and PR 17's live gate wait for credentials, ZDR account settings, and these choices. Fixture tests do not establish live compatibility.
-- **Deployment and identity.** Choose where the pilot runs, any data-residency rules, and who may approve KPIs. PR 14 needs an identity choice for attributable decisions. The phase 1 live gate needs an agreed host.
-- **Gate 2 and scope.** Phase 1 excludes Reviewer and gate 2, but the product workflow requires both before finalisation. Confirm whether a phase 1 basket is explicitly provisional, with no claim of final approval. PRs 15–17 wait for that product decision. Two-person sign-off is a later decision if gate 2 remains in phase 2.
-- **Eval thresholds.** The release gate requires a baseline and labelled sets from phase 1, but the 200-pair set is scheduled in phase 2. Agree who labels it and whether the phase 1 pilot uses a smaller explicitly provisional baseline. PR 17 cannot claim the full kappa release gate without the labelled set.
-- **Reproducibility.** Cache replay promises byte-identical output, while uncached LLM calls can vary. Confirm snapshot membership and evidence versioning semantics before PR 9, including how late-ingested records and restatements are handled. Phase 2 owns full replay; phase 1 must not claim identical uncached model results.
+- **Scope.** Target the US, EU, UK, and Switzerland where sufficient data is available. Report coverage gaps. SEC and OpenFIGI alone do not establish a complete European universe.
+- **Prices and liquidity.** EODHD is an optional candidate, alongside open sources. Select a source after checking prices, volume, point-in-time market-cap inputs, coverage, and applicable non-commercial terms. PR 10 and the live phase gate wait for this check.
+- **EODHD timing.** Add its adapter early in phase 1. It must remain disabled without `EODHD_API_KEY`; the open-data path must work without it.
+- **Pilot theme and reference.** Use Smart Energy, with Robeco Smart Energy as a dated comparison. Its global portfolio and limited published holdings constrain comparison with our regional universe. Select an accessible ETF reference and freeze its holdings date before PR 17.
+- **Model, provider, and spending.** The two configured models passed a live structured-output check. Choose the per-run budget after further testing; confirm the monthly cap and account privacy settings before the live pilot. The gateway does not enforce a monetary cap.
+- **Deployment and approval.** An analyst can review and approve KPIs. Record that an analyst approved the framework; a sign-in page is not required for the local pilot. Choose a host before the live gate. Data residency is not currently a selection priority.
+- **Gate 2 and scope.** Label the phase 1 basket provisional. Reviewer and final approval remain later work.
+- **Evaluation.** AI may produce initial labels and an analyst will skim them. Treat results as provisional. The full kappa release gate still needs an independent labelled set. Agree a provisional pilot threshold separately; the existing full release threshold remains unchanged.
+- **Reproducibility.** Freeze snapshot membership and the evidence versions available when the snapshot is created. Preserve original filing dates and versions, including late arrivals and restatements. Phase 2 owns full replay; phase 1 must not claim identical uncached model results.
 
 ## Landing order and dependencies
 
@@ -89,7 +89,7 @@ For every performance check, measure the same command on trunk first, with the s
 ### PR 07. Data contracts and security master
 
 - [ ] Depends on 02 and 03. Files: `packages/data`, `packages/db`, `packages/core`.
-- [ ] Define provider contracts and timestamped records; ingest SEC ticker and CIK data and map OpenFIGI identifiers to stable security IDs. Preserve ambiguous mappings for resolution.
+- [ ] Define provider contracts and timestamped records; ingest SEC ticker and CIK data and map OpenFIGI identifiers to stable security IDs. Preserve ambiguous mappings for resolution. Identify and report European coverage gaps.
 - [ ] Unit: recorded SEC and OpenFIGI fixtures cover mappings, duplicates, retries, and repeat sync.
 - [ ] Live: ingest a small fixture into Postgres twice and inspect stable IDs and unchanged row counts.
 - [ ] Perf: time fixture ingestion for 1,000 records; fail above 30 seconds.
@@ -113,7 +113,7 @@ For every performance check, measure the same command on trunk first, with the s
 ### PR 10. Prices and universe
 
 - [ ] Depends on 07 and the price-source decision. Files: `packages/data/providers`, `packages/db`, `packages/core`.
-- [ ] Ingest selected US EOD prices and calculate point-in-time market cap and ADV with explicit missing-data handling. Apply region, cap, liquidity, and exclusion filters.
+- [ ] Ingest selected US, EU, UK, and Swiss EOD prices where coverage is sufficient and calculate point-in-time market cap and ADV with explicit missing-data handling. Apply region, cap, liquidity, and exclusion filters.
 - [ ] Unit: recorded source fixtures cover dates, missing values, filters, and repeat ingestion.
 - [ ] Live: load a 50-stock fixture and inspect each inclusion and exclusion reason.
 - [ ] Perf: filter 3,000 fixture securities; fail above 10 seconds.

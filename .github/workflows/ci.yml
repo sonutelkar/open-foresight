@@ -49,3 +49,8 @@ jobs:
         env:
           TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/foresight_test
         run: bun run test
+      - name: Security master integration tests
+        working-directory: packages/data
+        env:
+          TEST_DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/foresight_test
+        run: bun run test

@@ -14,6 +14,19 @@
       "name": "@open-foresight/core",
       "version": "0.0.0",
     },
+    "packages/data": {
+      "name": "@open-foresight/data",
+      "version": "0.0.0",
+      "dependencies": {
+        "@open-foresight/db": "workspace:*",
+        "drizzle-orm": "0.45.4",
+        "zod": "3.25.76",
+      },
+      "devDependencies": {
+        "@types/node": "22.15.30",
+        "postgres": "3.4.7",
+      },
+    },
     "packages/db": {
       "name": "@open-foresight/db",
       "version": "0.0.0",
@@ -114,6 +127,8 @@
     "@jridgewell/sourcemap-codec": ["@jridgewell/sourcemap-codec@1.6.0", "", {}, "sha512-T7jf+5zgsZHwNJ4lvQ7/aezbyk0nNX+zJVWpmHA7VYsEx7a7qr5Rg5IbtJFqkgze5Y2sruq1RUY8Q837Od7iFw=="],
 
     "@open-foresight/core": ["@open-foresight/core@workspace:packages/core"],
+
+    "@open-foresight/data": ["@open-foresight/data@workspace:packages/data"],
 
     "@open-foresight/db": ["@open-foresight/db@workspace:packages/db"],
 

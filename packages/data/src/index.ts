@@ -1,0 +1,155 @@
+import { eq, inArray, sql } from 'drizzle-orm';
+import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
+import { figiMappings, secListings, securities } from '@open-foresight/db';
+import { z } from 'zod';
+
+export type Capability = 'securities' | 'prices' | 'fundamentals' | 'segments' | 'filings' | 'news' | 'transcripts' | 'patents' | 'papers' | 'policy';
+export type SyncReport = { source: string; observedAt: Date; records: number; resolved: number; ambiguous: number; unmatched: number; reclassified: number };
+export interface DataProvider {
+  readonly id: string;
+  readonly capabilities: readonly Capability[];
+  sync(): Promise<SyncReport>;
+}
+
+const secResponse = z.object({
+  fields: z.tuple([z.literal('cik'), z.literal('name'), z.literal('ticker'), z.literal('exchange')]),
+  data: z.array(z.tuple([z.number().int().positive().max(9999999999), z.string().min(1), z.string().min(1), z.string().nullable()])).min(1),
+});
+const candidate = z.object({ figi: z.string().min(1), name: z.string().min(1), ticker: z.string().optional(), exchCode: z.string().optional(), securityType: z.string().optional(), securityType2: z.string().optional() }).passthrough();
+const mappingResponse = z.array(z.union([
+  z.object({ data: z.array(candidate).min(1) }),
+  z.object({ warning: z.string().min(1) }),
+  z.object({ error: z.string().min(1) }),
+]));
+
+export function parseSecListings(raw: unknown) {
+  const rows = secResponse.parse(raw).data;
+  const unique = new Map<string, { cik: string; name: string; ticker: string; exchange: string }>();
+  for (const [cik, name, ticker, exchange] of rows) {
+    const row = { cik: String(cik).padStart(10, '0'), name, ticker, exchange: exchange || 'UNKNOWN' };
+    unique.set(JSON.stringify([row.cik, row.ticker, row.exchange]), row);
+  }
+  return [...unique.values()];
+}
+
+type Fetch = typeof fetch;
+async function requestJson(fetcher: Fetch, url: string, init: RequestInit): Promise<unknown> {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let response: Response;
+    try {
+      response = await fetcher(url, init);
+    } catch (error) {
+      if (attempt === 2 || (error instanceof Error && error.name === 'AbortError')) throw error;
+      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
+      continue;
+    }
+    if (response.ok) return response.json();
+    if (response.status !== 429 && response.status < 500) throw new Error(`Provider returned HTTP ${response.status}`);
+    if (attempt === 2) throw new Error(`Provider returned HTTP ${response.status} after retries`);
+    const retryAfter = response.headers.get('retry-after');
+    const seconds = retryAfter === null ? NaN : Number(retryAfter);
+    if (Number.isFinite(seconds) && seconds > 60) throw new Error(`Provider retry-after exceeds 60 seconds: ${seconds}`);
+    await new Promise(resolve => setTimeout(resolve, Number.isFinite(seconds) ? Math.max(seconds, 0) * 1000 : 1000 * (attempt + 1)));
+  }
+  throw new Error('Provider request failed');
+}
+
+export function createSecSecurityProvider(options: {
+  db: PostgresJsDatabase;
+  userAgent: string;
+  fetch?: Fetch;
+  openFigiApiKey?: string;
+  secUrl?: string;
+  openFigiUrl?: string;
+  now?: () => Date;
+}): DataProvider {
+  if (!options.userAgent.trim()) throw new Error('SEC user agent is required');
+  const fetcher = options.fetch ?? fetch;
+  return {
+    id: 'sec_openfigi', capabilities: ['securities'],
+    async sync() {
+      const raw = await requestJson(fetcher, options.secUrl ?? 'https://www.sec.gov/files/company_tickers_exchange.json', { headers: { 'User-Agent': options.userAgent, accept: 'application/json' } });
+      const listings = parseSecListings(raw);
+      const tickerIssuers = new Map<string, Set<string>>();
+      for (const listing of listings) {
+        const issuers = tickerIssuers.get(listing.ticker) ?? new Set<string>();
+        issuers.add(listing.cik);
+        tickerIssuers.set(listing.ticker, issuers);
+      }
+      const gathered: Array<{ listing: typeof listings[number]; candidates: z.infer<typeof candidate>[] }> = [];
+      const batchSize = options.openFigiApiKey ? 100 : 10;
+      for (let offset = 0; offset < listings.length; offset += batchSize) {
+        if (offset > 0) await new Promise(resolve => setTimeout(resolve, options.openFigiApiKey ? 250 : 2500));
+        const batch = listings.slice(offset, offset + batchSize);
+        const jobs = batch.map(row => ({ idType: 'TICKER', idValue: row.ticker, exchCode: 'US' }));
+        const rawMappings = await requestJson(fetcher, options.openFigiUrl ?? 'https://api.openfigi.com/v3/mapping', {
+          method: 'POST', headers: { 'content-type': 'application/json', ...(options.openFigiApiKey ? { 'X-OPENFIGI-APIKEY': options.openFigiApiKey } : {}) }, body: JSON.stringify(jobs),
+        });
+        const mappings = mappingResponse.parse(rawMappings);
+        if (mappings.length !== batch.length) throw new Error('OpenFIGI returned a mismatched result count');
+        for (let index = 0; index < batch.length; index++) {
+          const listing = batch[index];
+          const mapping = mappings[index];
+          if (!listing || !mapping) throw new Error('OpenFIGI result missing');
+          if ('error' in mapping) throw new Error(`OpenFIGI mapping error: ${mapping.error}`);
+          gathered.push({ listing, candidates: 'data' in mapping ? mapping.data : [] });
+        }
+      }
+      const figiIssuers = new Map<string, Set<string>>();
+      for (const { listing, candidates } of gathered) {
+        const unique = [...new Map(candidates.map(item => [item.figi, item])).values()];
+        const item = unique[0];
+        if (unique.length === 1 && item && item.ticker === listing.ticker && item.exchCode === 'US') {
+          const issuers = figiIssuers.get(item.figi) ?? new Set<string>();
+          issuers.add(listing.cik);
+          figiIssuers.set(item.figi, issuers);
+        }
+      }
+      const observedAt = (options.now ?? (() => new Date()))();
+      const counts = await options.db.transaction(async tx => {
+        await tx.execute(sql`select pg_advisory_xact_lock(746352, 7)`);
+        const existing = await tx.select({ mappingId: figiMappings.id, cik: secListings.cik, ticker: secListings.ticker, candidates: figiMappings.candidates, securityId: figiMappings.securityId })
+          .from(figiMappings).innerJoin(secListings, eq(figiMappings.listingId, secListings.id));
+        const existingCandidates = existing.map(row => {
+          const parsed = z.array(candidate).parse(row.candidates);
+          const unique = [...new Map(parsed.map(item => [item.figi, item])).values()];
+          const sole = unique[0];
+          return { ...row, claim: unique.length === 1 && sole?.ticker === row.ticker && sole.exchCode === 'US' ? sole : undefined };
+        });
+        for (const row of existingCandidates) {
+          if (row.claim) figiIssuers.get(row.claim.figi)?.add(row.cik);
+        }
+        const conflicts = existingCandidates.filter(row => row.securityId !== null && row.claim && (figiIssuers.get(row.claim.figi)?.size ?? 0) > 1).map(row => row.mappingId);
+        for (let offset = 0; offset < conflicts.length; offset += 1000) {
+          await tx.update(figiMappings).set({ securityId: null, observedAt }).where(inArray(figiMappings.id, conflicts.slice(offset, offset + 1000)));
+        }
+        let resolved = 0, ambiguous = 0, unmatched = 0;
+        for (const { listing, candidates } of gathered) {
+          const unique = [...new Map(candidates.map(item => [item.figi, item])).values()];
+          const issuerConflict = (tickerIssuers.get(listing.ticker)?.size ?? 0) > 1 || unique.some(item => (figiIssuers.get(item.figi)?.size ?? 0) > 1);
+          const sole = unique[0];
+          const mismatched = sole !== undefined && (sole.ticker !== listing.ticker || sole.exchCode !== 'US');
+          const isAmbiguous = issuerConflict || unique.length > 1 || mismatched;
+          const [saved] = await tx.insert(secListings).values({ ...listing, observedAt }).onConflictDoUpdate({ target: [secListings.cik, secListings.ticker, secListings.exchange], set: { name: listing.name, observedAt } }).returning();
+          if (!saved) throw new Error('Could not save SEC listing');
+          let securityId: string | null = null;
+          if (!isAmbiguous && sole) {
+            const item = sole;
+            const [security] = await tx.insert(securities).values({ figi: item.figi, name: item.name }).onConflictDoUpdate({ target: securities.figi, set: { name: item.name } }).returning();
+            if (!security) throw new Error('Could not save security');
+            securityId = security.id;
+          }
+          await tx.insert(figiMappings).values({ listingId: saved.id, securityId, candidates, observedAt }).onConflictDoUpdate({ target: figiMappings.listingId, set: { securityId, candidates, observedAt } });
+          if (isAmbiguous) ambiguous++; else if (sole) resolved++; else unmatched++;
+        }
+        return { resolved, ambiguous, unmatched, reclassified: conflicts.length };
+      });
+      return { source: 'sec_openfigi', observedAt, records: listings.length, ...counts };
+    },
+  };
+}
+
+export async function findSecurityMapping(db: PostgresJsDatabase, listingId: string) {
+  const [mapping] = await db.select().from(figiMappings).where(eq(figiMappings.listingId, listingId));
+  return mapping;
+}

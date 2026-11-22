@@ -1,4 +1,4 @@
-import { bigserial, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { bigserial, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -52,4 +52,26 @@ export const humanDecisions = pgTable('human_decisions', {
 export const llmCache = pgTable('llm_cache', {
   requestHash: text('request_hash').primaryKey(), response: jsonb('response').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const securities = pgTable('securities', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  figi: text('figi').notNull().unique(),
+  name: text('name').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const secListings = pgTable('sec_listings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  cik: text('cik').notNull(), ticker: text('ticker').notNull(), exchange: text('exchange').notNull(),
+  name: text('name').notNull(),
+  observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('sec_listings_identity').on(table.cik, table.ticker, table.exchange)]);
+
+export const figiMappings = pgTable('figi_mappings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  listingId: uuid('listing_id').notNull().unique().references(() => secListings.id),
+  securityId: uuid('security_id').references(() => securities.id),
+  candidates: jsonb('candidates').notNull(),
+  observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
 });
