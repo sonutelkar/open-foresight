@@ -56,7 +56,10 @@ export const llmCache = pgTable('llm_cache', {
 
 export const securities = pgTable('securities', {
   id: uuid('id').defaultRandom().primaryKey(),
-  figi: text('figi').notNull().unique(),
+  /** Listing-level FIGI of the first listing seen. Null when the security was first created from a share class. */
+  figi: text('figi').unique(),
+  /** Company-level identity shared by every venue listing of one share class. */
+  shareClassFigi: text('share_class_figi').unique(),
   name: text('name').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
@@ -137,3 +140,17 @@ export const fxRates = pgTable('fx_rates', {
   perEur: numeric('per_eur').notNull(),
   ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
 }, table => [uniqueIndex('fx_rates_version').on(table.source, table.currency, table.date, table.perEur)]);
+
+export const mappingStatus = pgEnum('mapping_status', ['resolved', 'ambiguous', 'unmatched', 'no_isin']);
+
+export const exchangeListings = pgTable('exchange_listings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  source: text('source').notNull(), symbol: text('symbol').notNull(),
+  exchange: text('exchange').notNull(), name: text('name').notNull(), type: text('type').notNull(),
+  isin: text('isin'), currency: text('currency'),
+  status: mappingStatus('status').notNull(),
+  securityId: uuid('security_id').references(() => securities.id),
+  /** Distinct share classes OpenFIGI returned for the ISIN. */
+  shareClasses: jsonb('share_classes').notNull(),
+  observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('exchange_listings_identity').on(table.source, table.symbol)]);

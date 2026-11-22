@@ -1,0 +1,46 @@
+{
+ "US": [
+  {
+   "Code": "AAPL",
+   "Name": "Apple Inc.",
+   "Country": "USA",
+   "Exchange": "NASDAQ",
+   "Currency": "USD",
+   "Type": "Common Stock",
+   "Isin": "US0378331005"
+  }
+ ],
+ "XETRA": [
+  {
+   "Code": "SAP",
+   "Name": "SAP SE",
+   "Country": "Germany",
+   "Exchange": "XETRA",
+   "Currency": "EUR",
+   "Type": "Common Stock",
+   "Isin": "DE0007164600"
+  }
+ ],
+ "SW": [
+  {
+   "Code": "NESN",
+   "Name": "Nestle S.A.",
+   "Country": "Switzerland",
+   "Exchange": "SW",
+   "Currency": "CHF",
+   "Type": "Common Stock",
+   "Isin": "CH0038863350"
+  }
+ ],
+ "LSE": [
+  {
+   "Code": "VOD",
+   "Name": "Vodafone Group PLC",
+   "Country": "UK",
+   "Exchange": "LSE",
+   "Currency": "GBX",
+   "Type": "Common Stock",
+   "Isin": "GB00BH4HKS39"
+  }
+ ]
+}

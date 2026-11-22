@@ -2,6 +2,9 @@ import { eq, inArray, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { figiMappings, secListings, securities } from '@open-foresight/db';
 import { z } from 'zod';
+import { candidate, mapOpenFigi, requestJson, upsertSecurity } from './openfigi.js';
+
+type Fetch = typeof fetch;
 
 export type Capability = 'securities' | 'prices' | 'fundamentals' | 'segments' | 'filings' | 'news' | 'transcripts' | 'patents' | 'papers' | 'policy';
 export type SyncReport = { source: string; observedAt: Date; records: number; resolved: number; ambiguous: number; unmatched: number; reclassified: number };
@@ -15,13 +18,6 @@ const secResponse = z.object({
   fields: z.tuple([z.literal('cik'), z.literal('name'), z.literal('ticker'), z.literal('exchange')]),
   data: z.array(z.tuple([z.number().int().positive().max(9999999999), z.string().min(1), z.string().min(1), z.string().nullable()])).min(1),
 });
-const candidate = z.object({ figi: z.string().min(1), name: z.string().min(1), ticker: z.string().optional(), exchCode: z.string().optional(), securityType: z.string().optional(), securityType2: z.string().optional() }).passthrough();
-const mappingResponse = z.array(z.union([
-  z.object({ data: z.array(candidate).min(1) }),
-  z.object({ warning: z.string().min(1) }),
-  z.object({ error: z.string().min(1) }),
-]));
-
 export function parseSecListings(raw: unknown) {
   const rows = secResponse.parse(raw).data;
   const unique = new Map<string, { cik: string; name: string; ticker: string; exchange: string }>();
@@ -30,28 +26,6 @@ export function parseSecListings(raw: unknown) {
     unique.set(JSON.stringify([row.cik, row.ticker, row.exchange]), row);
   }
   return [...unique.values()];
-}
-
-type Fetch = typeof fetch;
-async function requestJson(fetcher: Fetch, url: string, init: RequestInit): Promise<unknown> {
-  for (let attempt = 0; attempt < 3; attempt++) {
-    let response: Response;
-    try {
-      response = await fetcher(url, init);
-    } catch (error) {
-      if (attempt === 2 || (error instanceof Error && error.name === 'AbortError')) throw error;
-      await new Promise(resolve => setTimeout(resolve, 1000 * (attempt + 1)));
-      continue;
-    }
-    if (response.ok) return response.json();
-    if (response.status !== 429 && response.status < 500) throw new Error(`Provider returned HTTP ${response.status}`);
-    if (attempt === 2) throw new Error(`Provider returned HTTP ${response.status} after retries`);
-    const retryAfter = response.headers.get('retry-after');
-    const seconds = retryAfter === null ? NaN : Number(retryAfter);
-    if (Number.isFinite(seconds) && seconds > 60) throw new Error(`Provider retry-after exceeds 60 seconds: ${seconds}`);
-    await new Promise(resolve => setTimeout(resolve, Number.isFinite(seconds) ? Math.max(seconds, 0) * 1000 : 1000 * (attempt + 1)));
-  }
-  throw new Error('Provider request failed');
 }
 
 export function createSecSecurityProvider(options: {
@@ -77,24 +51,8 @@ export function createSecSecurityProvider(options: {
         tickerIssuers.set(listing.ticker, issuers);
       }
       const gathered: Array<{ listing: typeof listings[number]; candidates: z.infer<typeof candidate>[] }> = [];
-      const batchSize = options.openFigiApiKey ? 100 : 10;
-      for (let offset = 0; offset < listings.length; offset += batchSize) {
-        if (offset > 0) await new Promise(resolve => setTimeout(resolve, options.openFigiApiKey ? 250 : 2500));
-        const batch = listings.slice(offset, offset + batchSize);
-        const jobs = batch.map(row => ({ idType: 'TICKER', idValue: row.ticker, exchCode: 'US' }));
-        const rawMappings = await requestJson(fetcher, options.openFigiUrl ?? 'https://api.openfigi.com/v3/mapping', {
-          method: 'POST', headers: { 'content-type': 'application/json', ...(options.openFigiApiKey ? { 'X-OPENFIGI-APIKEY': options.openFigiApiKey } : {}) }, body: JSON.stringify(jobs),
-        });
-        const mappings = mappingResponse.parse(rawMappings);
-        if (mappings.length !== batch.length) throw new Error('OpenFIGI returned a mismatched result count');
-        for (let index = 0; index < batch.length; index++) {
-          const listing = batch[index];
-          const mapping = mappings[index];
-          if (!listing || !mapping) throw new Error('OpenFIGI result missing');
-          if ('error' in mapping) throw new Error(`OpenFIGI mapping error: ${mapping.error}`);
-          gathered.push({ listing, candidates: 'data' in mapping ? mapping.data : [] });
-        }
-      }
+      const results = await mapOpenFigi({ fetcher, url: options.openFigiUrl, apiKey: options.openFigiApiKey, jobs: listings.map(row => ({ idType: 'TICKER' as const, idValue: row.ticker, exchCode: 'US' })) });
+      listings.forEach((listing, index) => gathered.push({ listing, candidates: results[index] ?? [] }));
       const figiIssuers = new Map<string, Set<string>>();
       for (const { listing, candidates } of gathered) {
         const unique = [...new Map(candidates.map(item => [item.figi, item])).values()];
@@ -134,10 +92,7 @@ export function createSecSecurityProvider(options: {
           if (!saved) throw new Error('Could not save SEC listing');
           let securityId: string | null = null;
           if (!isAmbiguous && sole) {
-            const item = sole;
-            const [security] = await tx.insert(securities).values({ figi: item.figi, name: item.name }).onConflictDoUpdate({ target: securities.figi, set: { name: item.name } }).returning();
-            if (!security) throw new Error('Could not save security');
-            securityId = security.id;
+            securityId = await upsertSecurity(tx, sole);
           }
           await tx.insert(figiMappings).values({ listingId: saved.id, securityId, candidates, observedAt }).onConflictDoUpdate({ target: figiMappings.listingId, set: { securityId, candidates, observedAt } });
           if (isAmbiguous) ambiguous++; else if (sole) resolved++; else unmatched++;
@@ -159,3 +114,5 @@ export * from './providers/eodhd/index.js';
 export * from './universe.js';
 export * from './providers/ecb/index.js';
 export * from './fx.js';
+export * from './openfigi.js';
+export * from './providers/eodhd/listings.js';
