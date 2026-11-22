@@ -7,8 +7,7 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { z } from 'zod';
 import { availableQuantIds, briefLimits, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
-import { humanDecisions, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runs, approveGate } from '@open-foresight/db';
-import type { DesignerInput, DesignerResult } from '@open-foresight/agents';
+import { basketMembers, baskets, humanDecisions, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
 
 export type AppDeps = {
   db: PostgresJsDatabase;
@@ -17,8 +16,8 @@ export type AppDeps = {
   availableSources: readonly SourceId[];
   /** Today's date as YYYY-MM-DD. A function so tests can fix it. */
   today: () => string;
-  /** Runs the Designer for a run. */
-  design: (args: { runId: string; input: DesignerInput }) => Promise<DesignerResult>;
+  /** Queues the run for the worker, which drives it to the next gate. The API never runs a stage itself. */
+  enqueue: (runId: string) => Promise<void>;
   /** A built web app to serve, with index.html as the fallback for any path outside /api. */
   staticDir?: string;
 };
@@ -36,14 +35,14 @@ const canonical = (v: unknown): unknown => Array.isArray(v) ? v.map(canonical) :
 const sameJson = (a: unknown, b: unknown) => JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
 
 /**
- * The API for the brief form and the gate 1 approval. It reads and writes the local store only.
- * Creating a run starts the Designer in the background. Approving validates the edited framework, freezes it as a version,
- * and records the decision, all in the transaction that advances the run, so a rejected approval leaves nothing behind.
+ * The API for the brief form, the gate 1 approval and the run view. It reads and writes the local store only.
+ * Creating a run and approving gate 1 each queue the run for the worker. A queue that is down does not fail the request, because the worker
+ * sweeps for runs that need work. Approving validates the edited framework, freezes it as a version, and records the decision,
+ * all in the transaction that advances the run, so a rejected approval leaves nothing behind.
  */
 export function createApp(deps: AppDeps) {
   const app = new Hono();
-  const pending = new Set<Promise<unknown>>();
-  const track = (p: Promise<unknown>) => { pending.add(p); void p.finally(() => pending.delete(p)); };
+  const queue = async (runId: string) => { try { await deps.enqueue(runId); } catch (error) { console.error(`Could not queue run ${runId}`, error); } };
 
   app.use('/api/*', bodyLimit({ maxSize: 1024 * 1024, onError: c => c.json({ error: 'The request body is too large' }, 413) }));
   app.use('/api/*', async (c, next) => {
@@ -76,7 +75,7 @@ export function createApp(deps: AppDeps) {
     const analyst = c.get('analyst' as never) as string;
     const [run] = await deps.db.insert(runs).values({ settings: { ...brief, createdBy: analyst }, modelProfile: brief.modelProfile }).returning({ id: runs.id });
     if (!run) return c.json({ error: 'The run was not saved' }, 500);
-    track(startDesign(deps, run.id, brief, analyst));
+    await queue(run.id);
     return c.json({ runId: run.id, status: 'draft' }, 202);
   });
 
@@ -85,11 +84,17 @@ export function createApp(deps: AppDeps) {
     if (!z.string().uuid().safeParse(id).success) return c.json({ error: 'Invalid run id' }, 400);
     const [run] = await deps.db.select().from(runs).where(eq(runs.id, id));
     if (!run) return c.json({ error: 'Run not found' }, 404);
-    const [drafts, history, decisions, versions] = await Promise.all([
+    const [drafts, history, decisions, versions, basketRows] = await Promise.all([
       deps.db.select().from(kpiFrameworkDrafts).where(eq(kpiFrameworkDrafts.runId, id)).orderBy(desc(kpiFrameworkDrafts.attempt)),
       deps.db.select({ status: runStatusHistory.status, at: runStatusHistory.createdAt }).from(runStatusHistory).where(eq(runStatusHistory.runId, id)).orderBy(runStatusHistory.sequence),
       deps.db.select().from(humanDecisions).where(eq(humanDecisions.runId, id)).orderBy(humanDecisions.createdAt),
       deps.db.select().from(kpiFrameworkVersions).where(eq(kpiFrameworkVersions.runId, id)).orderBy(kpiFrameworkVersions.version),
+      deps.db.select().from(baskets).where(eq(baskets.runId, id)),
+    ]);
+    const basket = basketRows[0];
+    const [members, universe] = await Promise.all([
+      basket ? deps.db.select().from(basketMembers).where(eq(basketMembers.basketId, basket.id)).orderBy(basketMembers.rank) : Promise.resolve([]),
+      deps.db.select({ symbol: runUniverse.symbol, included: runUniverse.included, reasons: runUniverse.reasons, coverage: runUniverse.coverage }).from(runUniverse).where(eq(runUniverse.runId, id)),
     ]);
     const valid = drafts.find(d => d.valid);
     return c.json({
@@ -97,6 +102,11 @@ export function createApp(deps: AppDeps) {
       draft: valid ? { id: valid.id, attempt: valid.attempt, promptVersion: valid.promptVersion, model: valid.model, framework: valid.framework } : null,
       attempts: drafts.map(d => ({ attempt: d.attempt, valid: d.valid, errors: d.errors, promptVersion: d.promptVersion, model: d.model })),
       history, decisions, versions,
+      universe: { total: universe.length, included: universe.filter(u => u.included).length, withFilings: universe.filter(u => u.included && (u.coverage === 'sec' || u.coverage === 'esef')).length },
+      basket: basket ? {
+        status: basket.status, unknownMode: basket.unknownMode, rules: basket.rules, funnel: basket.funnel, cap: basket.cap, excluded: basket.excluded, createdAt: basket.createdAt,
+        members: members.map(m => ({ rank: m.rank, symbol: m.symbol, name: m.name, score: Number(m.score), confidence: Number(m.confidence), weightPercent: Number(m.weightPercent), atCap: m.atCap, unknownWeight: Number(m.unknownWeight), capAdjustment: Number(m.capAdjustment), contributions: m.contributions })),
+      } : null,
     });
   });
 
@@ -132,6 +142,7 @@ export function createApp(deps: AppDeps) {
       const message = error instanceof Error ? error.message : 'Approval failed';
       return c.json({ error: message }, message.includes('not awaiting') || message.includes('changed') ? 409 : 500);
     }
+    await queue(id);
     return c.json({ ...created, status: 'prescreening' }, 201);
   });
 
@@ -148,25 +159,5 @@ export function createApp(deps: AppDeps) {
     });
   }
 
-  return { app, idle: async () => { while (pending.size) await Promise.allSettled([...pending]); } };
-}
-
-/**
- * Moves a new run to gate 1. The universe stage belongs to the orchestration ticket, so the run passes through `universe_built`
- * with a recorded placeholder, and the Designer gets no universe sample. That placeholder is the only stand-in here.
- */
-async function startDesign(deps: AppDeps, runId: string, brief: Brief, createdBy: string): Promise<void> {
-  const setStatus = (status: typeof runs.$inferInsert.status) => deps.db.update(runs).set({ status }).where(eq(runs.id, runId));
-  try {
-    await deps.db.update(runs).set({ settings: { ...brief, createdBy, universe: { status: 'placeholder', note: 'The universe stage is built by the orchestration ticket. This run was not screened.' } } }).where(eq(runs.id, runId));
-    await setStatus('universe_built');
-    await setStatus('designing');
-    const result = await deps.design({ runId, input: { brief: brief.brief, keywords: brief.keywords, seedNames: brief.seedNames, exclusions: brief.exclusions, regions: brief.regions, exposureStyle: brief.exposureStyle, asOf: brief.asOf, universeSample: [] } });
-    if (result.ok) { await setStatus('awaiting_kpi_approval'); return; }
-    await deps.db.update(runs).set({ settings: { ...brief, createdBy, designError: result.errors.map(e => `${e.code}: ${e.message}`).slice(0, 10) } }).where(eq(runs.id, runId));
-    await setStatus('failed');
-  } catch (error) {
-    await deps.db.update(runs).set({ settings: { ...brief, createdBy, designError: [error instanceof Error ? error.message : 'The Designer failed'] } }).where(eq(runs.id, runId)).catch(() => undefined);
-    await setStatus('failed').catch(() => undefined);
-  }
+  return { app };
 }

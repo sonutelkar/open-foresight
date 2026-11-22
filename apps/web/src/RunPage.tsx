@@ -2,11 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { frameworkToDraft, validateFramework, type Framework, type FrameworkError, type Kpi, type SourceId } from '@open-foresight/core';
 import { ApiError, approveRun, getRun, type Auth, type Config, type RunDetail } from './api';
 
-const stages = [['draft', 'Brief'], ['universe_built', 'Universe'], ['designing', 'Designer'], ['awaiting_kpi_approval', 'KPI approval'], ['prescreening', 'Scoring']] as const;
-const waiting = new Set(['draft', 'universe_built', 'designing']);
+const stages = ['Brief', 'Universe', 'Designer', 'KPI approval', 'Scoring', 'Basket'] as const;
+const stepOf: Record<string, number> = { draft: 0, universe_built: 1, designing: 2, awaiting_kpi_approval: 3, prescreening: 4, analysing: 4, packaging: 4, done: 5 };
+/** The statuses where the worker is busy, so the page keeps polling. */
+const waiting = new Set(['draft', 'universe_built', 'designing', 'prescreening', 'analysing', 'packaging']);
 const methodLabel: Record<string, string> = { quant: 'Quant', extract_then_quant: 'Extract then quant', judgement: 'Judgement' };
-const statusLabel: Record<string, string> = { draft: 'Starting', universe_built: 'Starting', designing: 'Designing', awaiting_kpi_approval: 'Awaiting your approval', prescreening: 'Approved, scoring next', failed: 'Failed' };
-const statusTone: Record<string, string> = { awaiting_kpi_approval: 'warn', prescreening: 'ok', failed: 'bad', designing: 'info', draft: 'info', universe_built: 'info' };
+const statusLabel: Record<string, string> = { draft: 'Starting', universe_built: 'Starting', designing: 'Designing', awaiting_kpi_approval: 'Awaiting your approval', prescreening: 'Scoring', analysing: 'Scoring', packaging: 'Building the basket', done: 'Provisional basket ready', failed: 'Failed' };
+const statusTone: Record<string, string> = { awaiting_kpi_approval: 'warn', prescreening: 'info', analysing: 'info', packaging: 'info', done: 'ok', failed: 'bad', designing: 'info', draft: 'info', universe_built: 'info' };
 const levels = ['0', '1', '2', '3', '4'] as const;
 const time = (iso: string) => new Date(iso).toLocaleString();
 const shortTheme = (brief?: string) => { if (!brief) return 'Theme run'; const first = brief.split(/[.:]/)[0]?.trim() ?? brief; return first.length > 56 ? `${first.slice(0, 56)}…` : first; };
@@ -24,7 +26,7 @@ export function RunPage({ id, config, auth }: { id: string; config: Config; auth
 
   if (error) return <div className="page"><div className="banner bad" role="alert">{error}</div></div>;
   if (!run) return <div className="page"><p className="muted">Loading…</p></div>;
-  const index = stages.findIndex(([s]) => s === run.status);
+  const index = stepOf[run.status] ?? -1;
 
   return (
     <div className="page wide">
@@ -38,14 +40,16 @@ export function RunPage({ id, config, auth }: { id: string; config: Config; auth
           <span className={`pill ${statusTone[run.status] ?? ''}`} data-testid="status-pill">{statusLabel[run.status] ?? run.status}</span>
         </div>
         <ol className="steps" aria-label="Run progress">
-          {stages.map(([s, label], i) => <li key={s} className={i < index ? 'done' : i === index ? 'now' : ''} aria-current={i === index ? 'step' : undefined}><span className="dot" />{label}</li>)}
+          {stages.map((label, i) => <li key={label} className={i < index || run.status === 'done' ? 'done' : i === index ? 'now' : ''} aria-current={i === index ? 'step' : undefined}><span className="dot" />{label}</li>)}
         </ol>
-        <p className="muted" data-testid="run-status" style={{ marginTop: 10 }}>Status: <strong>{run.status.replaceAll('_', ' ')}</strong>{run.settings.universe?.status === 'placeholder' ? ' · the universe stage is a placeholder until the orchestration ticket' : ''}</p>
+        <p className="muted" data-testid="run-status" style={{ marginTop: 10 }}>Status: <strong>{run.status.replaceAll('_', ' ')}</strong>{run.universe.total > 0 ? ` · ${run.universe.included} of ${run.universe.total} listings passed the universe screen` : ''}</p>
       </header>
 
-      {waiting.has(run.status) && <div className="banner info" data-testid="designing"><span className="spinner" aria-hidden /> The Designer is drafting the framework. This usually takes about a minute.</div>}
-      {run.status === 'failed' && <div className="banner bad" role="alert" data-testid="run-failed"><strong>The run failed.</strong>{(run.settings.designError ?? []).map((m, i) => <p key={i}>{m}</p>)}</div>}
+      {['draft', 'universe_built', 'designing'].includes(run.status) && <div className="banner info" data-testid="designing"><span className="spinner" aria-hidden /> The Designer is drafting the framework. This usually takes about a minute.</div>}
+      {['prescreening', 'analysing', 'packaging'].includes(run.status) && <div className="banner info" data-testid="scoring"><span className="spinner" aria-hidden /> The worker is scoring every name against the approved KPIs. This takes a few minutes for 50 names.</div>}
+      {run.status === 'failed' && <div className="banner bad" role="alert" data-testid="run-failed"><strong>The run failed.</strong>{[run.settings.failure?.message, ...(run.settings.designError ?? [])].filter(Boolean).map((m, i) => <p key={i}>{m}</p>)}</div>}
       {run.status === 'awaiting_kpi_approval' && run.draft && <Gate run={run} config={config} auth={auth} onApproved={refresh} />}
+      {run.basket && <BasketSummary basket={run.basket} />}
       {run.versions.length > 0 && <Approved run={run} />}
     </div>
   );
@@ -208,6 +212,24 @@ function Approved({ run }: { run: RunDetail }) {
         <tbody>{v.framework.kpis.map(k => <tr key={k.id}><td>{k.name}{k.isGate ? <span className="badge gate" style={{ marginLeft: 8 }}>Gate</span> : null}</td><td><span className={`badge ${k.method}`}>{methodLabel[k.method]}</span></td><td className="num">{k.weightPercent}</td></tr>)}</tbody>
       </table>
       {v.exclusions.length > 0 && <p className="muted" style={{ marginTop: 12 }}>Exclusions: {v.exclusions.join(', ')}</p>}
+    </section>
+  );
+}
+
+function BasketSummary({ basket }: { basket: NonNullable<RunDetail['basket']> }) {
+  const f = basket.funnel;
+  return (
+    <section className="card" data-testid="basket">
+      <div className="card-head">
+        <div><p className="card-title">Provisional basket</p><p className="card-sub">Provisional until a reviewer gate exists. Unknown KPIs are treated as {basket.unknownMode === 'strict' ? 'level 0' : 'missing, and the other weights are renormalised'}.</p></div>
+        <span className="pill warn">Provisional</span>
+      </div>
+      <p className="muted tnum" data-testid="funnel" style={{ margin: '12px 0' }}>{f.universe} listings, {f.screened} screened in, {f.candidates} scored, {f.gateFailed} failed the gate, {f.gateUnknown} had no evidence on the gate KPI, {f.zeroScore} scored zero, {f.selected} selected{f.belowCutoff ? `, ${f.belowCutoff} below the cutoff` : ''}.</p>
+      {basket.cap.relaxed && <div className="banner info" data-testid="cap-relaxed">Only {f.selected} names qualified, so the per-name cap of {basket.cap.requestedPercent}% was raised to {basket.cap.usedPercent}% to reach a total of 100%.</div>}
+      <table className="frozen">
+        <thead><tr><th className="rank">#</th><th>Name</th><th className="num">Score</th><th className="num">Confidence</th><th className="num">Weight %</th></tr></thead>
+        <tbody>{basket.members.map(m => <tr key={m.symbol} data-testid={`basket-row-${m.symbol}`}><td className="rank">{m.rank}</td><td>{m.name} <span className="muted">{m.symbol}</span></td><td className="num">{m.score.toFixed(3)}</td><td className="num">{m.confidence.toFixed(2)}</td><td className="num">{m.weightPercent.toFixed(2)}{m.atCap ? ' (cap)' : ''}</td></tr>)}</tbody>
+      </table>
     </section>
   );
 }

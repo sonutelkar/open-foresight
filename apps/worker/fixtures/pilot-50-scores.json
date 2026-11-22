@@ -1,0 +1,1284 @@
+{
+ "note": "Recorded from a real run. Levels and confidences are the real Analyst output on real filings. Names are real listings. No filing text is stored.",
+ "runId": "9875a20c-19dd-4703-8b07-326f6ddb05e1",
+ "basketId": "45e65dfe-5376-4c43-984d-e8dfff109c14",
+ "asOf": "2026-11-22",
+ "unknownMode": "lenient",
+ "kpis": [
+  {
+   "id": "smart_energy_presence",
+   "weight": 0.1,
+   "isGate": true
+  },
+  {
+   "id": "grid_revenue_share",
+   "weight": 0.25,
+   "isGate": false
+  },
+  {
+   "id": "grid_digital_offering",
+   "weight": 0.1,
+   "isGate": false
+  },
+  {
+   "id": "storage_inverter_revenue_share",
+   "weight": 0.2,
+   "isGate": false
+  },
+  {
+   "id": "efficiency_flexibility_offering",
+   "weight": 0.2,
+   "isGate": false
+  },
+  {
+   "id": "smart_grid_capex_commitment",
+   "weight": 0.15,
+   "isGate": false
+  }
+ ],
+ "names": [
+  {
+   "symbol": "AAPL.US",
+   "name": "APPLE INC",
+   "marketCapUsd": 4978144265920,
+   "advUsd": 17241573267.026997,
+   "coverage": "sec",
+   "scores": {
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "AES.US",
+   "name": "AES CORP",
+   "marketCapUsd": 10702634077.199999,
+   "advUsd": 231139520.45,
+   "coverage": "sec",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "3",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "ALO.PA",
+   "name": "Alstom S.A.",
+   "marketCapUsd": 4260517786.9508805,
+   "advUsd": 41599999.433403954,
+   "coverage": "esef",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "AMRC.US",
+   "name": "AMERESCO INC-CL A",
+   "marketCapUsd": 1099405462.5,
+   "advUsd": 14446243.3,
+   "coverage": "sec",
+   "scores": {
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "AMZN.US",
+   "name": "AMAZON.COM INC",
+   "marketCapUsd": 2649593169133.4,
+   "advUsd": 13555194389.1985,
+   "coverage": "sec",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "ASML.AS",
+   "name": "ASML Holding N.V.",
+   "marketCapUsd": 494734546998.944,
+   "advUsd": 1185721636.1459699,
+   "coverage": "esef",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "1",
+     "confidence": 0.4,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "2",
+     "confidence": 0.8,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "BE.US",
+   "name": "BLOOM ENERGY CORP- A",
+   "marketCapUsd": 39947260333.85,
+   "advUsd": 3352649703.75,
+   "coverage": "sec",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "ENGI.PA",
+   "name": "Engie S.A.",
+   "marketCapUsd": 67737029511.33216,
+   "advUsd": 107256354.86807504,
+   "coverage": "esef",
+   "scores": {
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "3",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "ENPH.US",
+   "name": "ENPHASE ENERGY INC",
+   "marketCapUsd": 2573469816.97,
+   "advUsd": 235725727.6,
+   "coverage": "sec",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "2",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "EOAN.XETRA",
+   "name": "E.ON SE",
+   "marketCapUsd": 53468365060.52594,
+   "advUsd": 72667383.13554473,
+   "coverage": "none",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "FSLR.US",
+   "name": "FIRST SOLAR INC",
+   "marketCapUsd": 14764919664.460001,
+   "advUsd": 636844541.477,
+   "coverage": "sec",
+   "scores": {
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "GOOGL.US",
+   "name": "ALPHABET INC-CL A",
+   "marketCapUsd": 3261475260000.0005,
+   "advUsd": 13035157052.5375,
+   "coverage": "sec",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "IBE.MC",
+   "name": "Iberdrola S.A.",
+   "marketCapUsd": 165384914887.41406,
+   "advUsd": 184655601.56460896,
+   "coverage": "esef",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "3",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "JNJ.US",
+   "name": "JOHNSON & JOHNSON",
+   "marketCapUsd": 651805365219.92,
+   "advUsd": 2164555821.3515,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "JPM.US",
+   "name": "JPMORGAN CHASE & CO",
+   "marketCapUsd": 837509463408.7499,
+   "advUsd": 2354137587.7699995,
+   "coverage": "sec",
+   "scores": {
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "KO.US",
+   "name": "COCA-COLA CO/THE",
+   "marketCapUsd": 417127130462.31,
+   "advUsd": 1848160742.3,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "MC.PA",
+   "name": "LVMH Moët Hennessy - Louis Vuitton",
+   "marketCapUsd": 205948418260.2707,
+   "advUsd": 263263254.30789998,
+   "coverage": "esef",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.4,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "MSFT.US",
+   "name": "MICROSOFT CORP",
+   "marketCapUsd": 3597825301299.32,
+   "advUsd": 15692345644.388248,
+   "coverage": "sec",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "NEE.US",
+   "name": "NEXTERA ENERGY INC",
+   "marketCapUsd": 173869907895.80002,
+   "advUsd": 1090992761.891,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "4",
+     "confidence": 0.8,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.8,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "NOKIA.HE",
+   "name": "Nokia Oyj",
+   "marketCapUsd": 40076333060.59076,
+   "advUsd": 126373725.80255641,
+   "coverage": "none",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "NVDA.US",
+   "name": "NVIDIA CORP",
+   "marketCapUsd": 3050379000000,
+   "advUsd": 48205853951.1005,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "PG.US",
+   "name": "PROCTER & GAMBLE CO/THE",
+   "marketCapUsd": 393689227372.2,
+   "advUsd": 1609737225.1460004,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "PLUG.US",
+   "name": "PLUG POWER INC",
+   "marketCapUsd": 1338196923.84,
+   "advUsd": 79124956.15,
+   "coverage": "sec",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "1",
+     "confidence": 0.4,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "RUN.US",
+   "name": "SUNRUN INC",
+   "marketCapUsd": 1547649859.8,
+   "advUsd": 109442910.8,
+   "coverage": "sec",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "RWE.XETRA",
+   "name": "RWE AG",
+   "marketCapUsd": 47746246130.716705,
+   "advUsd": 81257477.919282,
+   "coverage": "none",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "SEDG.US",
+   "name": "SOLAREDGE TECHNOLOGIES INC",
+   "marketCapUsd": 1102892136.57,
+   "advUsd": 89710771,
+   "coverage": "sec",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "1",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "4",
+     "confidence": 0.8,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "SHLS.US",
+   "name": "SHOALS TECHNOLOGIES GROUP -A",
+   "marketCapUsd": 1091697912,
+   "advUsd": 64655388.525,
+   "coverage": "sec",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "4",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "SIE.XETRA",
+   "name": "Siemens Aktiengesellschaft",
+   "marketCapUsd": 213873423921.92316,
+   "advUsd": 335593257.6778774,
+   "coverage": "none",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "VWS.CO",
+   "name": "Vestas Wind Systems A/S",
+   "marketCapUsd": 24705307730.728928,
+   "advUsd": 83799230.93086016,
+   "coverage": "esef",
+   "scores": {
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "XOM.US",
+   "name": "EXXONMOBIL HOLDINGS CORP",
+   "marketCapUsd": 652634798815.56,
+   "advUsd": 2564469382.5434995,
+   "coverage": "none",
+   "scores": {
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    }
+   }
+  },
+  {
+   "symbol": "SAP.XETRA",
+   "name": "SAP SE",
+   "marketCapUsd": 232992652433.80225,
+   "advUsd": 480392306.2161825,
+   "coverage": "none",
+   "scores": {
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "grid_digital_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_energy_presence": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  },
+  {
+   "symbol": "SU.PA",
+   "name": "Schneider Electric S.E.",
+   "marketCapUsd": 146307988614.81146,
+   "advUsd": 311346647.8881675,
+   "coverage": "esef",
+   "scores": {
+    "grid_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "efficiency_flexibility_offering": {
+     "level": "3",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "grid_digital_offering": {
+     "level": "2",
+     "confidence": 0.8,
+     "method": "judgement"
+    },
+    "storage_inverter_revenue_share": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    },
+    "smart_energy_presence": {
+     "level": "2",
+     "confidence": 0.6,
+     "method": "judgement"
+    },
+    "smart_grid_capex_commitment": {
+     "level": "unknown",
+     "confidence": 0.2,
+     "method": "extract_then_quant"
+    }
+   }
+  }
+ ]
+}

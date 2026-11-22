@@ -120,6 +120,13 @@
       "when": 1795380898811,
       "tag": "0016_kpi_framework_versions",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1795382481364,
+      "tag": "0017_packaging",
+      "breakpoints": true
     }
   ]
 }

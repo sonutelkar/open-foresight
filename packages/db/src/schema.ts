@@ -287,3 +287,38 @@ export const kpiFrameworkVersions = pgTable('kpi_framework_versions', {
   approvedBy: text('approved_by').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [uniqueIndex('kpi_framework_versions_run_version').on(table.runId, table.version)]);
+
+/**
+ * The names a run considers: every listing with prices in the local store, with the universe decision and, after prescreening,
+ * the security and issuers that carry its evidence. A stage that runs twice rewrites the same rows.
+ */
+export const runUniverse = pgTable('run_universe', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().references(() => runs.id),
+  symbol: text('symbol').notNull(), name: text('name'),
+  included: boolean('included').notNull(), reasons: jsonb('reasons').notNull(),
+  region: text('region'), marketCapUsd: numeric('market_cap_usd'), advUsd: numeric('adv_usd'),
+  securityId: uuid('security_id').references(() => securities.id),
+  /** Set by prescreening. `sec` and `esef` mean filings are available, `none` means no filing evidence, so text KPIs score unknown. */
+  coverage: text('coverage'), ciks: jsonb('ciks'), issuerKeys: jsonb('issuer_keys'),
+}, table => [uniqueIndex('run_universe_symbol').on(table.runId, table.symbol)]);
+
+/** The packaged output of a run. It is provisional until a gate 2 exists, and it never changes once written. */
+export const baskets = pgTable('baskets', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().unique().references(() => runs.id),
+  frameworkVersionId: uuid('framework_version_id').notNull().references(() => kpiFrameworkVersions.id),
+  status: text('status').notNull(), unknownMode: text('unknown_mode').notNull(),
+  rules: jsonb('rules').notNull(), funnel: jsonb('funnel').notNull(), cap: jsonb('cap').notNull(), excluded: jsonb('excluded').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const basketMembers = pgTable('basket_members', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  basketId: uuid('basket_id').notNull().references(() => baskets.id),
+  securityId: uuid('security_id').notNull().references(() => securities.id),
+  symbol: text('symbol').notNull(), name: text('name').notNull(), rank: integer('rank').notNull(),
+  score: numeric('score').notNull(), confidence: numeric('confidence').notNull(), weightPercent: numeric('weight_percent').notNull(),
+  atCap: boolean('at_cap').notNull(), unknownWeight: numeric('unknown_weight').notNull(), capAdjustment: numeric('cap_adjustment').notNull(),
+  contributions: jsonb('contributions').notNull(),
+}, table => [uniqueIndex('basket_members_security').on(table.basketId, table.securityId), uniqueIndex('basket_members_rank').on(table.basketId, table.rank)]);

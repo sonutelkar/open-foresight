@@ -8,12 +8,20 @@ export type Config = {
 export type RunSummary = { id: string; status: string; createdAt: string; theme: string };
 export type RunDetail = {
   id: string; status: string; createdAt: string; frameworkVersion: string | null;
-  settings: { brief?: string; exclusions?: string[]; createdBy?: string; designError?: string[]; universe?: { status: string; note: string } };
+  settings: { brief?: string; exclusions?: string[]; createdBy?: string; designError?: string[]; failure?: { stage: string; message: string } };
   draft: { id: string; attempt: number; promptVersion: string; model: string; framework: Framework } | null;
   attempts: Array<{ attempt: number; valid: boolean; errors: Array<{ code: string; message: string }> }>;
   history: Array<{ status: string; at: string }>;
   decisions: Array<{ id: string; userId: string; stage: string; target: string; action: string; reason: string | null; createdAt: string }>;
   versions: Array<{ id: string; version: number; edited: boolean; approvedBy: string; createdAt: string; exclusions: string[]; framework: Framework }>;
+  universe: { total: number; included: number; withFilings: number };
+  basket: Basket | null;
+};
+export type Basket = {
+  status: 'provisional'; unknownMode: 'strict' | 'lenient';
+  funnel: { universe: number; screened: number; candidates: number; gateFailed: number; gateUnknown: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
+  cap: { requestedPercent: number; usedPercent: number; relaxed: boolean };
+  members: Array<{ rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
 };
 export type Auth = { analyst: string; token: string };
 export class ApiError extends Error {
