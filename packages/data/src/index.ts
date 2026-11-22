@@ -5,10 +5,10 @@ import { z } from 'zod';
 
 export type Capability = 'securities' | 'prices' | 'fundamentals' | 'segments' | 'filings' | 'news' | 'transcripts' | 'patents' | 'papers' | 'policy';
 export type SyncReport = { source: string; observedAt: Date; records: number; resolved: number; ambiguous: number; unmatched: number; reclassified: number };
-export interface DataProvider {
+export interface DataProvider<TInput = void, TReport = SyncReport> {
   readonly id: string;
   readonly capabilities: readonly Capability[];
-  sync(): Promise<SyncReport>;
+  sync(input: TInput): Promise<TReport>;
 }
 
 const secResponse = z.object({
@@ -153,3 +153,5 @@ export async function findSecurityMapping(db: PostgresJsDatabase, listingId: str
   const [mapping] = await db.select().from(figiMappings).where(eq(figiMappings.listingId, listingId));
   return mapping;
 }
+
+export * from "./providers/sec-edgar/index.js";

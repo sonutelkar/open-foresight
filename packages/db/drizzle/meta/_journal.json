@@ -43,6 +43,13 @@
       "when": 1795362991760,
       "tag": "0005_empty_diamondback",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795365218128,
+      "tag": "0006_little_terrax",
+      "breakpoints": true
     }
   ]
 }

@@ -1,4 +1,4 @@
-import { bigserial, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
+import { bigserial, date, integer, jsonb, numeric, pgEnum, pgTable, text, timestamp, uuid, uniqueIndex } from 'drizzle-orm/pg-core';
 
 export const runStatus = pgEnum('run_status', [
   'draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening',
@@ -74,4 +74,30 @@ export const figiMappings = pgTable('figi_mappings', {
   securityId: uuid('security_id').references(() => securities.id),
   candidates: jsonb('candidates').notNull(),
   observedAt: timestamp('observed_at', { withTimezone: true }).notNull(),
+});
+
+export const secSourceDocuments = pgTable('sec_source_documents', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  url: text('url').notNull(), transportUrl: text('transport_url').notNull(), sha256: text('sha256').notNull(), body: text('body').notNull(),
+  fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('sec_source_documents_version').on(table.url, table.transportUrl, table.sha256)]);
+
+export const secFilings = pgTable('sec_filings', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  cik: text('cik').notNull(), accession: text('accession').notNull(), form: text('form').notNull(),
+  filedAt: date('filed_at').notNull(), primaryDocument: text('primary_document').notNull(),
+  submissionSourceId: uuid('submission_source_id').notNull().references(() => secSourceDocuments.id),
+  documentSourceId: uuid('document_source_id').notNull().references(() => secSourceDocuments.id),
+  ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
+}, table => [uniqueIndex('sec_filing_version').on(table.cik, table.accession, table.submissionSourceId, table.documentSourceId)]);
+
+export const secFacts = pgTable('sec_facts', {
+  id: uuid('id').defaultRandom().primaryKey(), key: text('key').notNull().unique(),
+  cik: text('cik').notNull(), accession: text('accession').notNull(),
+  taxonomy: text('taxonomy').notNull(), concept: text('concept').notNull(), unit: text('unit').notNull(),
+  value: numeric('value').notNull(), periodStart: date('period_start'), periodEnd: date('period_end').notNull(),
+  filedAt: date('filed_at').notNull(), form: text('form').notNull(),
+  raw: jsonb('raw').notNull(), sourceId: uuid('source_id').notNull().references(() => secSourceDocuments.id),
+  sourcePointer: text('source_pointer').notNull(),
+  ingestedAt: timestamp('ingested_at', { withTimezone: true }).notNull(),
 });
