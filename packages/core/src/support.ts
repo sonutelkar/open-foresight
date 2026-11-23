@@ -2,7 +2,12 @@ import type { Kpi } from './framework.js';
 import type { ResolvedCitation, ScoreLevel } from './score.js';
 
 /** A change code made to a model's level after validation. The stored level is the changed one, and the original is kept here. */
-export type ScoreAdjustment = { code: 'no_definition_term'; from: ScoreLevel; to: ScoreLevel; message: string };
+export type ScoreAdjustment = {
+  code: 'no_definition_term' | 'jev_unsupported' | 'jev_borderline' | 'jev_unavailable' | 'span_unverified';
+  from: ScoreLevel; to: ScoreLevel; message: string;
+  /** What the check saw, such as the probability each level got from the span check. */
+  detail?: unknown;
+};
 
 /** The highest level a judgement KPI may keep when no cited quote names anything the KPI defines. */
 export const unsupportedLevelCap: ScoreLevel = '2';

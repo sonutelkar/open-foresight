@@ -8,3 +8,4 @@ export * from './brief.js';
 export * from './basket.js';
 export * from './evidence.js';
 export * from './support.js';
+export * from './verify.js';

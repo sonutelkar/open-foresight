@@ -1,5 +1,5 @@
 {
   "extends": "../../tsconfig.json",
-  "compilerOptions": { "paths": { "@open-foresight/llm": ["../../packages/llm/dist/index.d.ts"] } },
+  "compilerOptions": { "paths": { "@open-foresight/llm": ["../../packages/llm/dist/index"] } },
   "include": ["src/**/*.ts", "../../config/*.ts"]
 }

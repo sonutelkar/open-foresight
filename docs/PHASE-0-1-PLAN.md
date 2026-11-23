@@ -177,11 +177,11 @@ For every performance check, measure the same command on trunk first, with the s
 
 ### PR 13c. Stored-span citation verification
 
-- [ ] Depends on 05b, 09, 11, and 13. Files: `packages/retrieval`, `packages/agents`, `packages/evals`.
-- [ ] Add an optional path where code selects an exact stored span and Jev judges whether it supports the claim. Preserve source and snapshot references.
-- [ ] Unit: reject nonexistent IDs, altered spans, wrong-company sources, and future evidence.
-- [ ] Live: compare citation validity, verbatim rate, and human-rated claim support with the existing extraction path on labelled examples.
-- [ ] Perf: validate 1,000 fixture citations; fail above 30 seconds or on a median regression above 25% against the measured trunk baseline.
+- [x] Depends on 05b, 09, 11, and 13. Files: `packages/retrieval`, `packages/agents`, `packages/evals`. The work landed in `packages/core`, `packages/agents` and `apps/worker`, because the check sits in the Analyst and needs no retrieval or evals change.
+- [x] Add an optional path where code selects an exact stored span and Jev judges whether it supports the claim. Preserve source and snapshot references. `loadStoredSpans` reads each cited chunk back from Postgres and keeps it only when the chunk exists, matches its document, belongs to an issuer of the security, was available by the as-of date, and holds the quote verbatim. `verifyClaim` then asks Jev one Noul per span for the claimed level and steps down while the span does not support it, to a floor of level 1. Probabilities of at least 0.6 support a level, 0.4 to 0.6 keeps it with a recorded doubt, and a lower level needs at least 0.4. It can only lower a level, an outage keeps the level and records that the check did not run, and the original level stays in `raw`. It is off unless the worker starts with `JEV_SPAN_CHECK=1`. The thresholds are provisional.
+- [x] Unit: reject nonexistent IDs, altered spans, wrong-company sources, and future evidence. `verifier.test.ts` covers each rejection, the step-down, the borderline note, an outage, and levels that are not checked, with a recorded judge. The existing validation tests keep covering the model's own citations.
+- [ ] Live: compare citation validity, verbatim rate, and human-rated claim support with the existing extraction path on labelled examples. The labelled examples do not exist yet. `scripts/jev-span-check.ts` ran real Jev on the five level 3 and 4 judgement scores of the PR 15 run: 18 calls, 0.0007 USD, at most 305 ms. Two were lowered (AES 3 to 1, SU.PA 3 to 2) and three kept, two of them as borderline, including Shoals at 0.54. Repeat calls moved a probability by about 0.1, so the 0.6 line is not stable on its own. No human has rated these verdicts.
+- [x] Perf: validate 1,000 fixture citations. The stored-span read took a median of 17 ms against the 30 second ceiling. The trunk has no stored-span path, so there is no baseline. Provider latency is excluded.
 - [ ] Enable only after meeting the existing 100% evidence-ID and 98% verbatim gates and reviewing claim support.
 
 ### PR 14. Brief and KPI approval

@@ -6,7 +6,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { ZodTypeAny } from 'zod';
 import { enabledSources, validateFramework, type FrameworkDraft, type Kpi } from '@open-foresight/core';
-import { createSnapshot, kpiFrameworkDrafts, kpiScores, llmCalls, runs, secFacts, secSourceDocuments, securities } from '@open-foresight/db';
+import { createSnapshot, documentChunks, kpiFrameworkDrafts, kpiScores, llmCalls, runs, secFacts, secSourceDocuments, securities } from '@open-foresight/db';
 import { scoreFramework, scoreKpi, type AnalystContext, type EvidenceSearcher } from './analyst.js';
 import type { StructuredGenerator } from './designer.js';
 
@@ -128,6 +128,22 @@ integration('Analyst on Postgres', () => {
     const [row] = await db.select().from(kpiScores).where(eq(kpiScores.id, outcome.scoreId));
     expect(row).toMatchObject({ level: '2', adjustments: [{ code: 'no_definition_term', from: '4', to: '2' }] });
     expect((row?.raw as { level: string }).level).toBe('4');
+  });
+
+  it('lowers a level the stored spans do not support when a Jev judge is set, and records both adjustments in order', async () => {
+    const s = await setup();
+    const hit = evidenceHit();
+    await db.insert(documentChunks).values({ id: hit.chunkId, docKind: 'sec_filing', docId: hit.docId, issuerKey: issuer, availableOn: '2026-05-01', section: hit.section, ordinal: 0, startOffset: 0, endOffset: PASSAGE.length, text: PASSAGE, embedding: new Array(1536).fill(0) as number[], indexVersion: `v-${randomUUID()}` });
+    const asked: string[] = [];
+    const judge = { async decide(input: { state: string; questions: Record<string, unknown> }) { const claim = (JSON.parse(input.state) as { claim: string }).claim; asked.push(claim); const level = (['4', '3', '2', '1'] as const).find(l => judgeKpi.rubric.levels[l] === claim)!; return { id: 'd', answers: Object.fromEntries(Object.keys(input.questions).map(q => [q, { type: 'noul' as const, noul: level === '2' ? 0.9 : 0.1 }])) }; } };
+    const g = stubGateway(s.runId, [{ level: '4', citations: goodCitations, rationale: 'Grid products are 26 percent of revenue.', conflicts: [] }]);
+    const outcome = await scoreKpi({ ...ctxFor(s, g.generator, stubSearcher([hit]).retriever), judge }, judgeKpi);
+    expect(outcome.level).toBe('2');
+    const [row] = await db.select().from(kpiScores).where(eq(kpiScores.id, outcome.scoreId));
+    expect(row?.level).toBe('2');
+    expect((row?.raw as { level: string }).level).toBe('4');
+    expect(row?.adjustments).toMatchObject([{ code: 'jev_unsupported', from: '4', to: '2' }]);
+    expect(asked).toEqual([judgeKpi.rubric.levels['4'], judgeKpi.rubric.levels['3'], judgeKpi.rubric.levels['2']]);
   });
 
   it('repairs a non verbatim quote once and saves both attempts', async () => {

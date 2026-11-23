@@ -1,5 +1,6 @@
 // The worker. Usage: DATABASE_URL=... OPENROUTER_API_KEY=... bun src/main.ts
 // It drives runs through the stages the API queues: universe, Designer, then, after gate 1, prescreening, scoring and packaging.
+// JEV_SPAN_CHECK=1 turns on the optional Jev check of the stored spans behind level 3 and 4 scores.
 // It reads only the local Postgres store, and its only outside calls are the model and embedding calls through packages/llm.
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -24,7 +25,7 @@ const stamp = () => new Date().toISOString().slice(11, 19);
 const worker = await startWorker({
   connectionString,
   deps: {
-    db, gateway, retriever, availableSources, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
+    db, gateway, retriever, availableSources, judge: process.env.JEV_SPAN_CHECK === '1' ? gateway : undefined, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
     design: ({ runId, input }) => runDesigner({ db, gateway, runId, input, availableSources }),
     log: message => console.log(`${stamp()} ${message}`),
   },
