@@ -53,7 +53,7 @@ This is the whole path from a clean checkout to a basket you can inspect. Each s
    ```sh
    RUN_ID=<run id> bun apps/worker/scripts/pilot-report.ts
    ```
-   It exits non-zero unless all four gates pass: the basket has at least one name, machine time is under 30 minutes, every citation ID exists in the store, and at least 98 percent of quotes appear word for word in the stored text. It also repeats the checks on the basket's members alone, and prints the cost. The full kappa and stability gates are never reported as met, because an AI-labelled set cannot satisfy them. To label a sample with a model from a different family and see the provisional agreement with the Analyst, run:
+   It exits non-zero unless all four gates pass. The basket must have at least one name, machine time must be under 30 minutes, every citation ID must exist in the store, and at least 98 percent of quotes must appear word for word in the stored text. It also repeats the checks on the basket's members alone, and prints the cost. The full kappa and stability gates are never reported as met, because an AI-labelled set cannot satisfy them. To label a sample with a model from a different family and see the provisional agreement with the Analyst, run:
    ```sh
    RUN_IDS=<run id>[,<run id>] bun apps/worker/scripts/label-pairs.ts
    ```
