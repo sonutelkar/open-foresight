@@ -52,7 +52,7 @@ integration('Designer on Postgres', () => {
     expect(result.framework.kpis).toHaveLength(5);
     const [draft] = await listDrafts(db, runId);
     expect(draft).toMatchObject({ attempt: 1, valid: true, model: 'stub/designer', errors: [] });
-    expect(draft?.promptVersion).toMatch(/^designer@v2:[0-9a-f]{12}$/);
+    expect(draft?.promptVersion).toMatch(/^designer@v3:[0-9a-f]{12}$/);
     expect(draft?.framework).toEqual(result.framework);
     expect(draft?.draft).toEqual(golden);
     const [call] = await db.select().from(llmCalls).where(eq(llmCalls.id, draft?.llmCallId ?? ''));
@@ -82,7 +82,7 @@ integration('Designer on Postgres', () => {
   });
 
   it('repairs an invalid draft once by showing every validation error, and saves both attempts', async () => {
-    const bad = clone(); bad.kpis[0]!.weightPercent = 45; bad.kpis[1]!.isGate = true; bad.kpis[2]!.rubric!.level3 = '';
+    const bad = clone(); bad.kpis[0]!.weightPercent = 45; bad.kpis[3]!.isGate = true; bad.kpis[2]!.rubric!.level3 = '';
     const runId = await newRun();
     const s = stub([bad, golden]);
     const result = await runDesigner({ db, gateway: s.generator, runId, input, availableSources: sources });

@@ -55,7 +55,7 @@ export async function runDesigner(options: {
   }
   let attempt = existing[0]?.attempt ?? 0;
 
-  const prompt = loadPrompt('designer', 'v2');
+  const prompt = loadPrompt('designer', 'v3');
   const system = render(prompt.system, {
     sources: options.availableSources.map(id => `- ${id}: ${sourceCatalog[id].description}`).join('\n'),
     quant_functions: availableQuantIds(options.availableSources).map(id => `- ${id} (reads ${quantCatalog[id].sources.join(', ')}): ${quantCatalog[id].description}`).join('\n'),

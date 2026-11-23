@@ -102,7 +102,7 @@ export function fakeDesigner(db: PostgresJsDatabase) {
 /** What the stub model answers for one company: the extracted share, and the judged level. */
 export const answers: Record<string, { extracted: number; level: '0' | '1' | '2' | '3' | '4' | 'unknown' }> = {
   'Alpha Energy Inc': { extracted: 0.4, level: '4' }, 'Beta Grid Corp': { extracted: 0.3, level: '2' },
-  'Gamma Oil Co': { extracted: 0.005, level: '4' }, 'Delta Electrique SA': { extracted: 0.12, level: '3' },
+  'Gamma Oil Co': { extracted: 0.005, level: '0' }, 'Delta Electrique SA': { extracted: 0.12, level: '3' },
 };
 const PASSAGE = 'Our grid products segment generated $3.1 billion of revenue, or 26% of total revenue, in fiscal 2025. We also sell storage systems, drives, controls and building automation.';
 const quote = 'grid products segment generated $3.1 billion of revenue, or 26% of total revenue, in fiscal 2025. We also sell storage systems, drives, controls and building automation.';

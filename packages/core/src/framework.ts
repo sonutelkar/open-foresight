@@ -49,7 +49,7 @@ export function constrainedDraftSchema(availableSources: readonly SourceId[]) {
 export type FrameworkErrorCode =
   | 'shape' | 'sub_theme_count' | 'kpi_count' | 'duplicate_id' | 'bad_id' | 'unknown_sub_theme' | 'empty_sub_theme'
   | 'no_sources' | 'unknown_source' | 'unavailable_source' | 'missing_quant_source' | 'lookback'
-  | 'weight' | 'weight_total' | 'factor_weight' | 'gate_count' | 'incomplete_rubric' | 'unexpected_rubric'
+  | 'weight' | 'weight_total' | 'factor_weight' | 'gate_count' | 'gate_method' | 'incomplete_rubric' | 'unexpected_rubric'
   | 'bad_thresholds' | 'unexpected_thresholds' | 'threshold_unit' | 'missing_extraction' | 'unexpected_extraction'
   | 'unknown_quant_query' | 'unexpected_quant_query' | 'text_too_short';
 export type FrameworkError = { code: FrameworkErrorCode; path: string; message: string };
@@ -100,7 +100,11 @@ export function validateFramework(input: unknown, context: { availableSources: r
     if (k.weightPercent < 0 || k.weightPercent > 100) fail('weight', `${at}.weightPercent`, `KPI "${k.id}" weight must be a whole percent from 0 to 100.`);
     total += k.weightPercent;
     if (k.method === 'quant' && k.quantQuery && (quantIds as string[]).includes(k.quantQuery) && quantCatalog[k.quantQuery as QuantId].group === 'market') marketWeight += k.weightPercent;
-    if (k.isGate) gates++;
+    if (k.isGate) {
+      gates++;
+      // A gate answers "does this company have any exposure". Companies rarely disclose an exact share of revenue, so a gate built on an extracted number is unknown for almost every name and removes them all.
+      if (k.method !== 'judgement') fail('gate_method', `${at}.isGate`, `KPI "${k.id}" is a gate but its method is ${k.method}. A gate must be a judgement KPI, because an extracted number is unknown for most companies and an unknown gate removes the name.`);
+    }
     const ascending = k.thresholds?.length === 4 && k.thresholds.every((t, j, a) => Number.isFinite(t) && (j === 0 || t > a[j - 1]!));
     const rubric = k.rubric;
     const rubricComplete = !!rubric && [rubric.level0, rubric.level1, rubric.level2, rubric.level3, rubric.level4, rubric.unknownRule].every(t => !shortText(t, 10));

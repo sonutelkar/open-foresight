@@ -44,7 +44,7 @@
       "quantQuery": null,
       "lookbackDays": 400,
       "weightPercent": 30,
-      "isGate": true,
+      "isGate": false,
       "extraction": {
         "target": "Revenue from grid equipment, grid automation and related services divided by total revenue for the latest fiscal year, from the segment or product revenue note.",
         "unit": "fraction"
@@ -94,7 +94,7 @@
       "quantQuery": null,
       "lookbackDays": 730,
       "weightPercent": 25,
-      "isGate": false,
+      "isGate": true,
       "extraction": null
     },
     {
