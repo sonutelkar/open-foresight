@@ -282,6 +282,10 @@ For every performance check, measure the same command on trunk first, with the s
 
 The phase 0 gate requires the two live model calls and a no-network cache hit. The phase 1 gate requires PR 17's live measurements and PR 09's point-in-time tests. Reviewer, gate 2, pre-screen, full-scale processing, full replay, and discovery remain later-phase work. A fixture run does not satisfy either live gate.
 
+**Phase 1 status.** Recorded on 2026-11-23. The phase 1 gate is met. PR 17 has the live measurements, with four pilot runs under 30 minutes, 100 percent valid citation IDs and 100 percent verbatim quotes, and PR 09's point-in-time tests pass. Phase 1 is complete, and the next steps are the operator's phase review and then phase 2.
+
+Three things are not claimed. The full kappa gate of 0.6 and the stability gate of 95 percent are not met, because the labelled set is AI-generated and needs a human-labelled set and a cache-off rerun. The pilot ran on the local 50-name store and not the 3,000-stock universe, which belongs to the later phases. PR 11b and PR 13b are optional Jev bake-offs that were not started. The gate does not require them, so they move to phase 2 with the later-phase Jev items.
+
 ## Later-phase Jev product features
 
 ### Phase 2. Jev Reviewer second opinion
