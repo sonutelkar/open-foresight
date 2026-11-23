@@ -1,0 +1,208 @@
+{
+  "schemaVersion": 1,
+  "runId": "e4d17647-bc3a-45fc-8dde-b0f1dd7d43ef",
+  "theme": "Smart energy: companies that make the electricity system more efficient, flexible and digital over a five year horizon. ",
+  "asOf": "2026-11-23",
+  "snapshotId": "25bd3ade-f0fc-4949-81c9-e6a2dd219f3b",
+  "host": "local",
+  "timestamps": {
+    "createdAt": "2026-11-23T14:20:18.594Z",
+    "approvedAt": "2026-11-23T14:20:23.416Z",
+    "doneAt": "2026-11-23T14:31:14.123Z",
+    "elapsedMs": 655529,
+    "gateWaitMs": 2497,
+    "machineMs": 653032
+  },
+  "approval": {
+    "analyst": "Ada Analyst",
+    "decisionId": "8937e047-ea5b-4b52-acbc-0aeb424fbae5"
+  },
+  "models": [
+    {
+      "role": "analyst",
+      "model": "openai/gpt-6-luna",
+      "provider": "azure",
+      "calls": 159,
+      "costUsd": 0,
+      "medianLatencyMs": 0
+    },
+    {
+      "role": "analyst",
+      "model": "openai/gpt-6-luna",
+      "provider": "Azure",
+      "calls": 1,
+      "costUsd": 0.00124305,
+      "medianLatencyMs": 12432
+    },
+    {
+      "role": "designer",
+      "model": "anthropic/claude-opus-5.5",
+      "provider": "google-vertex/global",
+      "calls": 1,
+      "costUsd": 0,
+      "medianLatencyMs": 0
+    },
+    {
+      "role": "verifier",
+      "model": "typesafe/jev-1.14-20261014",
+      "provider": "TypeSafe",
+      "calls": 4,
+      "costUsd": 0.000157332,
+      "medianLatencyMs": 367
+    }
+  ],
+  "embeddingCostUsd": 0.00014848,
+  "totalCostUsd": 0.001548862,
+  "funnel": {
+    "eligible": 18,
+    "screened": 32,
+    "selected": 18,
+    "universe": 46,
+    "zeroScore": 0,
+    "candidates": 32,
+    "gateFailed": 0,
+    "belowCutoff": 0,
+    "gateUnknown": 0,
+    "thinEvidence": 14
+  },
+  "scores": {
+    "total": 159,
+    "byMethod": {
+      "judgement": {
+        "0": 1,
+        "1": 28,
+        "2": 30,
+        "3": 2,
+        "unknown": 66
+      },
+      "extract_then_quant": {
+        "4": 1,
+        "unknown": 31
+      }
+    },
+    "adjustments": {
+      "jev_borderline": 2,
+      "jev_unsupported": 1
+    }
+  },
+  "citations": {
+    "totals": {
+      "scores": 159,
+      "scoresWithCitations": 96,
+      "citations": 135
+    },
+    "checks": {
+      "id": {
+        "passed": 135,
+        "total": 135,
+        "rate": 1
+      },
+      "verbatim": {
+        "passed": 135,
+        "total": 135,
+        "rate": 1
+      },
+      "point_in_time": {
+        "passed": 135,
+        "total": 135,
+        "rate": 1
+      },
+      "issuer": {
+        "passed": 135,
+        "total": 135,
+        "rate": 1
+      }
+    },
+    "failures": [],
+    "gates": {
+      "citationIds": {
+        "required": 1,
+        "rate": 1,
+        "passed": true
+      },
+      "verbatim": {
+        "required": 0.98,
+        "rate": 1,
+        "passed": true
+      }
+    }
+  },
+  "basketCitations": {
+    "totals": {
+      "scores": 90,
+      "scoresWithCitations": 80,
+      "citations": 118
+    },
+    "checks": {
+      "id": {
+        "passed": 118,
+        "total": 118,
+        "rate": 1
+      },
+      "verbatim": {
+        "passed": 118,
+        "total": 118,
+        "rate": 1
+      },
+      "point_in_time": {
+        "passed": 118,
+        "total": 118,
+        "rate": 1
+      },
+      "issuer": {
+        "passed": 118,
+        "total": 118,
+        "rate": 1
+      }
+    },
+    "failures": [],
+    "gates": {
+      "citationIds": {
+        "required": 1,
+        "rate": 1,
+        "passed": true
+      },
+      "verbatim": {
+        "required": 0.98,
+        "rate": 1,
+        "passed": true
+      }
+    }
+  },
+  "gates": {
+    "elapsed": {
+      "required": 1800000,
+      "actual": 653032,
+      "elapsedMs": 655529,
+      "passed": true
+    },
+    "citationIds": {
+      "required": 1,
+      "actual": 1,
+      "passed": true
+    },
+    "verbatim": {
+      "required": 0.98,
+      "actual": 1,
+      "passed": true
+    },
+    "basket": {
+      "required": 1,
+      "actual": 18,
+      "passed": true
+    },
+    "passed": true
+  },
+  "releaseGates": {
+    "weightedKappa": {
+      "required": 0.6,
+      "satisfied": false,
+      "reason": "The labelled set is AI-generated and provisional, and this release gate needs a human-labelled set."
+    },
+    "stability": {
+      "required": 0.95,
+      "satisfied": false,
+      "reason": "The labelled set is AI-generated and provisional, and this release gate needs a human-labelled set."
+    }
+  }
+}
