@@ -14,9 +14,15 @@ export type BasketCandidate = {
   /** One entry per KPI id. A KPI with no entry, or an invalid score, counts as unknown. */
   scores: Readonly<Record<string, CandidateScore | undefined>>;
 };
-export type BasketRules = { size: number; weightCapPercent: number; weighting: WeightingId; unknownMode: UnknownMode };
+export type BasketRules = {
+  size: number; weightCapPercent: number; weighting: WeightingId; unknownMode: UnknownMode;
+  /** The least share of the approved KPI weight a name must have known to be ranked in a lenient run, 0 to 1. Strict runs already score unknown as 0. */
+  minKnownWeight?: number;
+};
+/** Provisional. A name with less than this share of its KPI weight known is not ranked, so one strong KPI cannot carry a name. */
+export const defaultMinKnownWeight = 0.4;
 
-export type ExclusionReason = 'gate_failed' | 'gate_unknown' | 'zero_score' | 'below_cutoff';
+export type ExclusionReason = 'gate_failed' | 'gate_unknown' | 'thin_evidence' | 'zero_score' | 'below_cutoff';
 export type Contribution = { kpiId: string; level: ScoreLevel; /** The weight used after any renormalising, 0 to 1. */ weight: number; /** weight times level over 4. The contributions plus `capAdjustment` sum to the score. */ contribution: number };
 export type BasketMember = {
   securityId: string; symbol: string; name: string; rank: number; score: number; confidence: number; weightPercent: number; atCap: boolean;
@@ -32,7 +38,7 @@ export type Basket = {
   unknownMode: UnknownMode;
   members: BasketMember[];
   excluded: Array<{ securityId: string; symbol: string; reason: ExclusionReason; score: number | null }>;
-  funnel: { candidates: number; gateFailed: number; gateUnknown: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
+  funnel: { candidates: number; gateFailed: number; gateUnknown: number; thinEvidence: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
   cap: { requestedPercent: number; usedPercent: number; relaxed: boolean };
 };
 
@@ -106,7 +112,7 @@ function roundWeights(weights: number[], capPercent: number): number[] {
 
 /**
  * Turns scored candidates into a provisional basket. It is pure and deterministic.
- * Order: drop names that fail the gate KPI or score zero, rank, take the top N, weight, then cap.
+ * Order: drop names that fail the gate KPI, have too little known KPI weight, or score zero, rank, take the top N, weight, then cap.
  * An unknown gate KPI fails the gate in both modes, because unknown is not above zero.
  * When fewer names qualify than the cap needs to reach 100 percent, the cap is relaxed to the smallest feasible value, 100 over the name count, and the result says so.
  */
@@ -118,6 +124,7 @@ export function packageBasket(input: { candidates: readonly BasketCandidate[]; k
   for (const s of scored) {
     if (s.gate === 'fail') excluded.push({ securityId: s.c.securityId, symbol: s.c.symbol, reason: 'gate_failed', score: s.score });
     else if (s.gate === 'unknown') excluded.push({ securityId: s.c.securityId, symbol: s.c.symbol, reason: 'gate_unknown', score: s.score });
+    else if (rules.unknownMode === 'lenient' && 1 - s.unknownWeight < (rules.minKnownWeight ?? 0) - EPS) excluded.push({ securityId: s.c.securityId, symbol: s.c.symbol, reason: 'thin_evidence', score: s.score });
     else if (s.score <= EPS) excluded.push({ securityId: s.c.securityId, symbol: s.c.symbol, reason: 'zero_score', score: s.score });
     else eligible.push(s);
   }
@@ -137,7 +144,7 @@ export function packageBasket(input: { candidates: readonly BasketCandidate[]; k
   const count = (r: ExclusionReason) => excluded.filter(e => e.reason === r).length;
   return {
     status: 'provisional', unknownMode: rules.unknownMode, members, excluded,
-    funnel: { candidates: input.candidates.length, gateFailed: count('gate_failed'), gateUnknown: count('gate_unknown'), zeroScore: count('zero_score'), eligible: eligible.length, selected: picked.length, belowCutoff: count('below_cutoff') },
+    funnel: { candidates: input.candidates.length, gateFailed: count('gate_failed'), gateUnknown: count('gate_unknown'), thinEvidence: count('thin_evidence'), zeroScore: count('zero_score'), eligible: eligible.length, selected: picked.length, belowCutoff: count('below_cutoff') },
     cap: { requestedPercent: requested, usedPercent: used, relaxed: used !== requested },
   };
 }

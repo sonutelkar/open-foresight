@@ -268,6 +268,8 @@ export const kpiScores = pgTable('kpi_scores', {
   citations: jsonb('citations').notNull(), rationale: text('rationale').notNull(), conflicts: jsonb('conflicts').notNull(),
   /** The passages offered to the model, with their labels, so every citation can be traced back. */
   evidence: jsonb('evidence').notNull(), raw: jsonb('raw'),
+  /** Changes code made to the model's level after validation, each with the original level. `level` holds the changed one. */
+  adjustments: jsonb('adjustments').notNull().default([]),
   confidence: numeric('confidence').notNull(), valid: boolean('valid').notNull(), errors: jsonb('errors').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [uniqueIndex('kpi_scores_attempt').on(table.runId, table.securityId, table.kpiId, table.attempt)]);

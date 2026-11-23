@@ -77,7 +77,22 @@ describe('gate and exclusions', () => {
   it('excludes zero scores and reports the funnel', () => {
     const b = packageBasket({ candidates: [cand('Z', { gate: '0', a: '0', b: '0', c: '0' }), cand('Y', { gate: '1', a: '3' })], kpis: noGate, rules });
     expect(b.excluded.find(e => e.symbol === 'Z')?.reason).toBe('zero_score');
-    expect(b.funnel).toEqual({ candidates: 2, gateFailed: 0, gateUnknown: 0, zeroScore: 1, eligible: 1, selected: 1, belowCutoff: 0 });
+    expect(b.funnel).toEqual({ candidates: 2, gateFailed: 0, gateUnknown: 0, thinEvidence: 0, zeroScore: 1, eligible: 1, selected: 1, belowCutoff: 0 });
+  });
+
+  it('drops a lenient name whose known KPI weight is below the floor, and leaves strict runs alone', () => {
+    const thin = cand('THIN', { c: '4' }), solid = cand('SOLID', { a: '2', b: '2' });
+    const lenient = packageBasket({ candidates: [thin, solid], kpis: noGate, rules: { ...rules, unknownMode: 'lenient', minKnownWeight: 0.4 } });
+    expect(lenient.members.map(m => m.symbol)).toEqual(['SOLID']);
+    expect(lenient.excluded).toEqual([{ securityId: 'id-THIN', symbol: 'THIN', reason: 'thin_evidence', score: expect.any(Number) }]);
+    expect(lenient.funnel).toMatchObject({ thinEvidence: 1, eligible: 1, selected: 1 });
+    expect(packageBasket({ candidates: [thin, solid], kpis: noGate, rules: { ...rules, unknownMode: 'lenient' } }).members.map(m => m.symbol).sort()).toEqual(['SOLID', 'THIN']);
+    expect(packageBasket({ candidates: [thin, solid], kpis: noGate, rules: { ...rules, unknownMode: 'strict', minKnownWeight: 0.4 } }).funnel.thinEvidence).toBe(0);
+  });
+
+  it('keeps a name that is exactly at the floor', () => {
+    const b = packageBasket({ candidates: [cand('EDGE', { a: '2', b: '2' })], kpis: noGate, rules: { ...rules, unknownMode: 'lenient', minKnownWeight: 0.5 } });
+    expect(b.members.map(m => m.symbol)).toEqual(['EDGE']);
   });
 
   it('keeps the top N and marks the rest below the cutoff', () => {

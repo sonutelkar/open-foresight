@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import {
-  computeConfidence, extractionOutputSchema, judgementOutputSchema, quantLevel, validateScore,
+  capUnsupportedLevel, computeConfidence, extractionOutputSchema, judgementOutputSchema, quantLevel, validateScore,
   type DocKind, type EvidenceItem, type Framework, type Kpi, type ResolvedCitation, type ScoreError, type ScoreLevel,
 } from '@open-foresight/core';
 import { computeQuant } from '@open-foresight/data';
@@ -94,8 +94,9 @@ export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, {
     const check = validateScore({ kpi, output, evidence, asOf: ctx.asOf, allowedIssuerKeys: ctx.security.issuerKeys });
     const base = { promptVersion: prompt.promptVersion, llmCallId: auditId, evidence: evidenceRefs(evidence), raw: output as object, rationale: (output as { rationale: string }).rationale, conflicts: (output as { conflicts: string[] }).conflicts, unit: kpi.method === 'extract_then_quant' ? kpi.extraction.unit : null };
     if (check.ok) {
-      const confidence = computeConfidence({ method: kpi.method, valid: true, level: check.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf });
-      row = await save(ctx, kpi, attempt, { ...base, level: check.level, extractedValue: check.extractedValue === null ? null : String(check.extractedValue), citations: check.citations, confidence: String(confidence), valid: true });
+      const capped = capUnsupportedLevel({ kpi, level: check.level, citations: check.citations });
+      const confidence = computeConfidence({ method: kpi.method, valid: true, level: capped.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf });
+      row = await save(ctx, kpi, attempt, { ...base, level: capped.level, adjustments: capped.adjustment ? [capped.adjustment] : [], extractedValue: check.extractedValue === null ? null : String(check.extractedValue), citations: check.citations, confidence: String(confidence), valid: true });
       return asOutcome(row, false);
     }
     row = await save(ctx, kpi, attempt, { ...base, level: 'unknown', confidence: '0', valid: false, errors: check.errors });

@@ -1,0 +1,1 @@
+ALTER TABLE "kpi_scores" ADD COLUMN "adjustments" jsonb DEFAULT '[]'::jsonb NOT NULL;
