@@ -28,7 +28,7 @@ integration('Basket evidence API on Postgres', () => {
   const get = (path: string) => api.request(path);
 
   /** A run with `size` basket members. The worker's path to `done` needs a recorded gate approval, which these reads do not depend on, so the run stays at gate 1. Member 0 gets scores that cite an SEC passage, an ESEF passage, and a quote that is not in its passage. */
-  async function seed(size: number, status: 'open' | 'failed' = 'open') {
+  async function seed(size: number, status: 'open' | 'failed' = 'open', contributions: unknown[] = []) {
     const [run] = await db.insert(runs).values({ settings: { brief: 'Smart energy' }, modelProfile: 'quality' }).returning({ id: runs.id });
     const runId = run!.id;
     for (const next of status === 'failed' ? ['failed' as const] : ['universe_built', 'designing', 'awaiting_kpi_approval'] as const) await db.update(runs).set({ status: next }).where(eq(runs.id, runId));
@@ -37,7 +37,7 @@ integration('Basket evidence API on Postgres', () => {
     const [version] = await db.insert(kpiFrameworkVersions).values({ runId, version: 1, sourceDraftId: draft!.id, framework, exclusions: [], edited: false, approvedBy: 'Ada' }).returning({ id: kpiFrameworkVersions.id });
     const [basket] = await db.insert(baskets).values({ runId, frameworkVersionId: version!.id, status: 'provisional', unknownMode: 'lenient', rules: {}, funnel: { universe: size, screened: size, candidates: size, gateFailed: 0, gateUnknown: 0, zeroScore: 0, eligible: size, selected: size, belowCutoff: 0 }, cap: { requestedPercent: 5, usedPercent: 5, relaxed: false }, excluded: [] }).returning({ id: baskets.id });
     const ids = size === 0 ? [] : (await db.insert(securities).values(Array.from({ length: size }, (_, i) => ({ shareClassFigi: `SC-${randomUUID()}-${i}`, name: `Name ${i}` }))).returning({ id: securities.id })).map(r => r.id);
-    if (size > 0) await db.insert(basketMembers).values(ids.map((securityId, i) => ({ basketId: basket!.id, securityId, symbol: `S${i}.US`, name: `Name ${i}`, rank: i + 1, score: '0.5', confidence: '0.7', weightPercent: String(100 / size), atCap: false, unknownWeight: '0', capAdjustment: '0', contributions: [] })));
+    if (size > 0) await db.insert(basketMembers).values(ids.map((securityId, i) => ({ basketId: basket!.id, securityId, symbol: `S${i}.US`, name: `Name ${i}`, rank: i + 1, score: '0.5', confidence: '0.7', weightPercent: String(100 / size), atCap: false, unknownWeight: '0', capAdjustment: '0', contributions })));
     return { runId, draftId: draft!.id, ids };
   }
 
@@ -83,6 +83,24 @@ integration('Basket evidence API on Postgres', () => {
     const [first, second] = body.basket.members;
     expect(first).toMatchObject({ symbol: 'S0.US', evidence: { kpis: 2, quotes: 4, unverified: 1, unknownKpis: 0, lowered: 1 } });
     expect(second!.evidence).toEqual({ kpis: 0, quotes: 0, unverified: 0, unknownKpis: 0, lowered: 0 });
+  });
+
+  it('flags a Luna fallback score in the basket and the evidence, with Jev\'s unknown answer, and adds nothing when no score fell back', async () => {
+    const plain = await seed(2); await seedEvidence(plain);
+    const plainBody = await (await get(`/api/runs/${plain.runId}`)).json() as { basket: Record<string, unknown> };
+    expect(plainBody.basket).not.toHaveProperty('fallbackNote');
+    const plainEvidence = await (await get(`/api/runs/${plain.runId}/members/S0.US/evidence`)).json() as { kpis: Array<Record<string, unknown>> };
+    expect(plainEvidence.kpis.some(k => 'route' in k || 'jevAnswer' in k)).toBe(false);
+
+    const world = await seed(2, 'open', [{ kpiId: textKpi.id, level: '3', route: 'luna-fallback', weight: 0.5, contribution: 0.375 }]);
+    const snapshot = await createSnapshot({ db });
+    const jevAnswer = { level: 'unknown', reason: 'unknown_rule', weighted: 2.1, confidence: 0, version: 'jev-kpi-score@v1', answer: { decisionId: 'd1', score: 2, probabilities: {}, confidence: 0.5, known: 0.3, costUsd: 0 } };
+    await db.insert(kpiScores).values({ runId: world.runId, frameworkDraftId: world.draftId, snapshotId: snapshot.id, securityId: world.ids[0]!, symbol: 'S0.US', asOf: '2026-11-20', method: 'judgement', confidence: '0.3', errors: [], conflicts: [], evidence: [], kpiId: textKpi.id, attempt: 1, level: '3', valid: true, rationale: 'Scored by the Analyst.', citations: [], route: 'luna-fallback', jevAnswer });
+    const body = await (await get(`/api/runs/${world.runId}`)).json() as { basket: { fallbackNote: string; members: Array<{ contributions: Array<{ route?: string }> }> } };
+    expect(body.basket.fallbackNote).toMatch(/provisional/);
+    expect(body.basket.members[0]!.contributions[0]!.route).toBe('luna-fallback');
+    const evidence = await (await get(`/api/runs/${world.runId}/members/S0.US/evidence`)).json() as { kpis: Array<Record<string, any>> };
+    expect(evidence.kpis.find(k => k.kpiId === textKpi.id)).toMatchObject({ route: 'luna-fallback', level: '3', jevAnswer: { level: 'unknown', reason: 'unknown_rule', answer: { known: 0.3 } } });
   });
 
   it('returns 404 for a run with no basket, a name outside the basket, and 400 for a bad run id', async () => {

@@ -312,4 +312,90 @@ integration('Analyst on Postgres', () => {
     expect(outcomes.every(o => o.valid)).toBe(true);
     expect(g.calls).toHaveLength(framework.kpis.filter(k => k.method !== 'quant').length);
   });
+
+  describe('jev-first scoring', () => {
+    type Level = { type: 'score'; score: number; legend: Record<string, string>; probabilities: Record<string, number>; confidence: number };
+    /** A Jev judge that answers every call with the given level probabilities and `known` probability. */
+    function jevJudge(probabilities: Record<string, number>, known: number) {
+      const calls: string[] = [];
+      const judge = { async decide() { calls.push('decide'); const level: Level = { type: 'score', score: 0, legend: {}, probabilities, confidence: 0.5 }; return { id: `jev-${calls.length}`, answers: { level, known: { type: 'noul' as const, noul: known } }, usage: { input_tokens: 1, output_tokens: 1, cost: 0.0004 } }; } };
+      return { calls, judge };
+    }
+    const jevSays3 = () => jevJudge({ '2': 0.2, '3': 0.8 }, 0.9);
+    const jevUnknown = () => jevJudge({ '2': 0.5, '3': 0.5 }, 0.2);
+    const lunaSays3 = [{ level: '3', citations: goodCitations, rationale: 'The filing states that grid products were 26 percent of revenue.', conflicts: [] }];
+    const rowOf = async (id: string) => (await db.select().from(kpiScores).where(eq(kpiScores.id, id)))[0]!;
+
+    it('stores Jev\'s own level as jev and never calls the Analyst when Jev answers', async () => {
+      const s = await setup();
+      const g = stubGateway(s.runId, []), j = jevSays3();
+      const outcome = await scoreKpi(ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: j.judge }), judgeKpi);
+      expect(outcome).toMatchObject({ level: '3', valid: true, confidence: 0.8 });
+      expect(g.calls).toHaveLength(0);
+      expect(j.calls).toHaveLength(1);
+      const row = await rowOf(outcome.scoreId);
+      expect(row).toMatchObject({ route: 'jev', method: 'judgement', promptVersion: 'jev-kpi-score@v1', llmCallId: null, raw: null, citations: [] });
+      expect(row.jevAnswer).toMatchObject({ level: '3', reason: 'level', answer: { decisionId: 'jev-1', known: 0.9 } });
+    });
+
+    it('scores a Jev unknown with the Analyst, flags it luna-fallback, halves the confidence and keeps Jev\'s unknown answer', async () => {
+      const s = await setup();
+      const g = stubGateway(s.runId, lunaSays3), j = jevUnknown();
+      const outcome = await scoreKpi(ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: j.judge }), judgeKpi);
+      expect(g.calls).toHaveLength(1);
+      expect(outcome).toMatchObject({ level: '3', valid: true });
+      const row = await rowOf(outcome.scoreId);
+      expect(row).toMatchObject({ route: 'luna-fallback', level: '3' });
+      expect(Number(row.confidence)).toBeCloseTo(0.3, 5);
+      expect((row.raw as { level: string }).level).toBe('3');
+      expect(row.jevAnswer).toMatchObject({ level: 'unknown', reason: 'unknown_rule', answer: { known: 0.2, decisionId: 'jev-1' } });
+    });
+
+    it('stays unknown when the Analyst is unknown too, or never validates, and keeps Jev\'s answer on every attempt', async () => {
+      const s = await setup();
+      const unknown = await scoreKpi(ctxFor(s, stubGateway(s.runId, [{ level: 'unknown', citations: [], rationale: 'The passages do not say.', conflicts: [] }]).generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: jevUnknown().judge }), judgeKpi);
+      expect(unknown).toMatchObject({ level: 'unknown', valid: true });
+      expect(await rowOf(unknown.scoreId)).toMatchObject({ route: 'luna-fallback', level: 'unknown' });
+      const t = await setup();
+      const bad = { level: '3', citations: [{ evidenceId: 'e1', quote: 'a quote that is not in the passage' }], rationale: 'x', conflicts: [] };
+      const failed = await scoreKpi(ctxFor(t, stubGateway(t.runId, [bad, bad]).generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: jevUnknown().judge }), judgeKpi);
+      expect(failed).toMatchObject({ level: 'unknown', valid: false, attempts: 2 });
+      const rows = await db.select().from(kpiScores).where(eq(kpiScores.runId, t.runId));
+      expect(rows).toHaveLength(2);
+      expect(rows.every(r => r.route === 'luna-fallback' && (r.jevAnswer as { level: string }).level === 'unknown')).toBe(true);
+    });
+
+    it('makes no Jev or Analyst call without passages, and records why Jev did not answer', async () => {
+      const s = await setup();
+      const g = stubGateway(s.runId, []), j = jevSays3();
+      const outcome = await scoreKpi(ctxFor(s, g.generator, stubSearcher([]).retriever, { jevFirst: j.judge }), judgeKpi);
+      expect(g.calls.length + j.calls.length).toBe(0);
+      expect(await rowOf(outcome.scoreId)).toMatchObject({ level: 'unknown', route: 'luna-fallback', jevAnswer: { level: 'unknown', reason: 'no_evidence' } });
+    });
+
+    it('leaves quant and extraction KPIs to the existing path, and saves no route when the flag is off', async () => {
+      const s = await setup();
+      const g = stubGateway(s.runId, [{ extractedValue: 0.26, citations: goodCitations, rationale: 'Grid is 26 percent.', conflicts: [] }, ...lunaSays3]), j = jevSays3();
+      const withFlag = ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: j.judge });
+      const extracted = await scoreKpi(withFlag, extractKpi);
+      expect(j.calls).toHaveLength(0);
+      expect(await rowOf(extracted.scoreId)).toMatchObject({ route: null, jevAnswer: null });
+      const off = await scoreKpi(ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever), judgeKpi);
+      const row = await rowOf(off.scoreId);
+      expect(row).toMatchObject({ route: null, jevAnswer: null, level: '3' });
+      expect(Number(row.confidence)).toBeCloseTo(0.6, 5);
+    });
+
+    it('reuses a saved jev-first score without a call, and the database refuses a route with no Jev answer', async () => {
+      const s = await setup();
+      const j = jevSays3();
+      const ctx = ctxFor(s, stubGateway(s.runId, []).generator, stubSearcher([evidenceHit()]).retriever, { jevFirst: j.judge });
+      await scoreKpi(ctx, judgeKpi);
+      expect(await scoreKpi(ctx, judgeKpi)).toMatchObject({ reused: true, level: '3' });
+      expect(j.calls).toHaveLength(1);
+      const base = { runId: s.runId, frameworkDraftId: s.draftId, snapshotId: s.snapshotId, securityId: s.securityId, symbol: 'X', kpiId: 'k', asOf: '2026-11-01', method: 'judgement', citations: [], rationale: '', conflicts: [], evidence: [], errors: [], confidence: '0.5', level: '3', valid: true };
+      await expect(db.insert(kpiScores).values({ ...base, attempt: 80, route: 'jev' })).rejects.toThrow();
+      await expect(db.insert(kpiScores).values({ ...base, attempt: 81, route: 'other', jevAnswer: {} })).rejects.toThrow();
+    });
+  });
 });

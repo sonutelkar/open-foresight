@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { basketView, formatScore, glossary, levelText, methodName, reviewLimitation } from '@open-foresight/core';
+import { basketView, formatScore, glossary, levelText, methodName, reviewLimitation, routeNames } from '@open-foresight/core';
 import { getEvidence, type Citation, type EvidenceSummary, type KpiEvidence, type MemberEvidence, type RunDetail } from './api';
 
 type Basket = NonNullable<RunDetail['basket']>;
@@ -37,6 +37,7 @@ export function BasketSection({ run }: { run: RunDetail }) {
         <summary><Chevron open={false} />Not reviewed: no analyst has checked these scores or sources.</summary>
         <p>{reviewLimitation}</p>
       </details>
+      {basket.fallbackNote && <p className="banner warn" data-testid="fallback-note">{basket.fallbackNote}</p>}
       <div className="funnel" data-testid="funnel">
         <ol className="funnel-steps tnum">
           <li><b>{f.universe}</b> listings</li>
@@ -80,11 +81,12 @@ function Key() {
 }
 
 /** What a row says about its evidence before it is opened: how many quotes stand behind it, and anything that should make a reader look. */
-function Tally({ e }: { e: EvidenceSummary }) {
-  if (e.quotes === 0) return <span className="tally none">No quotes</span>;
+function Tally({ e, fallback }: { e: EvidenceSummary; fallback: number }) {
+  if (e.quotes === 0 && fallback === 0) return <span className="tally none">No quotes</span>;
   return (
     <span className="tally" data-testid="tally">
       <span>{plural(e.quotes, 'quote')}</span>
+      {fallback > 0 && <span className="flag warn" data-testid="fallback-flag">{fallback} Luna fallback</span>}
       {e.unverified > 0 && <span className="flag warn">{e.unverified} not verbatim</span>}
       {e.lowered > 0 && <span className="flag warn">{e.lowered} lowered</span>}
       {e.unknownKpis > 0 && <span className="flag">{e.unknownKpis} unknown</span>}
@@ -105,6 +107,7 @@ function MemberRows({ runId, member: m, startOpen }: { runId: string; member: Me
     return () => { live = false; };
   }, [open, evidence, runId, m.symbol, attempt]);
   const panel = `evidence-${m.symbol}`;
+  const fallback = m.contributions.filter(c => c.route === 'luna-fallback').length;
   return (
     <>
       <tr className={`member${open ? ' open' : ''}`} data-testid={`basket-row-${m.symbol}`} onClick={() => setOpen(o => !o)}>
@@ -114,9 +117,9 @@ function MemberRows({ runId, member: m, startOpen }: { runId: string; member: Me
             <Chevron open={open} /><span className="name">{m.name}</span>
           </button>
           <span className="muted sym">{m.symbol}</span>
-          <div className="narrow-only"><Tally e={m.evidence} /></div>
+          <div className="narrow-only"><Tally e={m.evidence} fallback={fallback} /></div>
         </td>
-        <td className="wide"><Tally e={m.evidence} /></td>
+        <td className="wide"><Tally e={m.evidence} fallback={fallback} /></td>
         <td className="num" data-testid={`score-${m.symbol}`}>{formatScore(m.score)}</td>
         <td className="num">{m.confidence.toFixed(2)}</td>
         <td className="num">{m.weightPercent.toFixed(2)}{m.atCap ? ' (cap)' : ''}</td>
@@ -139,11 +142,16 @@ function LevelMeter({ level }: { level?: string }) {
   return <span className="meter" role="img" aria-label={level === undefined ? 'not scored' : level === 'unknown' ? 'unknown' : `level ${level} of 4`}>{levels.map(l => <i key={l} className={Number(l) <= n && n >= 0 ? 'on' : ''} />)}</span>;
 }
 
-function KpiBlock({ kpi: k, contribution }: { kpi: KpiEvidence; contribution: Member['contributions'][number] | undefined }) {
+/** What a route badge says on hover. A fallback names Jev's unknown answer, so a reader can see why Luna scored it. */
+const routeTitle = (k: KpiEvidence) => (k.route === 'luna-fallback'
+  ? `Jev answered unknown (${k.jevAnswer?.reason.replaceAll('_', ' ') ?? 'no reason recorded'}${k.jevAnswer?.answer ? `, probability known ${k.jevAnswer.answer.known.toFixed(2)}` : ''}), so the Analyst scored this KPI and its confidence is discounted.`
+  : 'Scored by Jev, not the Analyst.');
+
+export function KpiBlock({ kpi: k, contribution }: { kpi: KpiEvidence; contribution: Member['contributions'][number] | undefined }) {
   return (
     <section className="ledger-row" data-testid={`kpi-evidence-${k.kpiId}`}>
       <header>
-        <div className="ledger-title"><h3>{k.name}</h3><span className="badge" title={glossary[k.method as keyof typeof glossary]}>{methodName(k.method)}</span></div>
+        <div className="ledger-title"><h3>{k.name}</h3><span className="badge" title={glossary[k.method as keyof typeof glossary]}>{methodName(k.method)}</span>{k.route && <span className={`badge route ${k.route}`} data-testid="route-badge" title={routeTitle(k)}>{routeNames[k.route]}{k.route === 'luna-fallback' ? ', provisional' : ''}</span>}</div>
         <div className="ledger-level"><LevelMeter level={k.scored ? k.level : undefined} /><span className="tnum">{k.scored ? levelText(k.level ?? 'unknown') : 'Not scored'}{contribution ? ` · adds ${contribution.contribution.toFixed(3)}` : ''}</span></div>
       </header>
       {k.adjustments?.map(a => <p key={a.code} className="adjust" data-testid="adjustment"><strong>{a.from === a.to ? 'Check' : 'Lowered'}.</strong> {a.message}</p>)}
@@ -152,7 +160,7 @@ function KpiBlock({ kpi: k, contribution }: { kpi: KpiEvidence; contribution: Me
       {k.quantValue != null && <p className="muted">Computed value {k.quantValue}</p>}
       {k.conflicts && k.conflicts.length > 0 && <p className="warn">Conflicts: {k.conflicts.join('; ')}</p>}
       {k.citations?.map(c => <Quote key={c.evidenceId} c={c} />)}
-      {k.scored && k.method !== 'quant' && (k.citations?.length ?? 0) === 0 && <p className="muted">No passage supported a score.</p>}
+      {k.scored && k.method !== 'quant' && (k.citations?.length ?? 0) === 0 && <p className="muted">{k.route === 'jev' ? 'Jev cites no passages.' : 'No passage supported a score.'}</p>}
     </section>
   );
 }

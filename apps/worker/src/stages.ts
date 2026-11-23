@@ -2,14 +2,14 @@ import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import {
   briefSchema, defaultMinKnownWeight, exchangeOf, exchanges, packageBasket, unknownModeFor, type Brief, type Framework, type Region, type ScoreLevel,
-  type BasketCandidate, type BasketKpi, type SourceId,
+  type BasketCandidate, type BasketKpi, type CandidateScore, type ScoreRoute, type SourceId,
 } from '@open-foresight/core';
 import { buildUniverse, fxToUsdAsOf } from '@open-foresight/data';
 import {
   basketMembers, baskets, createSnapshot, esefFilingsAsOf, exchangeListings, figiMappings, filingsAsOf, kpiFrameworkVersions, kpiScores, priceBars,
   runUniverse, runs, secListings, securities,
 } from '@open-foresight/db';
-import { applyExposure, scoreFramework, type SpanJudge, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
+import { applyExposure, scoreFramework, type ScoreJudge, type SpanJudge, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
 import { issuerKeysForSecurity } from '@open-foresight/retrieval';
 
 export type RunStatus = typeof runs.$inferSelect['status'];
@@ -23,6 +23,8 @@ export type WorkerDeps = {
   judge?: SpanJudge;
   /** Optional Jev exposure check that settles the gate KPI at level 0 for names plainly outside the theme. Off unless the worker starts with JEV_EXPOSURE_CHECK=1. */
   exposureJudge?: SpanJudge;
+  /** Optional Jev first scoring of judgement KPIs, with the Analyst as a flagged fallback. The worker sets it unless it starts with JEV_FIRST_SCORING=0. */
+  jevFirst?: ScoreJudge;
   availableSources: readonly SourceId[];
   /** Securities scored at once. Each runs a few KPIs at once, so this multiplies the model calls in flight. Default 3. */
   scoreConcurrency?: number;
@@ -186,7 +188,7 @@ const frameworkVersionOf = async (db: PostgresJsDatabase, run: Run) => {
 };
 
 /** Scores every KPI for every included name. Scores already saved for this run are reused, so a retry only does the work that is left. */
-const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudge, scoreConcurrency, log }, run) => {
+const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudge, jevFirst, scoreConcurrency, log }, run) => {
   const brief = briefOf(run.settings);
   if (!run.snapshotId) throw new StageFailure('The run has no data snapshot');
   const version = await frameworkVersionOf(db, run);
@@ -196,7 +198,7 @@ const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudg
   const gate = framework.kpis.find(k => k.isGate);
   await pool(rows, scoreConcurrency ?? 3, async row => {
     const ctx = {
-      db, gateway, retriever, judge, runId: run.id, frameworkDraftId: version.sourceDraftId, snapshotId: run.snapshotId!, asOf: brief.asOf,
+      db, gateway, retriever, judge, jevFirst, runId: run.id, frameworkDraftId: version.sourceDraftId, snapshotId: run.snapshotId!, asOf: brief.asOf,
       security: { id: row.securityId!, name: row.name ?? row.symbol, symbol: row.symbol, ciks: (row.ciks as string[] | null) ?? [], issuerKeys: (row.issuerKeys as string[] | null) ?? [] },
     };
     if (exposureJudge && gate) await applyExposure({ ...ctx, judge: exposureJudge }, gate, brief.brief);
@@ -206,6 +208,27 @@ const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudg
   return 'packaging';
 };
 
+/** The candidates, KPIs and rules a run's basket is built from, read from the saved scores. The packaging stage and the policy report share it. */
+export async function basketInput(db: PostgresJsDatabase, run: Run) {
+  const brief = briefOf(run.settings);
+  const version = await frameworkVersionOf(db, run);
+  const framework = version.framework as Framework;
+  const kpis: BasketKpi[] = framework.kpis.map(k => ({ id: k.id, weight: k.weightPercent / 100, isGate: k.isGate }));
+  const universe = await db.select().from(runUniverse).where(and(eq(runUniverse.runId, run.id), eq(runUniverse.included, true)));
+  const scoreRows = await db.select().from(kpiScores).where(eq(kpiScores.runId, run.id)).orderBy(desc(kpiScores.attempt));
+  const best = new Map<string, CandidateScore>();
+  for (const s of scoreRows) {
+    const key = `${s.securityId}|${s.kpiId}`;
+    if (s.valid && !best.has(key)) best.set(key, { level: s.level as ScoreLevel, confidence: Number(s.confidence), ...(s.route ? { route: s.route as ScoreRoute } : {}) });
+  }
+  const candidates: BasketCandidate[] = universe.map(u => ({
+    securityId: u.securityId!, symbol: u.symbol, name: u.name ?? u.symbol, marketCapUsd: Number(u.marketCapUsd ?? 0), advUsd: Number(u.advUsd ?? 0),
+    scores: Object.fromEntries(kpis.flatMap(k => { const v = best.get(`${u.securityId}|${k.id}`); return v ? [[k.id, v]] : []; })),
+  }));
+  const rules = { size: brief.basketSize, weightCapPercent: brief.weightCapPercent, weighting: brief.weighting, unknownMode: unknownModeFor(brief.exposureStyle), minKnownWeight: defaultMinKnownWeight };
+  return { version, candidates, kpis, rules };
+}
+
 /**
  * Turns the saved scores into the provisional basket and writes it with its members in one transaction. A basket is never rewritten.
  * A run that already has a basket, such as after a crash before the status moved, only finishes.
@@ -213,22 +236,7 @@ const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudg
 const packageStage: Stage = async ({ db }, run) => {
   const [existing] = await db.select({ id: baskets.id }).from(baskets).where(eq(baskets.runId, run.id));
   if (existing) return 'done';
-  const brief = briefOf(run.settings);
-  const version = await frameworkVersionOf(db, run);
-  const framework = version.framework as Framework;
-  const kpis: BasketKpi[] = framework.kpis.map(k => ({ id: k.id, weight: k.weightPercent / 100, isGate: k.isGate }));
-  const universe = await db.select().from(runUniverse).where(and(eq(runUniverse.runId, run.id), eq(runUniverse.included, true)));
-  const scoreRows = await db.select().from(kpiScores).where(eq(kpiScores.runId, run.id)).orderBy(desc(kpiScores.attempt));
-  const best = new Map<string, { level: ScoreLevel; confidence: number }>();
-  for (const s of scoreRows) {
-    const key = `${s.securityId}|${s.kpiId}`;
-    if (s.valid && !best.has(key)) best.set(key, { level: s.level as ScoreLevel, confidence: Number(s.confidence) });
-  }
-  const candidates: BasketCandidate[] = universe.map(u => ({
-    securityId: u.securityId!, symbol: u.symbol, name: u.name ?? u.symbol, marketCapUsd: Number(u.marketCapUsd ?? 0), advUsd: Number(u.advUsd ?? 0),
-    scores: Object.fromEntries(kpis.flatMap(k => { const v = best.get(`${u.securityId}|${k.id}`); return v ? [[k.id, v]] : []; })),
-  }));
-  const rules = { size: brief.basketSize, weightCapPercent: brief.weightCapPercent, weighting: brief.weighting, unknownMode: unknownModeFor(brief.exposureStyle), minKnownWeight: defaultMinKnownWeight };
+  const { version, candidates, kpis, rules } = await basketInput(db, run);
   const basket = packageBasket({ candidates, kpis, rules });
   const allRows = await db.select({ included: runUniverse.included }).from(runUniverse).where(eq(runUniverse.runId, run.id));
   const funnel = { universe: allRows.length, screened: allRows.filter(r => r.included).length, ...basket.funnel };

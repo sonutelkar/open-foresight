@@ -57,3 +57,17 @@ export function readJevLevel(probabilities: Readonly<Record<string, number>>, kn
   if (near < jevLevelRule.minNear) return { level: 'unknown', reason: 'split', weighted, confidence: 0 };
   return { level: levelKeys[i]!, reason: 'level', weighted, confidence: q[i]! };
 }
+
+/** How a stored score was produced under the `jev-first` path. `jev` is Jev's own level. `luna-fallback` is the Analyst's level for a pair Jev answered unknown. */
+export type ScoreRoute = 'jev' | 'luna-fallback';
+
+/**
+ * A `luna-fallback` score keeps this share of the confidence the Analyst would have given it as the primary scorer.
+ * It comes from the PR 13b bake-off: on the pairs Jev found unknown, Luna's confidence did not drop, so Luna's own confidence does not warn of a weak answer there.
+ * The size is a round figure, one half, and is not tuned to the AI-labelled set. Revisit it with a human-labelled set.
+ */
+export const lunaFallbackConfidenceFactor = 0.5;
+
+export const routeNames: Record<ScoreRoute, string> = { jev: 'Jev', 'luna-fallback': 'Luna fallback' };
+/** Shown with a basket that holds a fallback score. */
+export const fallbackLimitation = 'Luna fallback scores are provisional. Jev could not answer these KPIs, and Luna was weak on such pairs in the bake-off, so its confidence is halved. The comparison used AI-generated labels.';

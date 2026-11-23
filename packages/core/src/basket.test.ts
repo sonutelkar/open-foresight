@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { capWeights, packageBasket, unknownModeFor, type BasketCandidate, type BasketKpi, type BasketRules } from './basket.js';
+import { capWeights, compareBaskets, packageBasket, unknownModeFor, type BasketCandidate, type BasketKpi, type BasketRules } from './basket.js';
 import type { ScoreLevel } from './score.js';
 
 const kpis: BasketKpi[] = [{ id: 'gate', weight: 0.4, isGate: true }, { id: 'a', weight: 0.3, isGate: false }, { id: 'b', weight: 0.2, isGate: false }, { id: 'c', weight: 0.1, isGate: false }];
@@ -169,5 +169,48 @@ describe('weighting and caps', () => {
     const b = packageBasket({ candidates: many, kpis: k, rules: { ...rules, size: 37, weightCapPercent: 4 } });
     expect(sum(b.members.map(m => m.weightPercent))).toBeCloseTo(100, 9);
     expect(Math.max(...b.members.map(m => m.weightPercent))).toBeLessThanOrEqual(4 + 1e-4);
+  });
+});
+
+describe('fallback scores', () => {
+  const withRoute = (c: BasketCandidate, routes: Record<string, 'jev' | 'luna-fallback'>): BasketCandidate =>
+    ({ ...c, scores: Object.fromEntries(Object.entries(c.scores).map(([k, v]) => [k, v && routes[k] ? { ...v, route: routes[k] } : v])) });
+  const levels = { gate: '4', a: '2', b: '4', c: '1' } as const;
+
+  it('carries the route into the contributions and nowhere else, so a run without routes is unchanged', () => {
+    const plain = packageBasket({ candidates: [cand('X', levels)], kpis, rules });
+    const routed = packageBasket({ candidates: [withRoute(cand('X', levels), { a: 'luna-fallback', b: 'jev' })], kpis, rules });
+    expect(plain.members[0]!.contributions.some(c => 'route' in c)).toBe(false);
+    expect(routed.members[0]!.contributions.map(c => c.route)).toEqual([undefined, 'luna-fallback', 'jev', undefined]);
+    const strip = (b: typeof routed) => ({ ...b, members: b.members.map(m => ({ ...m, contributions: m.contributions.map(({ route: _route, ...rest }) => rest) })) });
+    expect(strip(routed)).toEqual(plain);
+  });
+
+  it('counts a fallback level as known in both modes and on the gate', () => {
+    const lenient: BasketRules = { ...rules, unknownMode: 'lenient' };
+    const fallbackGate = withRoute(cand('F', { gate: '2', a: '2', b: '2', c: '2' }), { gate: 'luna-fallback', a: 'luna-fallback' });
+    for (const r of [rules, lenient]) {
+      const m = packageBasket({ candidates: [fallbackGate], kpis, rules: r }).members[0]!;
+      expect(m.unknownWeight).toBe(0);
+      expect(m.score).toBeCloseTo(0.5, 12);
+    }
+  });
+
+  it('keeps the unknown rules when a KPI stays unknown after the fallback', () => {
+    const stillUnknown = cand('U', { gate: '4', a: 'unknown', b: '4', c: '4' });
+    expect(packageBasket({ candidates: [stillUnknown], kpis, rules }).members[0]!.score).toBeCloseTo(0.7, 12);
+    const gateUnknown = withRoute(cand('G', { gate: 'unknown', a: '4', b: '4', c: '4' }), { gate: 'luna-fallback' });
+    expect(packageBasket({ candidates: [gateUnknown], kpis, rules }).excluded).toEqual([expect.objectContaining({ symbol: 'G', reason: 'gate_unknown' })]);
+  });
+});
+
+describe('compareBaskets', () => {
+  it('reports who entered, who left and how many shared weights moved', () => {
+    const base = packageBasket({ candidates: [cand('A', { gate: '4', a: '4', b: '4', c: '4' }), cand('B', { gate: '4', a: '2', b: '2', c: '2' }), cand('C', { gate: '4', a: '1', b: '1', c: '1' })], kpis, rules: { ...rules, size: 2 } });
+    const other = packageBasket({ candidates: [cand('A', { gate: '4', a: '3', b: '3', c: '3' }), cand('B', { gate: '4', a: '0', b: '0', c: '0' }), cand('C', { gate: '4', a: '2', b: '2', c: '2' })], kpis, rules: { ...rules, size: 2 } });
+    const diff = compareBaskets(base, other);
+    expect(diff).toMatchObject({ selected: 2, added: ['C'], dropped: ['B'], weightsChanged: 1 });
+    expect(diff.maxWeightShiftPercent).toBeGreaterThan(0);
+    expect(compareBaskets(base, base)).toMatchObject({ added: [], dropped: [], weightsChanged: 0, maxWeightShiftPercent: 0 });
   });
 });

@@ -1,3 +1,4 @@
+import type { ScoreRoute } from './jev-score.js';
 import type { ScoreLevel } from './score.js';
 
 /** How a KPI the Analyst could not score counts. Strict treats it as level 0. Lenient drops it and renormalises the remaining weights. */
@@ -8,7 +9,8 @@ export type WeightingId = 'score' | 'equal' | 'score_sqrt_cap';
 export const unknownModeFor = (exposureStyle: string): UnknownMode => (exposureStyle === 'strict' ? 'strict' : 'lenient');
 
 export type BasketKpi = { id: string; /** Share of the theme score, 0 to 1. */ weight: number; isGate: boolean };
-export type CandidateScore = { level: ScoreLevel; confidence: number };
+/** `route` is set only under the `jev-first` path. A level from either route counts as known. */
+export type CandidateScore = { level: ScoreLevel; confidence: number; route?: ScoreRoute };
 export type BasketCandidate = {
   securityId: string; symbol: string; name: string; marketCapUsd: number; advUsd: number;
   /** One entry per KPI id. A KPI with no entry, or an invalid score, counts as unknown. */
@@ -23,7 +25,7 @@ export type BasketRules = {
 export const defaultMinKnownWeight = 0.4;
 
 export type ExclusionReason = 'gate_failed' | 'gate_unknown' | 'thin_evidence' | 'zero_score' | 'below_cutoff';
-export type Contribution = { kpiId: string; level: ScoreLevel; /** The weight used after any renormalising, 0 to 1. */ weight: number; /** weight times level over 4. The contributions plus `capAdjustment` sum to the score. */ contribution: number };
+export type Contribution = { kpiId: string; level: ScoreLevel; route?: ScoreRoute; /** The weight used after any renormalising, 0 to 1. */ weight: number; /** weight times level over 4. The contributions plus `capAdjustment` sum to the score. */ contribution: number };
 export type BasketMember = {
   securityId: string; symbol: string; name: string; rank: number; score: number; confidence: number; weightPercent: number; atCap: boolean;
   contributions: Contribution[];
@@ -59,7 +61,8 @@ function scoreOne(c: BasketCandidate, kpis: readonly BasketKpi[], mode: UnknownM
     const level = c.scores[k.id]?.level ?? 'unknown';
     const n = levelNumber(level);
     const weight = mode === 'lenient' ? (n === null ? 0 : (k.weight / total) * scale) : k.weight / total;
-    return { kpiId: k.id, level, weight, contribution: n === null ? 0 : (weight * n) / 4 };
+    const route = c.scores[k.id]?.route;
+    return { kpiId: k.id, level, ...(route ? { route } : {}), weight, contribution: n === null ? 0 : (weight * n) / 4 };
   });
   const raw = contributions.reduce((s, x) => s + x.contribution, 0);
   const score = mode === 'lenient' && unknownWeight > 0.5 + EPS ? Math.min(raw, lenientUnknownCap) : raw;
@@ -146,5 +149,19 @@ export function packageBasket(input: { candidates: readonly BasketCandidate[]; k
     status: 'provisional', unknownMode: rules.unknownMode, members, excluded,
     funnel: { candidates: input.candidates.length, gateFailed: count('gate_failed'), gateUnknown: count('gate_unknown'), thinEvidence: count('thin_evidence'), zeroScore: count('zero_score'), eligible: eligible.length, selected: picked.length, belowCutoff: count('below_cutoff') },
     cap: { requestedPercent: requested, usedPercent: used, relaxed: used !== requested },
+  };
+}
+
+/**
+ * What differs between two baskets built from the same names: who entered or left, and how many shared names carry a different weight.
+ * It reports the basket-level effect of a scoring policy against a base.
+ */
+export function compareBaskets(base: Basket, other: Basket, epsilonPercent = 1e-4) {
+  const a = new Map(base.members.map(m => [m.symbol, m.weightPercent])), b = new Map(other.members.map(m => [m.symbol, m.weightPercent]));
+  const shifts = [...a].flatMap(([symbol, w]) => (b.has(symbol) ? [Math.abs(b.get(symbol)! - w)] : []));
+  return {
+    selected: other.members.length,
+    added: [...b.keys()].filter(s => !a.has(s)).sort(), dropped: [...a.keys()].filter(s => !b.has(s)).sort(),
+    weightsChanged: shifts.filter(d => d > epsilonPercent).length, maxWeightShiftPercent: shifts.length ? Math.max(...shifts) : 0,
   };
 }

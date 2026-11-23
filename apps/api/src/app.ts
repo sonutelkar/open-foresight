@@ -6,7 +6,7 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { z } from 'zod';
-import { availableQuantIds, briefLimits, esefReportLink, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, quoteInPassage, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
+import { availableQuantIds, briefLimits, esefReportLink, fallbackLimitation, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, quoteInPassage, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
 import { basketMembers, baskets, documentChunks, esefFilings, humanDecisions, kpiScores, secFilings, secSourceDocuments, webDocuments, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
 
 export type AppDeps = {
@@ -134,6 +134,7 @@ export function createApp(deps: AppDeps) {
       universe: { total: universe.length, included: universe.filter(u => u.included).length, withFilings: universe.filter(u => u.included && (u.coverage === 'sec' || u.coverage === 'esef')).length },
       basket: basket ? {
         status: basket.status, unknownMode: basket.unknownMode, rules: basket.rules, funnel: basket.funnel, cap: basket.cap, excluded: basket.excluded, createdAt: basket.createdAt,
+        ...(members.some(m => (m.contributions as Array<{ route?: string }>).some(k => k.route === 'luna-fallback')) ? { fallbackNote: fallbackLimitation } : {}),
         members: members.map(m => ({ evidence: evidence.get(m.securityId) ?? { kpis: 0, quotes: 0, unverified: 0, unknownKpis: 0, lowered: 0 }, rank: m.rank, symbol: m.symbol, name: m.name, score: Number(m.score), confidence: Number(m.confidence), weightPercent: Number(m.weightPercent), atCap: m.atCap, unknownWeight: Number(m.unknownWeight), capAdjustment: Number(m.capAdjustment), contributions: m.contributions })),
       } : null,
     });
@@ -177,7 +178,7 @@ export function createApp(deps: AppDeps) {
         const r = latest.get(k.id);
         if (!r) return { kpiId: k.id, name: k.name, method: k.method, scored: false };
         return {
-          kpiId: k.id, name: k.name, method: r.method, scored: true, level: r.level, adjustments: r.adjustments, confidence: Number(r.confidence), valid: r.valid, rationale: r.rationale, conflicts: r.conflicts,
+          kpiId: k.id, name: k.name, method: r.method, scored: true, ...(r.route ? { route: r.route, jevAnswer: r.jevAnswer } : {}), level: r.level, adjustments: r.adjustments, confidence: Number(r.confidence), valid: r.valid, rationale: r.rationale, conflicts: r.conflicts,
           extractedValue: r.extractedValue === null ? null : Number(r.extractedValue), unit: r.unit, quantValue: r.quantValue === null ? null : Number(r.quantValue), quantInputs: r.quantInputs,
           citations: (r.citations as Cited[]).map(x => {
             const text = chunkText.get(x.chunkId), src = source.get(x.docId);
