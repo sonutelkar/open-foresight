@@ -5,10 +5,10 @@ export type Config = {
   briefLimits: { minWords: number; maxChars: number; basketSize: [number, number] };
   availableSources: string[]; sources: Record<string, string>; quantFunctions: Record<string, string>;
 };
-export type RunSummary = { id: string; status: string; createdAt: string; theme: string };
+export type RunSummary = { id: string; status: string; createdAt: string; theme: string; exposureStyle: string | null; asOf: string | null; selected: number | null };
 export type RunDetail = {
   id: string; status: string; createdAt: string; frameworkVersion: string | null;
-  settings: { brief?: string; exclusions?: string[]; createdBy?: string; designError?: string[]; failure?: { stage: string; message: string } };
+  settings: { brief?: string; exposureStyle?: string; asOf?: string; weightCapPercent?: number; exclusions?: string[]; createdBy?: string; designError?: string[]; failure?: { stage: string; message: string } };
   draft: { id: string; attempt: number; promptVersion: string; model: string; framework: Framework } | null;
   attempts: Array<{ attempt: number; valid: boolean; errors: Array<{ code: string; message: string }> }>;
   history: Array<{ status: string; at: string }>;
