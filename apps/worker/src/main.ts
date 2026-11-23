@@ -1,7 +1,7 @@
 // The worker. Usage: DATABASE_URL=... OPENROUTER_API_KEY=... bun src/main.ts
 // It drives runs through the stages the API queues: universe, Designer, then, after gate 1, prescreening, scoring and packaging.
-// JEV_SPAN_CHECK=1 turns on the optional Jev check of the stored spans behind level 3 and 4 scores.
-// JEV_EXPOSURE_CHECK=1 turns on the optional Jev check that settles the gate KPI at level 0 for names outside the theme.
+// The Jev check of the stored spans behind level 3 and 4 scores is on. JEV_SPAN_CHECK=0 turns it off.
+// The Jev check that settles the gate KPI at level 0 for names outside the theme is on. JEV_EXPOSURE_CHECK=0 turns it off.
 // It reads only the local Postgres store, and its only outside calls are the model and embedding calls through packages/llm.
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -26,7 +26,7 @@ const stamp = () => new Date().toISOString().slice(11, 19);
 const worker = await startWorker({
   connectionString,
   deps: {
-    db, gateway, retriever, availableSources, judge: process.env.JEV_SPAN_CHECK === '1' ? gateway : undefined, exposureJudge: process.env.JEV_EXPOSURE_CHECK === '1' ? gateway : undefined, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
+    db, gateway, retriever, availableSources, judge: process.env.JEV_SPAN_CHECK === '0' ? undefined : gateway, exposureJudge: process.env.JEV_EXPOSURE_CHECK === '0' ? undefined : gateway, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
     design: ({ runId, input }) => runDesigner({ db, gateway, runId, input, availableSources }),
     log: message => console.log(`${stamp()} ${message}`),
   },
