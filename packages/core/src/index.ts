@@ -10,3 +10,4 @@ export * from './evidence.js';
 export * from './support.js';
 export * from './verify.js';
 export * from './exposure.js';
+export * from './issuer-aliases.js';

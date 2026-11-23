@@ -232,6 +232,23 @@ For every performance check, measure the same command on trunk first, with the s
 - [x] Perf: one Jev call per name. The live calls had a median of 206 ms, and the worker scores names in parallel with the Analyst. Provider latency is excluded from the ceiling, and the trunk has no exposure path, so there is no baseline.
 - [x] Enable by default. The operator chose this on 2026-11-23, before any labelled evaluation. The false-none rate on labelled pairs is still to be measured and reported in PR 17.
 
+### PR 17a. Coverage gaps
+
+- [x] Depends on 08, 08b and 15. Files: `packages/core`, `packages/db`, `packages/retrieval`, `apps/worker/scripts`.
+- [x] Give three pilot names filing evidence. Exxon Mobil mapped to the new holding company, CIK 2115436, which has filed no 10-K, so it is linked to Exxon Mobil Corp, CIK 34088. SAP and Nokia file English 20-F reports with the SEC and have no usable ESEF route, because the filings index has no German reports and GLEIF lists no ISIN for Nokia's LEI. The seed script now takes the newest 10-K, 20-F or 40-F.
+- [x] Scope. Add `issuerAliases` and `annualForms` in `packages/core`, migration 0019 for `security_issuers`, `linkIssuerAliases` in `packages/retrieval`, and `issuerKeysForSecurity` now adds the linked issuers. Add `scripts/check-coverage.ts`. The seed script gates each part on its own phase, because a rerun of `sec` ingested a new version of every filing and embedded it again for 0.065 USD. Nokia's Finnish ESEF report is not ingested, because the 20-F is in English. The 20-F facts use the IFRS taxonomy, so the US GAAP quant functions return unknown for them.
+- [x] Unit: `issuer-aliases.test.ts` checks the keys, and `issuers.integration.test.ts` checks that a link is added once, keeps existing issuers, and reports symbols with no resolved security.
+- [x] Live: on a copy of the PR 15 store, the three filings were ingested and indexed, with 199 chunks for Exxon, 365 for SAP and 319 for Nokia. The Jev exposure check then read their business passages. SAP is `none` at 0.97, Exxon is `none` at 0.91 and Nokia is `none` at 0.94, so the last two stay unknown under the 0.95 line. Siemens, E.ON and RWE still have no passages.
+- [x] Perf: n/a. This changes ingestion and one lookup, not the run path.
+
+### PR 17b. Report discovery
+
+- [ ] Depends on 17a and 05b. Files: `packages/data`, `packages/llm`, `apps/worker/scripts`. Not started. This is the design the operator asked for on 2026-11-23, for companies with no annual report in the store, such as Siemens, E.ON and RWE.
+- [ ] A cheap model with the OpenRouter web search tool proposes candidate URLs for a company's latest annual report. It never fetches or scores. Code fetches each URL and accepts it only when the page is an allow-listed domain, is readable without a login, is an ESEF XHTML package or a PDF, and names the company and a period end. Every accepted page is stored with its URL, hash, ETag and first fetch time. A page is evidence only for as-of dates on or after that first fetch, the same later-date rule the ESEF path uses.
+- [ ] Scraping rules. Use plain fetch with Readability for static pages and `unpdf` for PDFs. Add Crawlee with Playwright only for an investor site that needs JavaScript. Respect robots.txt and each site's terms, identify with a contact User-Agent where a site requires one, rate-limit per domain, cache by URL and ETag, keep an allow-list of domains per source, and never fetch paywalled or login-only content.
+- [ ] Runs as an explicit command and not at every startup, so a run is never delayed or changed by a web search. Each attempt, including failures, is recorded so a company is retried only after a set number of days. Yahoo business summaries are a separate fallback for the exposure check only.
+- [ ] Open before building: whether the OpenRouter web tool works with the ZDR and provider pinning that `packages/llm` requires, a PDF extractor and heading detector for the chunker, and a `doc_kind` for pages that are not SEC or ESEF filings.
+
 ### PR 17. Pilot and phase gate
 
 - [ ] Depends on 04, 16, 16b and 16c and the pilot, hosting, model, budget, and eval decisions. Files: `packages/evals`, pilot fixtures and run documentation.

@@ -134,6 +134,13 @@
       "when": 1795432719741,
       "tag": "0018_score_adjustments",
       "breakpoints": true
+    },
+    {
+      "idx": 19,
+      "version": "7",
+      "when": 1795434484532,
+      "tag": "0019_security_issuers",
+      "breakpoints": true
     }
   ]
 }
