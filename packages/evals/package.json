@@ -14,5 +14,11 @@
   },
   "devDependencies": {
     "@types/node": "22.15.30"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   }
 }
