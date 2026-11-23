@@ -1,0 +1,166 @@
+{
+  "schemaVersion": 1,
+  "runId": "3cc9c80f-e6d0-4a3f-a34e-6c3fb562d152",
+  "theme": "Smart energy: companies that make the electricity system more efficient, flexible and digital over a five year horizon. ",
+  "asOf": "2026-11-23",
+  "snapshotId": "9e9ecb4d-1637-47a8-ac70-ebaad86daa45",
+  "host": "local",
+  "timestamps": {
+    "createdAt": "2026-11-23T13:34:55.593Z",
+    "approvedAt": "2026-11-23T13:35:46.781Z",
+    "doneAt": "2026-11-23T13:41:26.329Z",
+    "elapsedMs": 390736,
+    "gateWaitMs": 1933,
+    "machineMs": 388803
+  },
+  "approval": {
+    "analyst": "Ada Analyst",
+    "decisionId": "519d45d1-d7fd-4ff0-9dbb-822c8416aeb6"
+  },
+  "models": [
+    {
+      "role": "analyst",
+      "model": "openai/gpt-6-luna",
+      "provider": "azure",
+      "calls": 2,
+      "costUsd": 0,
+      "medianLatencyMs": 0
+    },
+    {
+      "role": "analyst",
+      "model": "openai/gpt-6-luna",
+      "provider": "Azure",
+      "calls": 189,
+      "costUsd": 0.21717649,
+      "medianLatencyMs": 10433
+    },
+    {
+      "role": "designer",
+      "model": "anthropic/claude-opus-5.5",
+      "provider": "Google",
+      "calls": 1,
+      "costUsd": 0.121,
+      "medianLatencyMs": 47779
+    },
+    {
+      "role": "verifier",
+      "model": "typesafe/jev-1.14-20261014",
+      "provider": "TypeSafe",
+      "calls": 7,
+      "costUsd": 0.000223524,
+      "medianLatencyMs": 2853
+    }
+  ],
+  "embeddingCostUsd": 0.00024924,
+  "totalCostUsd": 0.338649254,
+  "funnel": {
+    "eligible": 0,
+    "screened": 32,
+    "selected": 0,
+    "universe": 46,
+    "zeroScore": 0,
+    "candidates": 32,
+    "gateFailed": 1,
+    "belowCutoff": 0,
+    "gateUnknown": 31,
+    "thinEvidence": 0
+  },
+  "scores": {
+    "total": 189,
+    "byMethod": {
+      "judgement": {
+        "0": 4,
+        "1": 36,
+        "2": 26,
+        "3": 7,
+        "unknown": 86
+      },
+      "extract_then_quant": {
+        "0": 1,
+        "unknown": 29
+      }
+    },
+    "adjustments": {
+      "no_definition_term": 1,
+      "jev_borderline": 2
+    }
+  },
+  "citations": {
+    "totals": {
+      "scores": 189,
+      "scoresWithCitations": 106,
+      "citations": 138
+    },
+    "checks": {
+      "id": {
+        "passed": 138,
+        "total": 138,
+        "rate": 1
+      },
+      "verbatim": {
+        "passed": 138,
+        "total": 138,
+        "rate": 1
+      },
+      "point_in_time": {
+        "passed": 138,
+        "total": 138,
+        "rate": 1
+      },
+      "issuer": {
+        "passed": 138,
+        "total": 138,
+        "rate": 1
+      }
+    },
+    "failures": [],
+    "gates": {
+      "citationIds": {
+        "required": 1,
+        "rate": 1,
+        "passed": true
+      },
+      "verbatim": {
+        "required": 0.98,
+        "rate": 1,
+        "passed": true
+      }
+    }
+  },
+  "gates": {
+    "elapsed": {
+      "required": 1800000,
+      "actual": 388803,
+      "elapsedMs": 390736,
+      "passed": true
+    },
+    "citationIds": {
+      "required": 1,
+      "actual": 1,
+      "passed": true
+    },
+    "verbatim": {
+      "required": 0.98,
+      "actual": 1,
+      "passed": true
+    },
+    "basket": {
+      "required": 1,
+      "actual": 0,
+      "passed": false
+    },
+    "passed": false
+  },
+  "releaseGates": {
+    "weightedKappa": {
+      "required": 0.6,
+      "satisfied": false,
+      "reason": "The labelled set is AI-generated and provisional, and this release gate needs a human-labelled set."
+    },
+    "stability": {
+      "required": 0.95,
+      "satisfied": false,
+      "reason": "The labelled set is AI-generated and provisional, and this release gate needs a human-labelled set."
+    }
+  }
+}

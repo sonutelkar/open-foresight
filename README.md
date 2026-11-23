@@ -11,6 +11,57 @@ bun run build
 
 The project scope is in [docs/SPEC.md](docs/SPEC.md).
 
+## Run it locally
+
+This is the whole path from a clean checkout to a basket you can inspect. Each step links to the section below that explains it.
+
+**You need** Node 22, Bun 1.3.6, Docker with Compose, and `uv` for the Yahoo reader. The keys go in `.env` at the repository root. Bun loads that file for any `bun` command you run from the repository root, so run every command below from there unless it says otherwise.
+
+| Key | Needed for |
+|---|---|
+| `OPENROUTER_API_KEY` | every model call and the embeddings |
+| `EODHD_API_KEY` | prices, the symbol lists and the universe screen |
+| `SEC_USER_AGENT` | SEC requests. The SEC requires your own contact string, such as `Your Name you@example.com` |
+| `APPROVAL_TOKEN` | approving a framework. At least 16 characters, from `openssl rand -hex 16` |
+| `DATABASE_URL` | the API and the worker. See `.env.example` |
+
+1. **Install and build.** `bun install --frozen-lockfile && bun run build`. The build produces the web app in `apps/web/dist`, and Bun loads the other packages from their `dist` folders.
+2. **Start Postgres and the other services.** `docker compose up -d --wait`. See [Local services](#local-services).
+3. **Migrate the database.** Load the keys into your shell, then run the migrations from the database package.
+   ```sh
+   set -a; . ./.env; set +a
+   (cd packages/db && bun run migrate)
+   ```
+4. **Fill the store.** The agents read only this local store, so it has to exist before a run. The first command takes about 20 minutes and about 0.2 USD in embeddings. It ingests prices, listings, SEC filings, ESEF reports and their embeddings for the 50 pilot names. See [Packaging and orchestration](#packaging-and-orchestration).
+   ```sh
+   bun apps/worker/scripts/seed-pilot.ts
+   ```
+   For names the SEC and the ESEF index do not cover, add their reports and profiles, then embed the new text. See the paragraph on company reports from the web.
+   ```sh
+   bun apps/worker/scripts/discover-reports.ts
+   bun apps/worker/scripts/fetch-profiles.ts
+   PHASES=index bun apps/worker/scripts/seed-pilot.ts
+   ```
+5. **Start the API and the worker** in two terminals. The API serves the web app on `http://127.0.0.1:8787` and only queues work. Nothing advances without the worker.
+   ```sh
+   bun apps/api/src/server.ts
+   bun apps/worker/src/main.ts
+   ```
+   Both Jev checks are on by default. Start the worker with `JEV_SPAN_CHECK=0` or `JEV_EXPOSURE_CHECK=0` to turn one off.
+6. **Run a theme in the browser.** Open `http://127.0.0.1:8787`. Enter your name and the `APPROVAL_TOKEN` value in the top bar. Write a brief and submit it. After about a minute the run reaches gate 1, where you can edit the KPI weights and rubrics and approve. The worker then scores every name, which takes about 6 minutes for 30 names, and the page shows the provisional basket. Click a name to see each KPI level with its quote and a link to the source.
+7. **Measure the run.** The pilot report checks that every citation is real and writes a versioned JSON document to `docs/pilot/`. It needs the run id from the page address. Run it from the repository root with `DATABASE_URL` pointing at the same database.
+   ```sh
+   RUN_ID=<run id> bun apps/worker/scripts/pilot-report.ts
+   ```
+   It exits non-zero unless all four gates pass: the basket has at least one name, machine time is under 30 minutes, every citation ID exists in the store, and at least 98 percent of quotes appear word for word in the stored text. It also repeats the checks on the basket's members alone, and prints the cost. The full kappa and stability gates are never reported as met, because an AI-labelled set cannot satisfy them. To label a sample with a model from a different family and see the provisional agreement with the Analyst, run:
+   ```sh
+   RUN_IDS=<run id>[,<run id>] bun apps/worker/scripts/label-pairs.ts
+   ```
+   The same page can be driven from a script, with a real browser, with `bun apps/web/scripts/browser-live-run.ts`. It submits a brief, approves gate 1, waits for the basket and checks the funnel, weights and audit trail. It needs `APPROVAL_TOKEN` and `DB_NAME` set.
+8. **Stop.** Press Ctrl-C in each terminal. `docker compose down` stops the services and keeps the data volumes.
+
+**Tests.** `bun run test` runs the suites that need no database. The database suites need a migrated, disposable database named in `TEST_DATABASE_URL`, and they pass most reliably on a fresh one. See [Database migrations and tests](#database-migrations-and-tests).
+
 ## Local services
 
 Install Docker Desktop or Docker Engine with Compose. Create a local `.env` file with unique development credentials:

@@ -60,10 +60,22 @@ describe('validateFramework', () => {
   });
 
   it('rejects more than one gate, and accepts none or one', () => {
-    const d = clone(); d.kpis[1]!.isGate = true;
+    const d = clone(); d.kpis[3]!.isGate = true;
     expect(codes(d)).toEqual(['gate_count']);
-    const none = clone(); none.kpis[0]!.isGate = false;
+    const none = clone(); none.kpis[2]!.isGate = false;
     expect(codes(none)).toEqual([]);
+  });
+
+  it('requires a gate to be a judgement KPI, because an extracted number is unknown for most companies', () => {
+    for (const [i, method] of [[0, 'extract_then_quant'], [1, 'quant']] as const) {
+      const d = clone(); d.kpis[2]!.isGate = false; d.kpis[i]!.isGate = true;
+      const r = validateFramework(d, { availableSources: all });
+      expect(r.ok).toBe(false);
+      if (r.ok) return;
+      expect(r.errors.map(e => e.code)).toEqual(['gate_method']);
+      expect(r.errors[0]!.path).toBe(`kpis.${i}.isGate`);
+      expect(r.errors[0]!.message).toContain(method);
+    }
   });
 
   it('checks thresholds and quant functions by method', () => {
@@ -124,7 +136,7 @@ describe('validateFramework', () => {
   });
 
   it('reports every violation at once, with a path and a message', () => {
-    const d = clone(); d.kpis[0]!.weightPercent = 40; d.kpis[1]!.isGate = true; d.kpis[2]!.rubric!.level1 = '';
+    const d = clone(); d.kpis[0]!.weightPercent = 40; d.kpis[3]!.isGate = true; d.kpis[2]!.rubric!.level1 = '';
     const r = validateFramework(d, { availableSources: all });
     expect(r.ok).toBe(false);
     if (r.ok) return;
