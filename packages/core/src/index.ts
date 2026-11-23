@@ -10,6 +10,7 @@ export * from './evidence.js';
 export * from './support.js';
 export * from './verify.js';
 export * from './exposure.js';
+export * from './jev-score.js';
 export * from './issuer-aliases.js';
 export * from './report-sources.js';
 export * from './framework-diff.js';

@@ -65,6 +65,8 @@ type GatewayOptions = { apiKey: string; models: ModelConfig[]; db: PostgresJsDat
 type StructuredRequest<T extends ZodTypeAny> = {
   runId: string; role: string; promptVersion: string; system: string; user: string;
   schemaName: string; schema: T; inputEvidenceIds: string[]; seed?: number; maxOutputTokens?: number; onAudit?: (id: string) => void;
+  /** False neither reads nor writes the cache, so a repeat of a recorded request reaches the model. The call is audited as usual. */
+  cache?: boolean;
 };
 
 const questionSchema = z.discriminatedUnion('type', [
@@ -203,7 +205,7 @@ export async function createGateway(options: GatewayOptions) {
       const schema = zodToJsonSchema(input.schema, { $refStrategy: 'none' });
       const cacheKey = requestHash({ capability: 'generate', role: input.role, promptVersion: input.promptVersion, inputEvidenceIds: input.inputEvidenceIds, model: config.model, provider: selected.tag, temperature: selected.temperature ? 0 : null, seed: input.seed ?? null, tokenLimit, messages, schemaName: input.schemaName, schema });
       return serializeKey(cacheKey, async () => {
-        const [cached] = await options.db.select().from(llmCache).where(eq(llmCache.requestHash, cacheKey));
+        const [cached] = input.cache === false ? [] : await options.db.select().from(llmCache).where(eq(llmCache.requestHash, cacheKey));
         if (cached) {
           const value = input.schema.parse(cached.response);
           const auditId = await writeAudit(options.db, { runId: input.runId, role: input.role, promptVersion: input.promptVersion, model: config.model, provider: selected.tag, params: { cacheHit: true }, requestHash: cacheKey, inputEvidenceIds: input.inputEvidenceIds, response: cached.response, cost: '0', latencyMs: 0 });
@@ -252,7 +254,7 @@ export async function createGateway(options: GatewayOptions) {
           });
           input.onAudit?.(auditId);
           if (!failure) {
-            await options.db.insert(llmCache).values({ requestHash: cacheKey, response: cacheValue }).onConflictDoNothing();
+            if (input.cache !== false) await options.db.insert(llmCache).values({ requestHash: cacheKey, response: cacheValue }).onConflictDoNothing();
             return value;
           }
           if (!response && failureCause instanceof OpenAI.APIError && (failureCause.status === 429 || (failureCause.status !== undefined && failureCause.status >= 500)) && retries++ === 0) {
