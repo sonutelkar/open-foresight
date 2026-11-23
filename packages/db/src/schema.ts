@@ -324,3 +324,12 @@ export const basketMembers = pgTable('basket_members', {
   atCap: boolean('at_cap').notNull(), unknownWeight: numeric('unknown_weight').notNull(), capAdjustment: numeric('cap_adjustment').notNull(),
   contributions: jsonb('contributions').notNull(),
 }, table => [uniqueIndex('basket_members_security').on(table.basketId, table.securityId), uniqueIndex('basket_members_rank').on(table.basketId, table.rank)]);
+
+/** A hand made link from a security to the issuer whose filings are its evidence, for issuers that no ticker, FIGI or ISIN link reaches. */
+export const securityIssuers = pgTable('security_issuers', {
+  securityId: uuid('security_id').notNull().references(() => securities.id),
+  /** `cik:0000034088` or `lei:549300...`. */
+  issuerKey: text('issuer_key').notNull(),
+  note: text('note').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [primaryKey({ columns: [table.securityId, table.issuerKey] })]);
