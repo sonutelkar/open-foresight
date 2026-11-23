@@ -76,6 +76,13 @@ integration('API on Postgres', () => {
     expect((await app.request('/api/runs')).status).toBe(200);
   });
 
+  it('lists runs with the exposure style, the as-of date and the selected count', async () => {
+    const api = make();
+    const { runId } = await (await post(api.app, '/api/runs', brief)).json() as { runId: string };
+    const list = await (await api.app.request('/api/runs')).json() as Array<{ id: string; exposureStyle: string | null; asOf: string | null; selected: number | null }>;
+    expect(list.find(r => r.id === runId)).toMatchObject({ exposureStyle: 'broad', asOf: '2026-11-20', selected: null });
+  });
+
   it('blocks invalid briefs with field errors and creates no run', async () => {
     const { app } = make();
     const before = await runCount();
