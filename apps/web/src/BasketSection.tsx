@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { basketView, formatScore, levelText, reviewLimitation } from '@open-foresight/core';
+import { basketView, formatScore, glossary, levelText, methodName, reviewLimitation } from '@open-foresight/core';
 import { getEvidence, type Citation, type EvidenceSummary, type KpiEvidence, type MemberEvidence, type RunDetail } from './api';
 
 type Basket = NonNullable<RunDetail['basket']>;
@@ -20,22 +20,62 @@ export function BasketSection({ run }: { run: RunDetail }) {
   const view = basketView(run, run.basket);
   if (view === 'failed' || view === 'pending' || !run.basket) return null;
   const basket = run.basket, f = basket.funnel;
+  const dropped = [
+    f.gateFailed > 0 && `${f.gateFailed} failed the must-pass KPI`,
+    f.gateUnknown > 0 && `${f.gateUnknown} had no evidence on it`,
+    !!f.thinEvidence && `${f.thinEvidence} had too little known KPI weight`,
+    f.zeroScore > 0 && `${f.zeroScore} scored zero`,
+    f.belowCutoff > 0 && `${f.belowCutoff} fell below the cutoff`,
+  ].filter(Boolean);
   return (
     <section className="card" data-testid="basket">
       <div className="card-head">
-        <div><h2 className="card-title">Provisional basket</h2><p className="card-sub">Unknown KPIs are treated as {basket.unknownMode === 'strict' ? 'level 0' : 'missing, and the other weights are renormalised'}.</p></div>
+        <div><h2 className="card-title">Basket</h2><p className="card-sub">Unknown KPIs are treated as {basket.unknownMode === 'strict' ? 'level 0' : 'missing, and the other weights are renormalised'}.</p></div>
         <span className="pill warn">Provisional</span>
       </div>
-      <div className="banner info" data-testid="review-limitation" style={{ marginTop: 12 }}>{reviewLimitation}</div>
-      <p className="muted tnum" data-testid="funnel" style={{ margin: '12px 0' }}>{f.universe} listings, {f.screened} screened in, {f.candidates} scored, {f.gateFailed} failed the gate, {f.gateUnknown} had no evidence on the gate KPI, {f.thinEvidence ? `${f.thinEvidence} had too little known KPI weight, ` : ''}{f.zeroScore} scored zero, {f.selected} selected{f.belowCutoff ? `, ${f.belowCutoff} below the cutoff` : ''}.</p>
-      {basket.cap.relaxed && <div className="banner info" data-testid="cap-relaxed">Only {f.selected} names qualified, so the per-name cap of {basket.cap.requestedPercent}% was raised to {basket.cap.usedPercent}% to reach a total of 100%.</div>}
+      <details className="limit" data-testid="review-limitation">
+        <summary><Chevron open={false} />Not reviewed: no analyst has checked these scores or sources.</summary>
+        <p>{reviewLimitation}</p>
+      </details>
+      <div className="funnel" data-testid="funnel">
+        <ol className="funnel-steps tnum">
+          <li><b>{f.universe}</b> listings</li>
+          <li><b>{f.screened}</b> screened in</li>
+          <li><b>{f.candidates}</b> scored</li>
+          <li className="end"><b>{f.selected}</b> selected</li>
+        </ol>
+        {dropped.length > 0 && <p className="muted tnum">After scoring, {dropped.join(', ')}.</p>}
+      </div>
       {view === 'empty'
         ? <p className="banner warn" data-testid="basket-empty">No names qualified for this basket. See the funnel above for where names dropped out.</p>
-        : <table className="frozen basket">
-            <thead><tr><th className="rank">#</th><th>Name</th><th className="wide">Evidence</th><th className="num">Score</th><th className="num">Confidence</th><th className="num">Weight %</th></tr></thead>
+        : <>
+          <table className="frozen basket">
+            <thead><tr><th className="rank">#</th><th>Name</th><th className="wide">Evidence</th><th className="num" title={glossary.score}>Score</th><th className="num" title={glossary.confidence}>Confidence</th><th className="num">Weight %{basket.cap.relaxed && <sup><a href="#cap-note" aria-label="Note on the weight cap">1</a></sup>}</th></tr></thead>
             <tbody>{basket.members.map(m => <MemberRows key={m.symbol} runId={run.id} member={m} startOpen={m.rank === 1} />)}</tbody>
-          </table>}
+          </table>
+          {basket.cap.relaxed && <p className="footnote" id="cap-note" data-testid="cap-relaxed"><sup>1</sup> Only {f.selected} names qualified, so the per-name cap of {basket.cap.requestedPercent}% was raised to {basket.cap.usedPercent}% to reach a total of 100%.</p>}
+          <Key />
+        </>}
     </section>
+  );
+}
+
+/** One line that says what the two main numbers are, and a disclosure for every other term on the table. */
+function Key() {
+  return (
+    <details className="key" data-testid="key">
+      <summary><Chevron open={false} />Score runs 0 to 1 from KPI levels 0 to 4. Confidence is how well the quotes back it. All terms</summary>
+      <dl>
+        <div><dt>Score</dt><dd>{glossary.score}</dd></div>
+        <div><dt>Confidence</dt><dd>{glossary.confidence}</dd></div>
+        <div><dt>Level 0 to 4</dt><dd>{glossary.level}</dd></div>
+        <div><dt>Unknown</dt><dd>{glossary.unknown}</dd></div>
+        <div><dt>Quant</dt><dd>{glossary.quant}</dd></div>
+        <div><dt>Extract then quant</dt><dd>{glossary.extract_then_quant}</dd></div>
+        <div><dt>Judgement</dt><dd>{glossary.judgement}</dd></div>
+        <div><dt>Must-pass KPI</dt><dd>{glossary.mustPass}</dd></div>
+      </dl>
+    </details>
   );
 }
 
@@ -103,7 +143,7 @@ function KpiBlock({ kpi: k, contribution }: { kpi: KpiEvidence; contribution: Me
   return (
     <section className="ledger-row" data-testid={`kpi-evidence-${k.kpiId}`}>
       <header>
-        <div className="ledger-title"><h3>{k.name}</h3><span className="badge">{k.method.replaceAll('_', ' ')}</span></div>
+        <div className="ledger-title"><h3>{k.name}</h3><span className="badge" title={glossary[k.method as keyof typeof glossary]}>{methodName(k.method)}</span></div>
         <div className="ledger-level"><LevelMeter level={k.scored ? k.level : undefined} /><span className="tnum">{k.scored ? levelText(k.level ?? 'unknown') : 'Not scored'}{contribution ? ` · adds ${contribution.contribution.toFixed(3)}` : ''}</span></div>
       </header>
       {k.adjustments?.map(a => <p key={a.code} className="adjust" data-testid="adjustment"><strong>{a.from === a.to ? 'Check' : 'Lowered'}.</strong> {a.message}</p>)}

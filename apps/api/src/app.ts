@@ -86,8 +86,12 @@ export function createApp(deps: AppDeps) {
   }));
 
   app.get('/api/runs', async c => {
-    const rows = await deps.db.select({ id: runs.id, status: runs.status, createdAt: runs.createdAt, settings: runs.settings }).from(runs).orderBy(desc(runs.createdAt)).limit(20);
-    return c.json(rows.map(r => ({ id: r.id, status: r.status, createdAt: r.createdAt, theme: String((r.settings as { brief?: string }).brief ?? '').slice(0, 120) })));
+    const rows = await deps.db.select({ id: runs.id, status: runs.status, createdAt: runs.createdAt, settings: runs.settings, funnel: baskets.funnel }).from(runs).leftJoin(baskets, eq(baskets.runId, runs.id)).orderBy(desc(runs.createdAt)).limit(20);
+    return c.json(rows.map(r => {
+      const settings = r.settings as { brief?: string; exposureStyle?: string; asOf?: string };
+      const selected = (r.funnel as { selected?: number } | null)?.selected;
+      return { id: r.id, status: r.status, createdAt: r.createdAt, theme: String(settings.brief ?? '').slice(0, 120), exposureStyle: settings.exposureStyle ?? null, asOf: settings.asOf ?? null, selected: typeof selected === 'number' ? selected : null };
+    }));
   });
 
   app.post('/api/runs', async c => {

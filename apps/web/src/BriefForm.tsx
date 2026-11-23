@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
-import { validateBrief, type BriefError } from '@open-foresight/core';
+import { runContextLine, statusNames, validateBrief, type BriefError } from '@open-foresight/core';
+import { startedText } from './format';
 import { ApiError, createRun, listRuns, type Auth, type Config, type RunSummary } from './api';
 
 type Form = {
@@ -71,7 +72,6 @@ export function BriefForm({ config, auth, onCreated }: { config: Config; auth: A
   return (
     <div className="page">
       <header className="page-head">
-        <p className="eyebrow">New theme run</p>
         <h1>From investment thesis to investable basket</h1>
         <p className="lede">Describe the theme. The Designer drafts a KPI framework from your brief, and you approve it before any stock is scored.</p>
       </header>
@@ -135,7 +135,7 @@ export function BriefForm({ config, auth, onCreated }: { config: Config; auth: A
       {recent.length > 0 && (
         <section className="card">
           <p className="card-title">Recent runs</p>
-          <ul className="runs">{recent.map(r => <li key={r.id}><a href={`#/runs/${r.id}`}>{r.theme || r.id}</a> <span className={`pill ${r.status}`}>{r.status.replaceAll('_', ' ')}</span></li>)}</ul>
+          <ul className="runs">{recent.map(r => <li key={r.id}><div><a href={`#/runs/${r.id}`}>{r.theme || r.id}</a><p className="muted tnum">{runContextLine({ exposureStyle: r.exposureStyle ?? undefined, asOf: r.asOf ?? undefined, names: r.selected ?? undefined, started: startedText(r.createdAt) })}</p></div> <span className={`pill ${r.status}`}>{statusNames[r.status] ?? r.status}</span></li>)}</ul>
         </section>
       )}
     </div>

@@ -78,7 +78,7 @@ await page.screenshot({ path: `${shots}pr14-3-designing.png` });
 const started = Date.now();
 await page.locator('[data-testid^="kpi-row-"]').first().waitFor({ timeout: 240_000 });
 console.log(`INFO  the real Designer finished in ${((Date.now() - started) / 1000).toFixed(0)}s`);
-check('the run reaches KPI approval', (await page.getByTestId('run-status').innerText()).includes('awaiting kpi approval'));
+check('the run reaches KPI approval', (await page.getByTestId('status-pill').innerText()).includes('Awaiting your approval'));
 const rows = page.locator('[data-testid^="kpi-row-"]');
 const kpiCount = await rows.count();
 check('the gate shows 3 to 8 KPIs', kpiCount >= 3 && kpiCount <= 8, `${kpiCount} KPIs`);
