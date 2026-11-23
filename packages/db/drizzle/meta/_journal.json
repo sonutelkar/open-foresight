@@ -176,6 +176,13 @@
       "when": 1795436667853,
       "tag": "0024_web_documents_content",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1795437536189,
+      "tag": "0025_doc_kind_company_profile",
+      "breakpoints": true
     }
   ]
 }

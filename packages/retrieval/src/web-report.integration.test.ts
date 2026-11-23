@@ -56,6 +56,21 @@ describe.skipIf(!url)('web reports in retrieval on Postgres', () => {
     expect(new Set(hitsAfter.map(h => h.docId))).toEqual(new Set([docId]));
   });
 
+  it('indexes a company profile as its own kind, which a report search does not return and a profile search does', async () => {
+    const securityId = await setup();
+    const embedder = fakeEmbedder();
+    const profileId = await addDoc({ url: `yahoo-finance://profile/${tag}`, finalUrl: `yahoo-finance://profile/${tag}`, contentType: 'text/x-company-profile', text: 'Siemens AG\nSector: Industrials\n\nSiemens sells grid automation software and electrical products for smart infrastructure worldwide.', headings: [{ offset: 0, level: 1, title: 'Company profile' }], extractor: 'yahoo-yfinance' });
+    const snapshot = await createSnapshot({ db });
+    await indexDocuments({ db, embedder, kinds: ['company_profile'], issuerKeys: [issuerKey] });
+    const retriever = createRetriever({ db, embedder });
+    const asOf = new Date().toISOString().slice(0, 10);
+    const profile = await retriever.search({ snapshotId: snapshot.id, asOf, securityId, query: 'grid automation software', docKinds: ['company_profile'] });
+    expect(profile.map(h => [h.docKind, h.docId, h.section])).toEqual([['company_profile', profileId, 'Company profile']]);
+    const reports = await retriever.search({ snapshotId: snapshot.id, asOf, securityId, query: 'grid automation software', docKinds: ['web_report'] });
+    expect(reports.every(h => h.docKind === 'web_report' && h.docId !== profileId)).toBe(true);
+    expect(await extractedTextFor(db, 'company_profile', profileId)).toContain('Sector: Industrials');
+  });
+
   it('does not index a web report twice under one index version', async () => {
     await setup();
     await addDoc();

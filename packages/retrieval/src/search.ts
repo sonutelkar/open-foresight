@@ -45,7 +45,7 @@ export async function search(input: SearchInput): Promise<Hit[]> {
   const eligible = sql`dc.index_version = ${input.indexVersion} and dc.issuer_key in (${keyList}) and dc.available_on <= ${input.asOf}::date ${sinceFilter} ${kindFilter}
     and ((dc.doc_kind = 'sec_filing' and dc.doc_id in (select filing_id from snapshot_filings where snapshot_id = ${input.snapshotId}::uuid))
       or (dc.doc_kind = 'esef_filing' and dc.doc_id in (select filing_id from snapshot_esef_filings where snapshot_id = ${input.snapshotId}::uuid))
-      or (dc.doc_kind = 'web_report' and dc.doc_id in (select document_id from snapshot_web_documents where snapshot_id = ${input.snapshotId}::uuid)))`;
+      or (dc.doc_kind in ('web_report', 'company_profile') and dc.doc_id in (select document_id from snapshot_web_documents where snapshot_id = ${input.snapshotId}::uuid)))`;
   const tsquery = orTsQuery(input.query);
   return input.db.transaction(async tx => {
     const rows = new Map<string, Row>();

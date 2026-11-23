@@ -2,7 +2,8 @@ import { z } from 'zod';
 import { bucketLevel, type Kpi } from './framework.js';
 
 export type ScoreLevel = '0' | '1' | '2' | '3' | '4' | 'unknown';
-export type DocKind = 'sec_filing' | 'esef_filing' | 'web_report';
+/** `company_profile` is a third party business summary. Only the exposure check reads it. The Analyst never offers it as evidence for a KPI. */
+export type DocKind = 'sec_filing' | 'esef_filing' | 'web_report' | 'company_profile';
 
 /** A retrieved passage offered to the Analyst. `id` is a short label such as `e3`, so a model cannot cite an invented identifier. */
 export type EvidenceItem = {

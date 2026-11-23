@@ -29,11 +29,11 @@ export function normalizeYahoo(row: { marketCap?: number | null; price?: number 
 
 const projectDir = fileURLToPath(new URL('../../../../../tools/yahoo/', import.meta.url));
 
-/** Runs `tools/yahoo/fetch.py` through uv. It sends the symbol list on stdin and reads one JSON line per symbol. */
-export function uvRunner(options: { projectDir?: string; timeoutMs?: number } = {}): YahooRunner {
+/** Runs `tools/yahoo/fetch.py`, or the script named in `options.script`, through uv. It sends the symbol list on stdin and reads one JSON line per symbol. */
+export function uvRunner(options: { projectDir?: string; timeoutMs?: number; script?: string } = {}): YahooRunner {
   const dir = options.projectDir ?? projectDir;
   return items => new Promise((resolve, reject) => {
-    const child = spawn('uv', ['run', '--quiet', '--project', dir, 'python', `${dir}fetch.py`], { stdio: ['pipe', 'pipe', 'pipe'] });
+    const child = spawn('uv', ['run', '--quiet', '--project', dir, 'python', `${dir}${options.script ?? 'fetch.py'}`], { stdio: ['pipe', 'pipe', 'pipe'] });
     let out = '', err = '';
     const timer = setTimeout(() => { child.kill('SIGKILL'); reject(new Error('Yahoo reader timed out')); }, options.timeoutMs ?? 3_600_000);
     child.stdout.on('data', chunk => { out += chunk; });

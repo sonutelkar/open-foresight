@@ -122,3 +122,4 @@ export * from './providers/yahoo/index.js';
 export * from './providers/esef/index.js';
 export * from './providers/web-reports/index.js';
 export * from './quant.js';
+export * from './providers/yahoo/profile.js';

@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNull } from 'drizzle-orm';
+import { and, eq, inArray, isNull, ne } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { documentChunks, esefDocuments, esefFilings, secFilings, secSourceDocuments, webDocuments } from '@open-foresight/db';
 import { EXTRACTOR_VERSION, htmlToText, type DocKind as CoreDocKind, type Heading } from '@open-foresight/core';
@@ -6,6 +6,8 @@ import type { Embedder } from '@open-foresight/llm';
 import { CHUNKER_VERSION, chunkText } from './chunk.js';
 
 export type DocKind = CoreDocKind;
+/** The content type the Yahoo profile provider writes. It lives here so retrieval does not depend on the data package. */
+const profileContentType = 'text/x-company-profile';
 export type IndexReport = { indexVersion: string; documents: number; chunks: number; tokens: number; costUsd: number; empty: number };
 
 export const indexVersionFor = (embedder: Pick<Embedder, 'model'>) => `${EXTRACTOR_VERSION}:${CHUNKER_VERSION}:${embedder.model}`;
@@ -31,12 +33,15 @@ async function pending(db: PostgresJsDatabase, version: string, kinds: DocKind[]
       .where(and(isNull(documentChunks.id), leis ? inArray(esefFilings.lei, leis) : undefined)).limit(limit - out.length);
     out.push(...rows.map(r => ({ docKind: 'esef_filing' as const, docId: r.id, issuerKey: `lei:${r.lei}`, availableOn: r.availableOn, body: r.body })));
   }
-  if (kinds.includes('web_report') && out.length < limit) {
+  // Web reports and company profiles share `web_documents`. A profile is marked by its content type and is chunked as its own kind.
+  for (const kind of ['web_report', 'company_profile'] as const) {
+    if (!kinds.includes(kind) || out.length >= limit) continue;
+    const isProfile = eq(webDocuments.contentType, profileContentType);
     const rows = await db.select({ id: webDocuments.id, issuerKey: webDocuments.issuerKey, availableOn: webDocuments.availableOn, text: webDocuments.text, headings: webDocuments.headings })
       .from(webDocuments)
-      .leftJoin(documentChunks, and(eq(documentChunks.docKind, 'web_report'), eq(documentChunks.docId, webDocuments.id), eq(documentChunks.indexVersion, version), eq(documentChunks.ordinal, 0)))
-      .where(and(isNull(documentChunks.id), issuerKeys ? inArray(webDocuments.issuerKey, issuerKeys) : undefined)).limit(limit - out.length);
-    out.push(...rows.map(r => ({ docKind: 'web_report' as const, docId: r.id, issuerKey: r.issuerKey, availableOn: r.availableOn, extracted: { text: r.text, headings: r.headings as Heading[] } })));
+      .leftJoin(documentChunks, and(eq(documentChunks.docKind, kind), eq(documentChunks.docId, webDocuments.id), eq(documentChunks.indexVersion, version), eq(documentChunks.ordinal, 0)))
+      .where(and(isNull(documentChunks.id), kind === 'company_profile' ? isProfile : ne(webDocuments.contentType, profileContentType), issuerKeys ? inArray(webDocuments.issuerKey, issuerKeys) : undefined)).limit(limit - out.length);
+    out.push(...rows.map(r => ({ docKind: kind, docId: r.id, issuerKey: r.issuerKey, availableOn: r.availableOn, extracted: { text: r.text, headings: r.headings as Heading[] } })));
   }
   return out;
 }
@@ -47,7 +52,7 @@ async function pending(db: PostgresJsDatabase, version: string, kinds: DocKind[]
  */
 export async function indexDocuments(options: { db: PostgresJsDatabase; embedder: Embedder; kinds?: DocKind[]; limit?: number; /** Index only these issuers, such as `cik:0000320193` or `lei:...`. Default is every issuer. */ issuerKeys?: string[] }): Promise<IndexReport> {
   const version = indexVersionFor(options.embedder);
-  const docs = await pending(options.db, version, options.kinds ?? ['sec_filing', 'esef_filing', 'web_report'], options.limit ?? 1000, options.issuerKeys);
+  const docs = await pending(options.db, version, options.kinds ?? ['sec_filing', 'esef_filing', 'web_report', 'company_profile'], options.limit ?? 1000, options.issuerKeys);
   const report: IndexReport = { indexVersion: version, documents: 0, chunks: 0, tokens: 0, costUsd: 0, empty: 0 };
   for (const doc of docs) {
     const extracted = doc.extracted ?? htmlToText(doc.body ?? '');
@@ -74,7 +79,7 @@ export async function extractedTextFor(db: PostgresJsDatabase, docKind: DocKind,
     const [row] = await db.select({ body: secSourceDocuments.body }).from(secFilings).innerJoin(secSourceDocuments, eq(secSourceDocuments.id, secFilings.documentSourceId)).where(eq(secFilings.id, docId));
     return row ? htmlToText(row.body).text : undefined;
   }
-  if (docKind === 'web_report') {
+  if (docKind === 'web_report' || docKind === 'company_profile') {
     const [row] = await db.select({ text: webDocuments.text }).from(webDocuments).where(eq(webDocuments.id, docId));
     return row?.text;
   }

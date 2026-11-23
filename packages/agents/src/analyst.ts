@@ -34,7 +34,7 @@ export type ScoreOutcome = {
 type StoredRow = typeof kpiScores.$inferSelect;
 /** `esef_filings` also covers reports fetched from company sites, which stand in for ESEF reports where the index has none. */
 const sourceKinds: Record<string, DocKind[]> = { sec_filings: ['sec_filing'], esef_filings: ['esef_filing', 'web_report'] };
-const kindLabel: Record<DocKind, string> = { sec_filing: 'SEC filing', esef_filing: 'ESEF report', web_report: 'Company report' };
+const kindLabel: Record<DocKind, string> = { sec_filing: 'SEC filing', esef_filing: 'ESEF report', web_report: 'Company report', company_profile: 'Company profile' };
 const shiftDays = (date: string, n: number) => new Date(Date.parse(`${date}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
 
 const asOutcome = (row: StoredRow, reused: boolean): ScoreOutcome => ({
