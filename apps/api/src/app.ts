@@ -34,6 +34,30 @@ const sameToken = (given: string | undefined, expected: string) => {
 const canonical = (v: unknown): unknown => Array.isArray(v) ? v.map(canonical) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v as Record<string, unknown>).sort(([a], [b]) => a.localeCompare(b)).map(([k, x]) => [k, canonical(x)])) : v;
 const sameJson = (a: unknown, b: unknown) => JSON.stringify(canonical(a)) === JSON.stringify(canonical(b));
 
+/** What stands behind a basket member, counted from its latest valid scores, so a row can show its evidence without opening it. */
+export type EvidenceSummary = { kpis: number; quotes: number; unverified: number; unknownKpis: number; lowered: number };
+
+async function summarizeEvidence(db: PostgresJsDatabase, runId: string, securityIds: string[]): Promise<Map<string, EvidenceSummary>> {
+  const out = new Map<string, EvidenceSummary>();
+  if (securityIds.length === 0) return out;
+  const rows = await db.select().from(kpiScores).where(and(eq(kpiScores.runId, runId), eq(kpiScores.valid, true), inArray(kpiScores.securityId, securityIds)));
+  const latest = new Map<string, (typeof rows)[number]>();
+  for (const r of rows) { const key = `${r.securityId}|${r.kpiId}`, have = latest.get(key); if (!have || r.attempt > have.attempt) latest.set(key, r); }
+  type Cited = { chunkId: string; quote: string };
+  const chunkIds = [...new Set([...latest.values()].flatMap(r => (r.citations as Cited[]).map(c => c.chunkId)))];
+  const texts = new Map((chunkIds.length ? await db.select({ id: documentChunks.id, text: documentChunks.text }).from(documentChunks).where(inArray(documentChunks.id, chunkIds)) : []).map(c => [c.id, c.text]));
+  for (const r of latest.values()) {
+    const sum = out.get(r.securityId) ?? { kpis: 0, quotes: 0, unverified: 0, unknownKpis: 0, lowered: 0 };
+    const cites = r.citations as Cited[];
+    sum.kpis++; sum.quotes += cites.length;
+    sum.unverified += cites.filter(c => { const t = texts.get(c.chunkId); return t === undefined || !quoteInPassage(c.quote, t); }).length;
+    if (r.level === 'unknown') sum.unknownKpis++;
+    if ((r.adjustments as Array<{ from: string; to: string }>).some(a => a.from !== a.to)) sum.lowered++;
+    out.set(r.securityId, sum);
+  }
+  return out;
+}
+
 /**
  * The API for the brief form, the gate 1 approval and the run view. It reads and writes the local store only.
  * Creating a run and approving gate 1 each queue the run for the worker. A queue that is down does not fail the request, because the worker
@@ -96,6 +120,7 @@ export function createApp(deps: AppDeps) {
       basket ? deps.db.select().from(basketMembers).where(eq(basketMembers.basketId, basket.id)).orderBy(basketMembers.rank) : Promise.resolve([]),
       deps.db.select({ symbol: runUniverse.symbol, included: runUniverse.included, reasons: runUniverse.reasons, coverage: runUniverse.coverage }).from(runUniverse).where(eq(runUniverse.runId, id)),
     ]);
+    const evidence = await summarizeEvidence(deps.db, id, members.map(m => m.securityId));
     const valid = drafts.find(d => d.valid);
     return c.json({
       id: run.id, status: run.status, createdAt: run.createdAt, settings: run.settings, frameworkVersion: run.frameworkVersion,
@@ -105,7 +130,7 @@ export function createApp(deps: AppDeps) {
       universe: { total: universe.length, included: universe.filter(u => u.included).length, withFilings: universe.filter(u => u.included && (u.coverage === 'sec' || u.coverage === 'esef')).length },
       basket: basket ? {
         status: basket.status, unknownMode: basket.unknownMode, rules: basket.rules, funnel: basket.funnel, cap: basket.cap, excluded: basket.excluded, createdAt: basket.createdAt,
-        members: members.map(m => ({ rank: m.rank, symbol: m.symbol, name: m.name, score: Number(m.score), confidence: Number(m.confidence), weightPercent: Number(m.weightPercent), atCap: m.atCap, unknownWeight: Number(m.unknownWeight), capAdjustment: Number(m.capAdjustment), contributions: m.contributions })),
+        members: members.map(m => ({ evidence: evidence.get(m.securityId) ?? { kpis: 0, quotes: 0, unverified: 0, unknownKpis: 0, lowered: 0 }, rank: m.rank, symbol: m.symbol, name: m.name, score: Number(m.score), confidence: Number(m.confidence), weightPercent: Number(m.weightPercent), atCap: m.atCap, unknownWeight: Number(m.unknownWeight), capAdjustment: Number(m.capAdjustment), contributions: m.contributions })),
       } : null,
     });
   });

@@ -77,6 +77,14 @@ integration('Basket evidence API on Postgres', () => {
     expect(body.kpis.filter(k => !k.scored).length).toBe(framework.kpis.length - 2);
   });
 
+  it('summarises each member\'s evidence on the run payload, so a basket row shows its quotes without opening', async () => {
+    const world = await seed(3); await seedEvidence(world);
+    const body = await (await get(`/api/runs/${world.runId}`)).json() as { basket: { members: Array<{ symbol: string; evidence: Record<string, number> }> } };
+    const [first, second] = body.basket.members;
+    expect(first).toMatchObject({ symbol: 'S0.US', evidence: { kpis: 2, quotes: 4, unverified: 1, unknownKpis: 0, lowered: 1 } });
+    expect(second!.evidence).toEqual({ kpis: 0, quotes: 0, unverified: 0, unknownKpis: 0, lowered: 0 });
+  });
+
   it('returns 404 for a run with no basket, a name outside the basket, and 400 for a bad run id', async () => {
     const world = await seed(2);
     const [bare] = await db.insert(runs).values({ settings: {}, modelProfile: 'quality' }).returning({ id: runs.id });

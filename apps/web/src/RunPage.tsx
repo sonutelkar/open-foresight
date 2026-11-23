@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { frameworkToDraft, validateFramework, type Framework, type FrameworkError, type Kpi, type SourceId } from '@open-foresight/core';
+import { describeEdits, diffFramework, frameworkToDraft, validateFramework, type Framework, type FrameworkError, type Kpi, type SourceId } from '@open-foresight/core';
 import { BasketSection } from './BasketSection';
 import { ApiError, approveRun, getRun, type Auth, type Config, type RunDetail } from './api';
 
@@ -11,10 +11,11 @@ const methodLabel: Record<string, string> = { quant: 'Quant', extract_then_quant
 const statusLabel: Record<string, string> = { draft: 'Starting', universe_built: 'Starting', designing: 'Designing', awaiting_kpi_approval: 'Awaiting your approval', prescreening: 'Scoring', analysing: 'Scoring', packaging: 'Building the basket', done: 'Provisional basket ready', failed: 'Failed' };
 const statusTone: Record<string, string> = { awaiting_kpi_approval: 'warn', prescreening: 'info', analysing: 'info', packaging: 'info', done: 'ok', failed: 'bad', designing: 'info', draft: 'info', universe_built: 'info' };
 const levels = ['0', '1', '2', '3', '4'] as const;
+const plural = (n: number, one: string) => `${n} ${one}${n === 1 ? '' : 's'}`;
 const time = (iso: string) => new Date(iso).toLocaleString();
 const shortTheme = (brief?: string) => { if (!brief) return 'Theme run'; const first = brief.split(/[.:]/)[0]?.trim() ?? brief; return first.length > 56 ? `${first.slice(0, 56)}…` : first; };
 
-export function RunPage({ id, config, auth }: { id: string; config: Config; auth: Auth }) {
+export function RunPage({ id, config, auth, onAuth }: { id: string; config: Config; auth: Auth; onAuth: (patch: Partial<Auth>) => void }) {
   const [run, setRun] = useState<RunDetail | null>(null);
   const [error, setError] = useState('');
   const refresh = useCallback(() => getRun(id).then(setRun).catch(e => setError(e instanceof Error ? e.message : 'Could not load the run')), [id]);
@@ -49,7 +50,7 @@ export function RunPage({ id, config, auth }: { id: string; config: Config; auth
       {['draft', 'universe_built', 'designing'].includes(run.status) && <div className="banner info" data-testid="designing"><span className="spinner" aria-hidden /> The Designer is drafting the framework. This usually takes about a minute.</div>}
       {['prescreening', 'analysing', 'packaging'].includes(run.status) && <div className="banner info" data-testid="scoring"><span className="spinner" aria-hidden /> The worker is scoring every name against the approved KPIs. This takes a few minutes for 50 names.</div>}
       {run.status === 'failed' && <div className="banner bad" role="alert" data-testid="run-failed"><strong>The run failed.</strong>{[run.settings.failure?.message, ...(run.settings.designError ?? [])].filter(Boolean).map((m, i) => <p key={i}>{m}</p>)}</div>}
-      {run.status === 'awaiting_kpi_approval' && run.draft && <Gate run={run} config={config} auth={auth} onApproved={refresh} />}
+      {run.status === 'awaiting_kpi_approval' && run.draft && <Gate run={run} config={config} auth={auth} onAuth={onAuth} onApproved={refresh} />}
       <BasketSection run={run} />
       {run.versions.length > 0 && <Approved run={run} />}
     </div>
@@ -58,7 +59,7 @@ export function RunPage({ id, config, auth }: { id: string; config: Config; auth
 
 type Anyk = Record<string, any>;
 
-function Gate({ run, config, auth, onApproved }: { run: RunDetail; config: Config; auth: Auth; onApproved: () => Promise<unknown> }) {
+function Gate({ run, config, auth, onAuth, onApproved }: { run: RunDetail; config: Config; auth: Auth; onAuth: (patch: Partial<Auth>) => void; onApproved: () => Promise<unknown> }) {
   const draft = run.draft!;
   const [framework, setFramework] = useState<Framework>(() => structuredClone(draft.framework));
   const [exclusions, setExclusions] = useState((run.settings.exclusions ?? []).join('\n'));
@@ -74,6 +75,10 @@ function Gate({ run, config, auth, onApproved }: { run: RunDetail; config: Confi
   const general = errors.filter(e => !/^kpis\.\d+/.test(e.path));
   const hasAuth = auth.analyst.trim() !== '' && auth.token.trim() !== '';
   const edited = JSON.stringify(framework) !== JSON.stringify(draft.framework);
+  const edits = useMemo(() => diffFramework(draft.framework, framework), [draft.framework, framework]);
+  const gates = framework.kpis.filter(k => k.isGate).length;
+  const version = run.versions.length + 1;
+  const reset = () => { setFramework(structuredClone(draft.framework)); setExclusions((run.settings.exclusions ?? []).join('\n')); setServer([]); };
 
   const edit = (fn: (draftFramework: Framework) => void) => setFramework(f => { const next = structuredClone(f); fn(next); return next; });
   const setK = (i: number, patch: Anyk) => edit(f => { Object.assign(f.kpis[i] as Anyk, patch); });
@@ -149,7 +154,16 @@ function Gate({ run, config, auth, onApproved }: { run: RunDetail; config: Confi
         {server.length > 0 && <div className="banner bad" role="alert" data-testid="server-errors">{server.map((m, i) => <p key={i}>{m}</p>)}</div>}
         <div className="actionbar">
           <div className="total">Total <span className={total === 100 ? 'chip ok' : 'chip warn'} data-testid="weight-total">{total}%</span></div>
-          <span className="grow" data-testid="approve-hint">{!checked.ok ? `${errors.length} ${errors.length === 1 ? 'problem blocks' : 'problems block'} approval.` : !hasAuth ? 'Enter the analyst name and approver token above.' : edited ? 'You edited the framework. The approved version will record that.' : 'Approving as drafted.'}</span>
+          <div className="grow">
+            <p className="commit" data-testid="approve-hint">{!checked.ok
+              ? `${errors.length} ${errors.length === 1 ? 'problem blocks' : 'problems block'} approval.`
+              : <>Approving freezes version {version} with {plural(framework.kpis.length, 'KPI')} and {gates === 0 ? 'no gate' : plural(gates, 'gate')}, then scores up to {plural(run.universe.included, 'name')} with paid model calls. {edited ? `You edited the framework: ${describeEdits(edits) || 'the exclusions or the note changed'}.` : 'No edits to the draft.'}</>}</p>
+            {!hasAuth && <div className="who" data-testid="who">
+              <label>Analyst <input data-testid="bar-analyst" value={auth.analyst} onChange={e => onAuth({ analyst: e.target.value })} placeholder="Your name" autoComplete="off" maxLength={80} /></label>
+              <label>Approver token <input data-testid="bar-token" type="password" value={auth.token} onChange={e => onAuth({ token: e.target.value })} placeholder="From the server" autoComplete="off" /></label>
+            </div>}
+          </div>
+          {edited && <button type="button" className="textbtn" onClick={reset} data-testid="reset-draft">Reset to draft</button>}
           <button type="button" className="primary" disabled={!checked.ok || !hasAuth || busy} onClick={() => void approve()} data-testid="approve-button">{busy ? 'Approving…' : 'Approve and score'}</button>
         </div>
       </div>

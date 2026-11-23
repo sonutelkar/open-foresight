@@ -35,11 +35,13 @@ const row = await page.locator(`[data-testid="basket-row-${first[0]}"]`).innerTe
 check('the top row shows the stored score and weight', row.includes(Number(first[1]).toFixed(3)) && row.includes(Number(first[2]).toFixed(2)), row.replace(/\s+/g, ' '));
 await page.screenshot({ path: `${shots}pr16-1-basket.png`, fullPage: true });
 
-await page.getByTestId(`evidence-toggle-${target}`).click();
+// The top row opens by itself, so open the row only when it is closed.
+const toggle = page.getByTestId(`evidence-toggle-${target}`);
+if ((await toggle.getAttribute('aria-expanded')) !== 'true') await toggle.click();
 const panel = page.getByTestId(`evidence-${target}`);
 await panel.getByTestId('quote').first().waitFor();
 const quote = panel.getByTestId('quote').first();
-const shown = (await quote.locator('p').innerText()).replace(/^“|”$/g, '');
+const shown = (await quote.locator('blockquote').innerText()).replace(/^“|”$/g, '');
 const href = await quote.getByTestId('source-link').getAttribute('href');
 check('every cited quote in the panel is verified against its stored passage', (await panel.locator('[data-testid="quote"][data-verified="false"]').count()) === 0);
 await page.screenshot({ path: `${shots}pr16-2-evidence.png`, fullPage: true });

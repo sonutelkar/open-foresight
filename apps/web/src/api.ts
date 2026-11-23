@@ -17,11 +17,13 @@ export type RunDetail = {
   universe: { total: number; included: number; withFilings: number };
   basket: Basket | null;
 };
+/** What stands behind a basket member, counted by the API from its latest valid scores. */
+export type EvidenceSummary = { kpis: number; quotes: number; unverified: number; unknownKpis: number; lowered: number };
 export type Basket = {
   status: 'provisional'; unknownMode: 'strict' | 'lenient';
   funnel: { universe: number; screened: number; candidates: number; gateFailed: number; gateUnknown: number; thinEvidence?: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
   cap: { requestedPercent: number; usedPercent: number; relaxed: boolean };
-  members: Array<{ rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; capAdjustment: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
+  members: Array<{ evidence: EvidenceSummary; rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; capAdjustment: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
 };
 export type Auth = { analyst: string; token: string };
 export class ApiError extends Error {

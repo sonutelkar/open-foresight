@@ -187,11 +187,64 @@ table.frozen td.num, table.frozen th.num { text-align: right; font-variant-numer
   .approver input { width: 8.5rem; }
 }
 
-/* Rank column of the basket table: left aligned, with room before the name. */
-.frozen th.rank, .frozen td.rank { text-align: left; width: 2.75rem; color: var(--muted, #6b6b6b); font-variant-numeric: tabular-nums; }
+/* Basket. A row says how much evidence stands behind it, and opens to the ledger of quotes and where each came from. */
+.frozen th.rank, .frozen td.rank { text-align: left; width: 2.75rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+table.basket th.wide, table.basket td.wide { padding-right: 16px; }
+table.basket tr.member { cursor: pointer; }
+table.basket tr.member:hover td { background: var(--soft); }
+table.basket tr.member.open td { border-bottom-color: transparent; }
+button.disclose { display: inline-flex; align-items: center; gap: 8px; border: 0; background: none; padding: 2px 4px 2px 0; height: auto; color: var(--ink); font-weight: 600; font-size: 14.5px; text-align: left; border-radius: var(--radius-sm); }
+button.disclose:hover:not(:disabled) { background: none; color: var(--accent); }
+button.disclose:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.chevron { flex: none; color: var(--muted); transition: transform 0.16s cubic-bezier(0.22, 1, 0.36, 1); }
+.chevron.open { transform: rotate(90deg); }
+.sym { margin-left: 8px; font-size: 12px; }
+.narrow-only { display: none; margin: 3px 0 0 22px; }
+.tally { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px 8px; font-size: 12.5px; color: var(--ink-2); }
+.tally.none { color: var(--muted); }
+.tally .flag { font-size: 12px; padding: 1px 7px; border-radius: 6px; background: var(--soft); color: var(--muted); border: 1px solid var(--line); white-space: nowrap; }
+.tally .flag.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 
-table.basket button.link { text-align: left; }
-.quote { margin: 8px 0; padding: 6px 12px; border-left: 3px solid var(--line, #ccc); }
-.quote[data-verified="false"] { border-left-color: var(--warn, #b45309); }
-.quote footer { font-size: 0.85em; margin-top: 4px; }
-.rationale-text { color: var(--ink-2); font-size: 13px; margin: 6px 0 0; }
+/* The ledger: each KPI is a flat row with a level meter, its reasoning, and the quotes it rests on. */
+tr.ledger-wrap > td { padding: 4px 0 18px; border-bottom: 1px solid var(--line); }
+.ledger-note { font-size: 13px; margin: 0 0 10px; }
+.ledger-error { color: var(--bad); font-size: 13px; margin: 0 0 10px; }
+.textbtn { border: 0; background: none; padding: 0; height: auto; color: var(--accent); font: inherit; text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.ledger { display: grid; }
+.ledger-row { padding: 14px 0; border-top: 1px solid var(--line); }
+.ledger-row:first-child { border-top: 0; padding-top: 4px; }
+.ledger-row > header { display: flex; align-items: baseline; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap; }
+.ledger-title { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 10px; min-width: 0; }
+.ledger-title h3 { margin: 0; font-size: 14px; font-weight: 600; }
+.ledger-level { display: inline-flex; align-items: center; gap: 10px; font-size: 13px; color: var(--ink-2); }
+.meter { display: inline-flex; gap: 3px; }
+.meter i { width: 14px; height: 6px; border-radius: 2px; background: transparent; border: 1px solid var(--line-strong); }
+.meter i.on { background: var(--accent-fill); border-color: var(--accent-fill); }
+.rationale-text { color: var(--ink-2); font-size: 13px; margin: 8px 0 0; max-width: 58ch; }
+.adjust { margin: 8px 0 0; padding: 6px 10px; border-radius: var(--radius-sm); background: var(--warn-bg); color: var(--warn); font-size: 12.5px; max-width: 58ch; }
+.quote { margin: 10px 0 0; padding: 10px 14px; background: var(--soft); max-width: 64ch; }
+.quote.unverified { background: var(--warn-bg); }
+.quote blockquote { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--ink); }
+.quote figcaption { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 14px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+.quote .verdict { display: inline-flex; align-items: center; gap: 5px; font-weight: 600; }
+.quote .verdict.ok { color: var(--ok); }
+.quote .verdict.warn { color: var(--warn); }
+.quote .prov { font-family: var(--mono); font-size: 12px; }
+
+@media (max-width: 720px) {
+  table.basket th.wide, table.basket td.wide, table.basket th:nth-child(5), table.basket td:nth-child(5) { display: none; }
+  .narrow-only { display: block; }
+  table.basket th, table.basket td { padding-right: 8px; }
+  table.basket th.num { white-space: nowrap; }
+  tr.ledger-wrap > td[colspan] { padding-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .chevron { transition: none; } }
+
+/* Approval bar: it says what approving commits, and takes the analyst name and token when they are missing. */
+.actionbar .grow .commit { margin: 0; color: var(--ink-2); }
+.actionbar .who { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 8px; }
+.actionbar .who label { display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.actionbar .who input { height: 30px; width: 11rem; }
+/* Content text breaks without a one word last line, and KPI names break evenly. */
+.rationale-text, .quote blockquote, .ledger-note, .adjust { text-wrap: pretty; }
+.ledger-title h3 { text-wrap: balance; }
