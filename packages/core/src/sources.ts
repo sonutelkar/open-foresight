@@ -9,6 +9,16 @@ export const sourceCatalog = {
   market_cap: { kind: 'quant', regions: ['US', 'EU', 'UK', 'CH'], description: 'Market capitalisation from filing share counts, or from a recent observed value for non-US names.' },
 } as const satisfies Record<string, { kind: 'text' | 'quant'; regions: readonly Region[]; description: string }>;
 export type SourceId = keyof typeof sourceCatalog;
+
+/** The name a person reads for a source, in place of its internal id. */
+export const sourceNames: Record<SourceId, string> = {
+  sec_filings: 'SEC filings (10-K, 10-Q)',
+  esef_filings: 'Annual and interim reports outside the US',
+  sec_facts: 'SEC financial facts (XBRL)',
+  prices: 'Prices and volume',
+  market_cap: 'Market capitalisation',
+};
+export const sourceName = (id: string) => (id in sourceNames ? sourceNames[id as SourceId] : id.replaceAll('_', ' '));
 export const sourceIds = Object.keys(sourceCatalog) as SourceId[];
 
 /** Sources enabled for a run. `prices` needs the optional EODHD adapter. */
