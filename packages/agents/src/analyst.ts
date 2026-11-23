@@ -42,12 +42,12 @@ const asOutcome = (row: StoredRow, reused: boolean): ScoreOutcome => ({
   citations: row.citations as ResolvedCitation[], errors: row.errors as ScoreError[],
 });
 
-async function nextAttempt(ctx: AnalystContext, kpiId: string): Promise<number> {
+export async function nextAttempt(ctx: AnalystContext, kpiId: string): Promise<number> {
   const rows = await ctx.db.select({ attempt: kpiScores.attempt }).from(kpiScores).where(and(eq(kpiScores.runId, ctx.runId), eq(kpiScores.securityId, ctx.security.id), eq(kpiScores.kpiId, kpiId)));
   return rows.reduce((max, r) => Math.max(max, r.attempt), 0) + 1;
 }
 
-async function save(ctx: AnalystContext, kpi: Kpi, attempt: number, v: Partial<typeof kpiScores.$inferInsert> & Pick<typeof kpiScores.$inferInsert, 'level' | 'confidence' | 'valid'>): Promise<StoredRow> {
+export async function save(ctx: AnalystContext, kpi: Kpi, attempt: number, v: Partial<typeof kpiScores.$inferInsert> & Pick<typeof kpiScores.$inferInsert, 'level' | 'confidence' | 'valid'>): Promise<StoredRow> {
   const [row] = await ctx.db.insert(kpiScores).values({
     runId: ctx.runId, frameworkDraftId: ctx.frameworkDraftId, snapshotId: ctx.snapshotId, securityId: ctx.security.id, symbol: ctx.security.symbol,
     kpiId: kpi.id, asOf: ctx.asOf, attempt, method: kpi.method, citations: [], rationale: '', conflicts: [], evidence: [], errors: [], ...v,

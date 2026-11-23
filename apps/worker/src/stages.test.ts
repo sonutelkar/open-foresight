@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { basketMembers, baskets, humanDecisions, kpiScores, llmCalls, runStatusHistory, runUniverse, runs } from '@open-foresight/db';
 import { advance, drive, failRun, StageFailure, type WorkerDeps } from './stages.js';
-import { approve, createRun, fakeDesigner, fakeGateway, fakeRetriever, freshDatabase, seedWorld } from './test-world.js';
+import { framework, approve, createRun, fakeDesigner, fakeGateway, fakeRetriever, freshDatabase, seedWorld } from './test-world.js';
 
 const url = process.env.TEST_DATABASE_URL;
 const integration = url ? describe : describe.skip;
@@ -89,6 +89,24 @@ integration('run orchestration on Postgres', () => {
     expect(Number(members[0]!.unknownWeight)).toBeCloseTo(0.15, 9);
     expect((await db.select({ s: runStatusHistory.status }).from(runStatusHistory).where(eq(runStatusHistory.runId, runId)).orderBy(runStatusHistory.sequence)).map(r => r.s))
       .toEqual(['draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening', 'analysing', 'packaging', 'done']);
+  });
+
+  it('with the exposure check on, settles a name plainly outside the theme as a known gate failure and spends no Analyst call on its gate KPI', async () => {
+    const { deps, gateway } = depsFor();
+    const asked: string[] = [];
+    const exposureJudge = { async decide(input: { state: string; role: string }) { const company = (JSON.parse(input.state) as { company: string }).company; asked.push(company); const none = company === 'Gamma Oil Co'; return { id: `dec-${asked.length}`, answers: { exposure: { type: 'choice' as const, choice: none ? 'none' : 'core', probabilities: { core: none ? 0 : 0.9, partial: 0.05, none: none ? 0.98 : 0, cannot_tell: 0 }, confidence: 0.9 } } }; } };
+    const gated = { ...framework, kpis: framework.kpis.map(k => ({ ...k, isGate: k.id === 'storage_commitment' })) } as typeof framework;
+    const runId = await createRun(db);
+    await drive({ ...deps, exposureJudge }, runId);
+    await approve(db, runId, 'ada', gated);
+    expect(await drive({ ...deps, exposureJudge }, runId)).toBe('done');
+    expect(new Set(asked)).toEqual(new Set(['Alpha Energy Inc', 'Beta Grid Corp', 'Gamma Oil Co', 'Delta Electrique SA']));
+    const [gamma] = await db.select().from(runUniverse).where(eq(runUniverse.runId, runId)).then(r => r.filter(u => u.symbol === 'GAMM.US'));
+    const rows = await db.select().from(kpiScores).where(eq(kpiScores.runId, runId));
+    expect(rows.filter(r => r.securityId === gamma!.securityId && r.kpiId === 'storage_commitment')).toMatchObject([{ level: '0', valid: true, promptVersion: 'exposure-choice@v1', llmCallId: null }]);
+    expect(gateway.state.calls).toBe(4 * textKpis - 1);
+    const [basket] = await db.select().from(baskets).where(eq(baskets.runId, runId));
+    expect(basket?.excluded).toEqual([expect.objectContaining({ symbol: 'GAMM.US', reason: 'gate_failed' })]);
   });
 
   it('is safe to repeat: a finished run, or a second packaging job, adds nothing', async () => {
