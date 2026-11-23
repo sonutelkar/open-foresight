@@ -268,3 +268,4 @@ export async function createGateway(options: GatewayOptions) {
   };
 }
 export * from './embed.js';
+export * from './discover.js';

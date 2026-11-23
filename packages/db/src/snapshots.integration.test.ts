@@ -1,8 +1,10 @@
 import { afterAll, describe, expect, it } from 'vitest';
+import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { createSnapshot, factsAsOf, filingsAsOf } from './snapshots.js';
-import { secFacts, secFilings, secSourceDocuments, snapshotFacts } from './schema.js';
+import { randomUUID } from 'node:crypto';
+import { secFacts, secFilings, secSourceDocuments, snapshotFacts, snapshotWebDocuments, webDocuments } from './schema.js';
 
 const url = process.env.TEST_DATABASE_URL;
 const integration = url ? describe : describe.skip;
@@ -70,6 +72,16 @@ integration('point-in-time snapshots', () => {
     await expect(db.update(snapshotFacts).set({ factId: factOriginal })).rejects.toThrow();
     await expect(filingsAsOf({ db, snapshotId: snapshot.id, asOf: '2024-02-30', cik })).rejects.toThrow('asOf');
     await expect(createSnapshot({ db, ingestedCutoff: t('2999-01-01T00:00:00Z') })).rejects.toThrow('future');
+  });
+
+  it('freezes web reports by first fetch time, so a report fetched after the cutoff is not a member', async () => {
+    const add = async (fetchedAt: string) => (await db.insert(webDocuments).values({ url: `https://example.com/${randomUUID()}.pdf`, finalUrl: 'https://example.com/r.pdf', contentType: 'application/pdf', byteSize: 1, rawSha256: randomUUID(), text: 't', headings: [], extractor: 'test', issuerKey: 'lei:TESTTESTTESTTESTTEST', entityName: 'Test AG', fetchedAt: t(fetchedAt), availableOn: fetchedAt.slice(0, 10) }).returning({ id: webDocuments.id }))[0]!.id;
+    const before = await add('2024-05-01T00:00:00Z'), after = await add('2024-09-01T00:00:00Z');
+    const snapshot = await createSnapshot({ db, ingestedCutoff: t('2024-07-01T00:00:00Z') });
+    const members = (await db.select({ id: snapshotWebDocuments.documentId }).from(snapshotWebDocuments).where(eq(snapshotWebDocuments.snapshotId, snapshot.id))).map(r => r.id);
+    expect(members).toContain(before);
+    expect(members).not.toContain(after);
+    expect(snapshot.webDocuments).toBeGreaterThanOrEqual(1);
   });
 
   it('answers 100 as-of queries over 10,000 records inside the ceiling', async () => {

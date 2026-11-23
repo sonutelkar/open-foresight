@@ -32,8 +32,9 @@ export type ScoreOutcome = {
 };
 
 type StoredRow = typeof kpiScores.$inferSelect;
-const sourceKinds: Record<string, DocKind> = { sec_filings: 'sec_filing', esef_filings: 'esef_filing' };
-const kindLabel: Record<DocKind, string> = { sec_filing: 'SEC filing', esef_filing: 'ESEF report' };
+/** `esef_filings` also covers reports fetched from company sites, which stand in for ESEF reports where the index has none. */
+const sourceKinds: Record<string, DocKind[]> = { sec_filings: ['sec_filing'], esef_filings: ['esef_filing', 'web_report'] };
+const kindLabel: Record<DocKind, string> = { sec_filing: 'SEC filing', esef_filing: 'ESEF report', web_report: 'Company report' };
 const shiftDays = (date: string, n: number) => new Date(Date.parse(`${date}T00:00:00Z`) + n * 86_400_000).toISOString().slice(0, 10);
 
 const asOutcome = (row: StoredRow, reused: boolean): ScoreOutcome => ({
@@ -58,7 +59,7 @@ export async function save(ctx: AnalystContext, kpi: Kpi, attempt: number, v: Pa
 
 /** The passages a KPI is scored from: the best matches within its lookback window and its source kinds, labelled e1, e2 and so on. */
 export async function retrieveEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, { method: 'quant' }>): Promise<EvidenceItem[]> {
-  const docKinds = [...new Set(kpi.sources.flatMap(s => sourceKinds[s] ? [sourceKinds[s]] : []))];
+  const docKinds = [...new Set(kpi.sources.flatMap(s => sourceKinds[s] ?? []))];
   if (docKinds.length === 0) return [];
   const query = `${kpi.name}. ${kpi.definition}${kpi.method === 'extract_then_quant' ? ` ${kpi.extraction.target}` : ''}`;
   const hits = await ctx.retriever.search({ snapshotId: ctx.snapshotId, asOf: ctx.asOf, securityId: ctx.security.id, query, limit: ctx.evidenceLimit ?? 10, since: shiftDays(ctx.asOf, -kpi.lookbackDays), docKinds });

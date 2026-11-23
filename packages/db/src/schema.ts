@@ -333,3 +333,44 @@ export const securityIssuers = pgTable('security_issuers', {
   note: text('note').notNull(),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [primaryKey({ columns: [table.securityId, table.issuerKey] })]);
+
+/**
+ * A report found on the web, such as an annual report on a company's investor site, with its text already extracted.
+ * Chunk offsets point into `text`. `headings` holds the section starts, which for a PDF are its pages.
+ * `fetchedAt` is the first fetch of this content, and `availableOn` is that day, so the report is evidence only for as-of dates on or after it.
+ */
+export const webDocuments = pgTable('web_documents', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  url: text('url').notNull(), finalUrl: text('final_url').notNull(),
+  contentType: text('content_type').notNull(), byteSize: integer('byte_size').notNull(),
+  /** Hash of the fetched bytes. The same URL with new bytes is a new row. */
+  rawSha256: text('raw_sha256').notNull(), etag: text('etag'), lastModified: text('last_modified'),
+  text: text('text').notNull(), headings: jsonb('headings').notNull(), extractor: text('extractor').notNull(),
+  /** `lei:...` or `cik:...` of the company the report belongs to. */
+  issuerKey: text('issuer_key').notNull(), entityName: text('entity_name').notNull(), periodEnd: date('period_end'),
+  fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull(), availableOn: date('available_on').notNull(),
+  /** The discovery attempt that proposed this URL, when one did. */
+  attemptId: uuid('attempt_id'),
+}, table => [uniqueIndex('web_documents_version').on(table.url, table.rawSha256), index('web_documents_issuer').on(table.issuerKey)]);
+
+export const snapshotWebDocuments = pgTable('snapshot_web_documents', {
+  snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),
+  documentId: uuid('document_id').notNull().references(() => webDocuments.id),
+}, table => [primaryKey({ columns: [table.snapshotId, table.documentId] })]);
+
+/**
+ * Every try to find a report for a company, including failures, so a company is retried only after a set number of days.
+ * Discovery has no run, so its model call is audited here and not in `llm_calls`, the way index time embeddings are in `embedding_batches`.
+ */
+export const reportDiscoveryAttempts = pgTable('report_discovery_attempts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  issuerKey: text('issuer_key').notNull(), entityName: text('entity_name').notNull(),
+  /** `stored`, `no_candidates`, `all_rejected` or `error`. */
+  outcome: text('outcome').notNull(),
+  candidates: jsonb('candidates').notNull(), rejected: jsonb('rejected').notNull(),
+  promptVersion: text('prompt_version').notNull(), model: text('model'), provider: text('provider'),
+  /** False when the provider could not honor zero data retention and the call went ahead without it. */
+  zdr: boolean('zdr'), params: jsonb('params'), response: jsonb('response'), error: text('error'),
+  tokens: jsonb('tokens'), cost: numeric('cost'), latencyMs: integer('latency_ms'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [index('report_discovery_issuer').on(table.issuerKey, table.createdAt)]);

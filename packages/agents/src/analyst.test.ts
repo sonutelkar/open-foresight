@@ -97,7 +97,7 @@ integration('Analyst on Postgres', () => {
     const r = stubSearcher([evidenceHit()]);
     const outcome = await scoreKpi(ctxFor(s, g.generator, r.retriever), extractKpi);
     expect(r.calls).toHaveLength(1);
-    expect(r.calls[0]).toMatchObject({ asOf: '2026-11-01', securityId: s.securityId, docKinds: ['sec_filing', 'esef_filing'], limit: 10 });
+    expect(r.calls[0]).toMatchObject({ asOf: '2026-11-01', securityId: s.securityId, docKinds: ['sec_filing', 'esef_filing', 'web_report'], limit: 10 });
     const lookback = extractKpi.lookbackDays;
     expect(r.calls[0]?.since).toBe(new Date(Date.parse('2026-11-01T00:00:00Z') - lookback * 86_400_000).toISOString().slice(0, 10));
     expect(r.calls[0]?.query).toContain(extractKpi.extraction.target);
@@ -202,6 +202,18 @@ integration('Analyst on Postgres', () => {
       expect(await applyExposure(ctx2(s, [evidenceHit()], judge), { ...extractKpi, isGate: true } as Kpi, 'Smart energy')).toBe('skipped');
       expect(requests).toHaveLength(0);
     });
+  });
+
+  it('searches ESEF reports and company site reports for a KPI whose source is esef_filings', async () => {
+    const s = await setup();
+    const kpi = { ...judgeKpi, sources: ['esef_filings'] } as Kpi;
+    const r = stubSearcher([]);
+    await scoreKpi(ctxFor(s, stubGateway(s.runId, []).generator, r.retriever), kpi);
+    expect(r.calls[0]?.docKinds?.slice().sort()).toEqual(['esef_filing', 'web_report']);
+    const s2 = await setup();
+    const sec = stubSearcher([]);
+    await scoreKpi(ctxFor(s2, stubGateway(s2.runId, []).generator, sec.retriever), { ...judgeKpi, sources: ['sec_filings'] } as Kpi);
+    expect(sec.calls[0]?.docKinds).toEqual(['sec_filing']);
   });
 
   it('repairs a non verbatim quote once and saves both attempts', async () => {

@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, lte, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
-import { dataSnapshots, esefFilings, exchangeListings, leiIsins, secFacts, secFilings, snapshotEsefFilings, snapshotFacts, snapshotFilings } from './schema.js';
+import { dataSnapshots, esefFilings, exchangeListings, leiIsins, secFacts, secFilings, snapshotEsefFilings, snapshotFacts, snapshotFilings, snapshotWebDocuments, webDocuments } from './schema.js';
 
 const isoDate = /^\d{4}-\d{2}-\d{2}$/;
 function checkAsOf(asOf: string): void {
@@ -10,10 +10,10 @@ function checkAsOf(asOf: string): void {
 }
 
 /**
- * Freezes the SEC filings, SEC facts and ESEF filings ingested at or before `ingestedCutoff` (default now).
+ * Freezes the SEC filings, SEC facts, ESEF filings and web reports ingested at or before `ingestedCutoff` (default now).
  * Records ingested later, including late arrivals with old filing dates, are not members.
  */
-export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCutoff?: Date }): Promise<{ id: string; filings: number; facts: number; esefFilings: number }> {
+export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCutoff?: Date }): Promise<{ id: string; filings: number; facts: number; esefFilings: number; webDocuments: number }> {
   const cutoff = input.ingestedCutoff ?? new Date();
   if (Number.isNaN(cutoff.getTime()) || cutoff.getTime() > Date.now()) throw new Error('Snapshot cutoff must be a valid time not in the future');
   return input.db.transaction(async tx => {
@@ -28,7 +28,10 @@ export async function createSnapshot(input: { db: PostgresJsDatabase; ingestedCu
     const esef = await tx.insert(snapshotEsefFilings)
       .select(tx.select({ snapshotId: sql<string>`${snapshot.id}::uuid`.as('snapshot_id'), filingId: esefFilings.id }).from(esefFilings).where(lte(esefFilings.ingestedAt, cutoff)))
       .returning({ id: snapshotEsefFilings.filingId });
-    return { id: snapshot.id, filings: filings.length, facts: facts.length, esefFilings: esef.length };
+    const web = await tx.insert(snapshotWebDocuments)
+      .select(tx.select({ snapshotId: sql<string>`${snapshot.id}::uuid`.as('snapshot_id'), documentId: webDocuments.id }).from(webDocuments).where(lte(webDocuments.fetchedAt, cutoff)))
+      .returning({ id: snapshotWebDocuments.documentId });
+    return { id: snapshot.id, filings: filings.length, facts: facts.length, esefFilings: esef.length, webDocuments: web.length };
   });
 }
 
