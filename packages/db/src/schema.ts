@@ -351,7 +351,12 @@ export const webDocuments = pgTable('web_documents', {
   fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull(), availableOn: date('available_on').notNull(),
   /** The discovery attempt that proposed this URL, when one did. */
   attemptId: uuid('attempt_id'),
-}, table => [uniqueIndex('web_documents_version').on(table.url, table.rawSha256), index('web_documents_issuer').on(table.issuerKey)]);
+}, table => [
+  uniqueIndex('web_documents_version').on(table.url, table.rawSha256),
+  /** The same bytes under a second URL, such as a mirror, are the same report. */
+  uniqueIndex('web_documents_content').on(table.issuerKey, table.rawSha256),
+  index('web_documents_issuer').on(table.issuerKey),
+]);
 
 export const snapshotWebDocuments = pgTable('snapshot_web_documents', {
   snapshotId: uuid('snapshot_id').notNull().references(() => dataSnapshots.id),

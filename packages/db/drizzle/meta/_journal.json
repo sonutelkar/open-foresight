@@ -169,6 +169,13 @@
       "when": 1795435913798,
       "tag": "0023_discovery_audit",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1795436667853,
+      "tag": "0024_web_documents_content",
+      "breakpoints": true
     }
   ]
 }

@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "web_documents_content" ON "web_documents" USING btree ("issuer_key","raw_sha256");

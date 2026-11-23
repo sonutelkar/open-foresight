@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
-import { afterAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import { asc, eq, like } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -14,7 +14,9 @@ const pdfSha256 = createHash('sha256').update(pdf).digest('hex');
 const html = (await fixture('report.html')).toString('utf8');
 const pdfPageStarts = ['Northwind Grid AG Annual Report 2025\nFiscal year', 'Smart Infrastructure segment\nThe segment sells', 'Mobility and rail signalling segment\nThe segment supplies'];
 const AGENT = 'open-foresight-educational';
-const ISSUER = 'lei:NORTHWIND00000000000';
+/** A new issuer for each test, because one company's identical bytes under two URLs are one report. */
+const newIssuer = () => `lei:NW${randomUUID().replaceAll('-', '').slice(0, 18).toUpperCase()}`;
+let ISSUER = newIssuer();
 
 type Reply = { status?: number; body?: BodyInit | null; headers?: Record<string, string> } | 'network_error';
 /** A stubbed web. Unknown URLs, robots.txt included, answer 404. */
@@ -30,7 +32,8 @@ function web(routes: Record<string, (headers: Headers) => Reply>) {
   };
   return { calls, fetcher };
 }
-const pdfReply = (headers: Record<string, string> = {}) => () => ({ body: pdf.slice(), headers: { 'content-type': 'application/pdf', ...headers } });
+/** A trailing PDF comment changes the bytes and the hash but not the pages, so one fixture can stand for different reports. */
+const pdfReply = (headers: Record<string, string> = {}, variant = '') => () => ({ body: variant ? Buffer.concat([pdf, Buffer.from(`\n%variant ${variant}\n`)]) : pdf.slice(), headers: { 'content-type': 'application/pdf', ...headers } });
 const htmlReply = (body: string) => () => ({ body, headers: { 'content-type': 'text/html; charset=utf-8' } });
 const input = (urls: string[]) => ({ issuerKey: ISSUER, entityName: 'Northwind Grid AG', mustMention: ['Contoso', 'NORTHWIND'], urls });
 
@@ -40,6 +43,7 @@ const integration = url ? describe : describe.skip;
 integration('web reports on Postgres', () => {
   const client = postgres(url ?? 'postgres://localhost/unused', { max: 2 });
   const db = drizzle(client);
+  beforeEach(() => { ISSUER = newIssuer(); });
   afterAll(async () => { await client.end(); });
   const make = (stub: ReturnType<typeof web>, over: Partial<Parameters<typeof createWebReportsProvider>[0]> = {}) =>
     createWebReportsProvider({ db, userAgent: AGENT, allowedDomains: ['northwind.test'], fetch: stub.fetcher, minDelayMs: 0, now: () => new Date('2026-11-22T10:00:00Z'), ...over });
@@ -131,7 +135,7 @@ integration('web reports on Postgres', () => {
       [`${origin('d')}/robots.txt`]: robots('User-agent: *\nDisallow: /*.pdf$\n'),
       [`${origin('e')}/robots.txt`]: () => ({ status: 503 }),
       [`${origin('f')}/robots.txt`]: () => 'network_error',
-      ...Object.fromEntries(['a/private/annual/r.pdf', 'a/private/annual/r2.pdf', 'b/r.pdf', 'd/files/r.pdf?download=1', 'g/r.pdf'].map(p => [`${origin(p.slice(0, 1))}${p.slice(1)}`, pdfReply()])),
+      ...Object.fromEntries(['a/private/annual/r.pdf', 'a/private/annual/r2.pdf', 'b/r.pdf', 'd/files/r.pdf?download=1', 'g/r.pdf'].map((p, i) => [`${origin(p.slice(0, 1))}${p.slice(1)}`, pdfReply({}, `robots-${i}`)])),
     });
     const urls = ['a/private/annual/r.pdf', 'a/private/notes.pdf', 'a/private/annual/r2.pdf', 'b/r.pdf', 'c/reports/r.pdf', 'd/files/r.pdf', 'd/files/r.pdf?download=1', 'e/r.pdf', 'f/r.pdf', 'g/r.pdf']
       .map(p => `${origin(p.slice(0, 1))}${p.slice(1)}`);
@@ -181,6 +185,17 @@ integration('web reports on Postgres', () => {
     expect(await on('2026-11-22').sync(input([page]))).toEqual({ stored: [], unchanged: [page], rejected: [] });
     expect(sent()).toEqual(['"v2"', 'Fri, 21 Nov 2025 08:00:00 GMT']);
     expect(await rows(page)).toHaveLength(2);
+  });
+
+  it('treats the same bytes at a second URL, such as a mirror, as the same report', async () => {
+    const a = `https://ir.northwind.test/${randomUUID()}/report.html`, b = `https://ir.northwind.test/${randomUUID()}/mirror.html`;
+    const body = html.replace('9.4 billion', `9.${Math.floor(Math.random() * 1e6)} billion`);
+    const stub = web({ [a]: () => ({ body, headers: { 'content-type': 'text/html' } }), [b]: () => ({ body, headers: { 'content-type': 'text/html' } }) });
+    const report = await make(stub).sync(input([a, b]));
+    expect(report.stored.map(r => r.url)).toEqual([a]);
+    expect(report.unchanged).toEqual([b]);
+    expect(await rows(a)).toHaveLength(1);
+    expect(await rows(b)).toHaveLength(0);
   });
 
   it('refuses bad input and options before fetching anything', async () => {
