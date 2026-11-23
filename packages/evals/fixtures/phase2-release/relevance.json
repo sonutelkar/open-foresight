@@ -1,0 +1,5510 @@
+{
+  "schemaVersion": 1,
+  "manifestId": "fixture-relevance",
+  "version": 1,
+  "supersedes": null,
+  "createdAt": "2026-11-23T00:00:00.000Z",
+  "fixture": true,
+  "provenance": "ai-generated-human-sampled",
+  "themes": [
+    "smart-energy",
+    "cybersecurity",
+    "robotics-ai"
+  ],
+  "labellers": [
+    {
+      "name": "labeller-a",
+      "kind": "ai",
+      "vendor": "anthropic",
+      "model": "labeller-a"
+    }
+  ],
+  "scorerVendors": [
+    "openai",
+    "jev"
+  ],
+  "sampling": {
+    "seed": 20261123,
+    "requested": 500,
+    "pool": 500
+  },
+  "adjudication": {
+    "method": "single-ai-labeller",
+    "adjudicators": []
+  },
+  "humanSample": {
+    "n": 50,
+    "agreed": 50,
+    "reviewers": [
+      "fixture-colleague"
+    ]
+  },
+  "missingPolicy": {
+    "unknown": "kappa-excludes-and-reports",
+    "missing": "counted-and-incomplete"
+  },
+  "contentHash": "636229a670bc4b0f45da4ab356f3addec9711fad41728fcd412c05b54b6f8ac0",
+  "kind": "relevance",
+  "records": [
+    {
+      "id": "rel-0",
+      "theme": "smart-energy",
+      "symbol": "S0",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-1",
+      "theme": "cybersecurity",
+      "symbol": "S1",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p1-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-2",
+      "theme": "robotics-ai",
+      "symbol": "S2",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p2-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-3",
+      "theme": "smart-energy",
+      "symbol": "S3",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p3-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-4",
+      "theme": "cybersecurity",
+      "symbol": "S4",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p4-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-5",
+      "theme": "robotics-ai",
+      "symbol": "S5",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p5-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-6",
+      "theme": "smart-energy",
+      "symbol": "S6",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p6-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-7",
+      "theme": "cybersecurity",
+      "symbol": "S7",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p7-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-8",
+      "theme": "robotics-ai",
+      "symbol": "S8",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p8-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-9",
+      "theme": "smart-energy",
+      "symbol": "S9",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p9-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-10",
+      "theme": "cybersecurity",
+      "symbol": "S10",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p10-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-11",
+      "theme": "robotics-ai",
+      "symbol": "S11",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p11-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-12",
+      "theme": "smart-energy",
+      "symbol": "S12",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p12-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-13",
+      "theme": "cybersecurity",
+      "symbol": "S13",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p13-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-14",
+      "theme": "robotics-ai",
+      "symbol": "S14",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p14-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-15",
+      "theme": "smart-energy",
+      "symbol": "S15",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p15-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-16",
+      "theme": "cybersecurity",
+      "symbol": "S16",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p16-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-17",
+      "theme": "robotics-ai",
+      "symbol": "S17",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p17-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-18",
+      "theme": "smart-energy",
+      "symbol": "S18",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p18-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-19",
+      "theme": "cybersecurity",
+      "symbol": "S19",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p19-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-20",
+      "theme": "robotics-ai",
+      "symbol": "S20",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p20-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-21",
+      "theme": "smart-energy",
+      "symbol": "S21",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p21-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-22",
+      "theme": "cybersecurity",
+      "symbol": "S22",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p22-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-23",
+      "theme": "robotics-ai",
+      "symbol": "S23",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p23-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-24",
+      "theme": "smart-energy",
+      "symbol": "S24",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p24-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-25",
+      "theme": "cybersecurity",
+      "symbol": "S25",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-26",
+      "theme": "robotics-ai",
+      "symbol": "S26",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p26-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-27",
+      "theme": "smart-energy",
+      "symbol": "S27",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p27-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-28",
+      "theme": "cybersecurity",
+      "symbol": "S28",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p28-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-29",
+      "theme": "robotics-ai",
+      "symbol": "S29",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p29-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-30",
+      "theme": "smart-energy",
+      "symbol": "S30",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p30-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-31",
+      "theme": "cybersecurity",
+      "symbol": "S31",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p31-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-32",
+      "theme": "robotics-ai",
+      "symbol": "S32",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p32-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-33",
+      "theme": "smart-energy",
+      "symbol": "S33",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p33-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-34",
+      "theme": "cybersecurity",
+      "symbol": "S34",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p34-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-35",
+      "theme": "robotics-ai",
+      "symbol": "S35",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p35-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-36",
+      "theme": "smart-energy",
+      "symbol": "S36",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p36-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-37",
+      "theme": "cybersecurity",
+      "symbol": "S37",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p37-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-38",
+      "theme": "robotics-ai",
+      "symbol": "S38",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p38-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-39",
+      "theme": "smart-energy",
+      "symbol": "S39",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p39-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-40",
+      "theme": "cybersecurity",
+      "symbol": "S40",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p40-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-41",
+      "theme": "robotics-ai",
+      "symbol": "S41",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p41-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-42",
+      "theme": "smart-energy",
+      "symbol": "S42",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p42-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-43",
+      "theme": "cybersecurity",
+      "symbol": "S43",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p43-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-44",
+      "theme": "robotics-ai",
+      "symbol": "S44",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p44-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-45",
+      "theme": "smart-energy",
+      "symbol": "S45",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p45-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-46",
+      "theme": "cybersecurity",
+      "symbol": "S46",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p46-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-47",
+      "theme": "robotics-ai",
+      "symbol": "S47",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p47-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-48",
+      "theme": "smart-energy",
+      "symbol": "S48",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p48-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-49",
+      "theme": "cybersecurity",
+      "symbol": "S49",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p49-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-50",
+      "theme": "robotics-ai",
+      "symbol": "S50",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-51",
+      "theme": "smart-energy",
+      "symbol": "S51",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p51-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-52",
+      "theme": "cybersecurity",
+      "symbol": "S52",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p52-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-53",
+      "theme": "robotics-ai",
+      "symbol": "S53",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p53-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-54",
+      "theme": "smart-energy",
+      "symbol": "S54",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p54-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-55",
+      "theme": "cybersecurity",
+      "symbol": "S55",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p55-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-56",
+      "theme": "robotics-ai",
+      "symbol": "S56",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p56-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-57",
+      "theme": "smart-energy",
+      "symbol": "S57",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p57-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-58",
+      "theme": "cybersecurity",
+      "symbol": "S58",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p58-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-59",
+      "theme": "robotics-ai",
+      "symbol": "S59",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p59-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-60",
+      "theme": "smart-energy",
+      "symbol": "S60",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p60-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-61",
+      "theme": "cybersecurity",
+      "symbol": "S61",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p61-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-62",
+      "theme": "robotics-ai",
+      "symbol": "S62",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p62-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-63",
+      "theme": "smart-energy",
+      "symbol": "S63",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p63-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-64",
+      "theme": "cybersecurity",
+      "symbol": "S64",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p64-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-65",
+      "theme": "robotics-ai",
+      "symbol": "S65",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p65-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-66",
+      "theme": "smart-energy",
+      "symbol": "S66",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p66-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-67",
+      "theme": "cybersecurity",
+      "symbol": "S67",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p67-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-68",
+      "theme": "robotics-ai",
+      "symbol": "S68",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p68-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-69",
+      "theme": "smart-energy",
+      "symbol": "S69",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p69-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-70",
+      "theme": "cybersecurity",
+      "symbol": "S70",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p70-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-71",
+      "theme": "robotics-ai",
+      "symbol": "S71",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p71-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-72",
+      "theme": "smart-energy",
+      "symbol": "S72",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p72-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-73",
+      "theme": "cybersecurity",
+      "symbol": "S73",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p73-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-74",
+      "theme": "robotics-ai",
+      "symbol": "S74",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p74-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-75",
+      "theme": "smart-energy",
+      "symbol": "S75",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-76",
+      "theme": "cybersecurity",
+      "symbol": "S76",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p76-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-77",
+      "theme": "robotics-ai",
+      "symbol": "S77",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p77-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-78",
+      "theme": "smart-energy",
+      "symbol": "S78",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p78-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-79",
+      "theme": "cybersecurity",
+      "symbol": "S79",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p79-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-80",
+      "theme": "robotics-ai",
+      "symbol": "S80",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p80-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-81",
+      "theme": "smart-energy",
+      "symbol": "S81",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p81-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-82",
+      "theme": "cybersecurity",
+      "symbol": "S82",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p82-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-83",
+      "theme": "robotics-ai",
+      "symbol": "S83",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p83-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-84",
+      "theme": "smart-energy",
+      "symbol": "S84",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p84-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-85",
+      "theme": "cybersecurity",
+      "symbol": "S85",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p85-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-86",
+      "theme": "robotics-ai",
+      "symbol": "S86",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p86-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-87",
+      "theme": "smart-energy",
+      "symbol": "S87",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p87-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-88",
+      "theme": "cybersecurity",
+      "symbol": "S88",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p88-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-89",
+      "theme": "robotics-ai",
+      "symbol": "S89",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p89-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-90",
+      "theme": "smart-energy",
+      "symbol": "S90",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p90-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-91",
+      "theme": "cybersecurity",
+      "symbol": "S91",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p91-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-92",
+      "theme": "robotics-ai",
+      "symbol": "S92",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p92-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-93",
+      "theme": "smart-energy",
+      "symbol": "S93",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p93-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-94",
+      "theme": "cybersecurity",
+      "symbol": "S94",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p94-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-95",
+      "theme": "robotics-ai",
+      "symbol": "S95",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p95-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-96",
+      "theme": "smart-energy",
+      "symbol": "S96",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p96-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-97",
+      "theme": "cybersecurity",
+      "symbol": "S97",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p97-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-98",
+      "theme": "robotics-ai",
+      "symbol": "S98",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p98-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-99",
+      "theme": "smart-energy",
+      "symbol": "S99",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p99-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-100",
+      "theme": "cybersecurity",
+      "symbol": "S100",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-101",
+      "theme": "robotics-ai",
+      "symbol": "S101",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p101-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-102",
+      "theme": "smart-energy",
+      "symbol": "S102",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p102-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-103",
+      "theme": "cybersecurity",
+      "symbol": "S103",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p103-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-104",
+      "theme": "robotics-ai",
+      "symbol": "S104",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p104-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-105",
+      "theme": "smart-energy",
+      "symbol": "S105",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p105-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-106",
+      "theme": "cybersecurity",
+      "symbol": "S106",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p106-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-107",
+      "theme": "robotics-ai",
+      "symbol": "S107",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p107-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-108",
+      "theme": "smart-energy",
+      "symbol": "S108",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p108-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-109",
+      "theme": "cybersecurity",
+      "symbol": "S109",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p109-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-110",
+      "theme": "robotics-ai",
+      "symbol": "S110",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p110-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-111",
+      "theme": "smart-energy",
+      "symbol": "S111",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p111-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-112",
+      "theme": "cybersecurity",
+      "symbol": "S112",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p112-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-113",
+      "theme": "robotics-ai",
+      "symbol": "S113",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p113-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-114",
+      "theme": "smart-energy",
+      "symbol": "S114",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p114-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-115",
+      "theme": "cybersecurity",
+      "symbol": "S115",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p115-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-116",
+      "theme": "robotics-ai",
+      "symbol": "S116",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p116-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-117",
+      "theme": "smart-energy",
+      "symbol": "S117",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p117-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-118",
+      "theme": "cybersecurity",
+      "symbol": "S118",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p118-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-119",
+      "theme": "robotics-ai",
+      "symbol": "S119",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p119-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-120",
+      "theme": "smart-energy",
+      "symbol": "S120",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p120-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-121",
+      "theme": "cybersecurity",
+      "symbol": "S121",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p121-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-122",
+      "theme": "robotics-ai",
+      "symbol": "S122",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p122-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-123",
+      "theme": "smart-energy",
+      "symbol": "S123",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p123-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-124",
+      "theme": "cybersecurity",
+      "symbol": "S124",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p124-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-125",
+      "theme": "robotics-ai",
+      "symbol": "S125",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-126",
+      "theme": "smart-energy",
+      "symbol": "S126",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p126-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-127",
+      "theme": "cybersecurity",
+      "symbol": "S127",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p127-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-128",
+      "theme": "robotics-ai",
+      "symbol": "S128",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p128-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-129",
+      "theme": "smart-energy",
+      "symbol": "S129",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p129-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-130",
+      "theme": "cybersecurity",
+      "symbol": "S130",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p130-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-131",
+      "theme": "robotics-ai",
+      "symbol": "S131",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p131-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-132",
+      "theme": "smart-energy",
+      "symbol": "S132",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p132-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-133",
+      "theme": "cybersecurity",
+      "symbol": "S133",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p133-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-134",
+      "theme": "robotics-ai",
+      "symbol": "S134",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p134-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-135",
+      "theme": "smart-energy",
+      "symbol": "S135",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p135-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-136",
+      "theme": "cybersecurity",
+      "symbol": "S136",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p136-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-137",
+      "theme": "robotics-ai",
+      "symbol": "S137",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p137-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-138",
+      "theme": "smart-energy",
+      "symbol": "S138",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p138-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-139",
+      "theme": "cybersecurity",
+      "symbol": "S139",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p139-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-140",
+      "theme": "robotics-ai",
+      "symbol": "S140",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p140-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-141",
+      "theme": "smart-energy",
+      "symbol": "S141",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p141-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-142",
+      "theme": "cybersecurity",
+      "symbol": "S142",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p142-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-143",
+      "theme": "robotics-ai",
+      "symbol": "S143",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p143-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-144",
+      "theme": "smart-energy",
+      "symbol": "S144",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p144-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-145",
+      "theme": "cybersecurity",
+      "symbol": "S145",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p145-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-146",
+      "theme": "robotics-ai",
+      "symbol": "S146",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p146-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-147",
+      "theme": "smart-energy",
+      "symbol": "S147",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p147-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-148",
+      "theme": "cybersecurity",
+      "symbol": "S148",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p148-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-149",
+      "theme": "robotics-ai",
+      "symbol": "S149",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p149-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-150",
+      "theme": "smart-energy",
+      "symbol": "S150",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-151",
+      "theme": "cybersecurity",
+      "symbol": "S151",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p151-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-152",
+      "theme": "robotics-ai",
+      "symbol": "S152",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p152-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-153",
+      "theme": "smart-energy",
+      "symbol": "S153",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p153-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-154",
+      "theme": "cybersecurity",
+      "symbol": "S154",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p154-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-155",
+      "theme": "robotics-ai",
+      "symbol": "S155",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p155-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-156",
+      "theme": "smart-energy",
+      "symbol": "S156",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p156-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-157",
+      "theme": "cybersecurity",
+      "symbol": "S157",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p157-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-158",
+      "theme": "robotics-ai",
+      "symbol": "S158",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p158-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-159",
+      "theme": "smart-energy",
+      "symbol": "S159",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p159-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-160",
+      "theme": "cybersecurity",
+      "symbol": "S160",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p160-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-161",
+      "theme": "robotics-ai",
+      "symbol": "S161",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p161-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-162",
+      "theme": "smart-energy",
+      "symbol": "S162",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p162-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-163",
+      "theme": "cybersecurity",
+      "symbol": "S163",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p163-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-164",
+      "theme": "robotics-ai",
+      "symbol": "S164",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p164-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-165",
+      "theme": "smart-energy",
+      "symbol": "S165",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p165-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-166",
+      "theme": "cybersecurity",
+      "symbol": "S166",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p166-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-167",
+      "theme": "robotics-ai",
+      "symbol": "S167",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p167-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-168",
+      "theme": "smart-energy",
+      "symbol": "S168",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p168-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-169",
+      "theme": "cybersecurity",
+      "symbol": "S169",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p169-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-170",
+      "theme": "robotics-ai",
+      "symbol": "S170",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p170-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-171",
+      "theme": "smart-energy",
+      "symbol": "S171",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p171-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-172",
+      "theme": "cybersecurity",
+      "symbol": "S172",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p172-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-173",
+      "theme": "robotics-ai",
+      "symbol": "S173",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p173-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-174",
+      "theme": "smart-energy",
+      "symbol": "S174",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p174-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-175",
+      "theme": "cybersecurity",
+      "symbol": "S175",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-176",
+      "theme": "robotics-ai",
+      "symbol": "S176",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p176-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-177",
+      "theme": "smart-energy",
+      "symbol": "S177",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p177-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-178",
+      "theme": "cybersecurity",
+      "symbol": "S178",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p178-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-179",
+      "theme": "robotics-ai",
+      "symbol": "S179",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p179-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-180",
+      "theme": "smart-energy",
+      "symbol": "S180",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p180-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-181",
+      "theme": "cybersecurity",
+      "symbol": "S181",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p181-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-182",
+      "theme": "robotics-ai",
+      "symbol": "S182",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p182-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-183",
+      "theme": "smart-energy",
+      "symbol": "S183",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p183-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-184",
+      "theme": "cybersecurity",
+      "symbol": "S184",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p184-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-185",
+      "theme": "robotics-ai",
+      "symbol": "S185",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p185-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-186",
+      "theme": "smart-energy",
+      "symbol": "S186",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p186-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-187",
+      "theme": "cybersecurity",
+      "symbol": "S187",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p187-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-188",
+      "theme": "robotics-ai",
+      "symbol": "S188",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p188-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-189",
+      "theme": "smart-energy",
+      "symbol": "S189",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p189-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-190",
+      "theme": "cybersecurity",
+      "symbol": "S190",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p190-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-191",
+      "theme": "robotics-ai",
+      "symbol": "S191",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p191-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-192",
+      "theme": "smart-energy",
+      "symbol": "S192",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p192-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-193",
+      "theme": "cybersecurity",
+      "symbol": "S193",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p193-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-194",
+      "theme": "robotics-ai",
+      "symbol": "S194",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p194-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-195",
+      "theme": "smart-energy",
+      "symbol": "S195",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p195-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-196",
+      "theme": "cybersecurity",
+      "symbol": "S196",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p196-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-197",
+      "theme": "robotics-ai",
+      "symbol": "S197",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p197-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-198",
+      "theme": "smart-energy",
+      "symbol": "S198",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p198-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-199",
+      "theme": "cybersecurity",
+      "symbol": "S199",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p199-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-200",
+      "theme": "robotics-ai",
+      "symbol": "S200",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-201",
+      "theme": "smart-energy",
+      "symbol": "S201",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p201-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-202",
+      "theme": "cybersecurity",
+      "symbol": "S202",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p202-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-203",
+      "theme": "robotics-ai",
+      "symbol": "S203",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p203-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-204",
+      "theme": "smart-energy",
+      "symbol": "S204",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p204-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-205",
+      "theme": "cybersecurity",
+      "symbol": "S205",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p205-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-206",
+      "theme": "robotics-ai",
+      "symbol": "S206",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p206-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-207",
+      "theme": "smart-energy",
+      "symbol": "S207",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p207-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-208",
+      "theme": "cybersecurity",
+      "symbol": "S208",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p208-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-209",
+      "theme": "robotics-ai",
+      "symbol": "S209",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p209-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-210",
+      "theme": "smart-energy",
+      "symbol": "S210",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p210-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-211",
+      "theme": "cybersecurity",
+      "symbol": "S211",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p211-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-212",
+      "theme": "robotics-ai",
+      "symbol": "S212",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p212-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-213",
+      "theme": "smart-energy",
+      "symbol": "S213",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p213-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-214",
+      "theme": "cybersecurity",
+      "symbol": "S214",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p214-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-215",
+      "theme": "robotics-ai",
+      "symbol": "S215",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p215-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-216",
+      "theme": "smart-energy",
+      "symbol": "S216",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p216-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-217",
+      "theme": "cybersecurity",
+      "symbol": "S217",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p217-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-218",
+      "theme": "robotics-ai",
+      "symbol": "S218",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p218-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-219",
+      "theme": "smart-energy",
+      "symbol": "S219",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p219-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-220",
+      "theme": "cybersecurity",
+      "symbol": "S220",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p220-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-221",
+      "theme": "robotics-ai",
+      "symbol": "S221",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p221-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-222",
+      "theme": "smart-energy",
+      "symbol": "S222",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p222-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-223",
+      "theme": "cybersecurity",
+      "symbol": "S223",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p223-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-224",
+      "theme": "robotics-ai",
+      "symbol": "S224",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p224-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-225",
+      "theme": "smart-energy",
+      "symbol": "S225",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-226",
+      "theme": "cybersecurity",
+      "symbol": "S226",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p226-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-227",
+      "theme": "robotics-ai",
+      "symbol": "S227",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p227-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-228",
+      "theme": "smart-energy",
+      "symbol": "S228",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p228-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-229",
+      "theme": "cybersecurity",
+      "symbol": "S229",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p229-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-230",
+      "theme": "robotics-ai",
+      "symbol": "S230",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p230-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-231",
+      "theme": "smart-energy",
+      "symbol": "S231",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p231-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-232",
+      "theme": "cybersecurity",
+      "symbol": "S232",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p232-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-233",
+      "theme": "robotics-ai",
+      "symbol": "S233",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p233-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-234",
+      "theme": "smart-energy",
+      "symbol": "S234",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p234-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-235",
+      "theme": "cybersecurity",
+      "symbol": "S235",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p235-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-236",
+      "theme": "robotics-ai",
+      "symbol": "S236",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p236-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-237",
+      "theme": "smart-energy",
+      "symbol": "S237",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p237-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-238",
+      "theme": "cybersecurity",
+      "symbol": "S238",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p238-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-239",
+      "theme": "robotics-ai",
+      "symbol": "S239",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p239-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-240",
+      "theme": "smart-energy",
+      "symbol": "S240",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p240-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-241",
+      "theme": "cybersecurity",
+      "symbol": "S241",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p241-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-242",
+      "theme": "robotics-ai",
+      "symbol": "S242",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p242-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-243",
+      "theme": "smart-energy",
+      "symbol": "S243",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p243-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-244",
+      "theme": "cybersecurity",
+      "symbol": "S244",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p244-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-245",
+      "theme": "robotics-ai",
+      "symbol": "S245",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p245-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-246",
+      "theme": "smart-energy",
+      "symbol": "S246",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p246-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-247",
+      "theme": "cybersecurity",
+      "symbol": "S247",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p247-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-248",
+      "theme": "robotics-ai",
+      "symbol": "S248",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p248-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-249",
+      "theme": "smart-energy",
+      "symbol": "S249",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p249-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-250",
+      "theme": "cybersecurity",
+      "symbol": "S250",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-251",
+      "theme": "robotics-ai",
+      "symbol": "S251",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p251-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-252",
+      "theme": "smart-energy",
+      "symbol": "S252",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p252-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-253",
+      "theme": "cybersecurity",
+      "symbol": "S253",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p253-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-254",
+      "theme": "robotics-ai",
+      "symbol": "S254",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p254-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-255",
+      "theme": "smart-energy",
+      "symbol": "S255",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p255-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-256",
+      "theme": "cybersecurity",
+      "symbol": "S256",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p256-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-257",
+      "theme": "robotics-ai",
+      "symbol": "S257",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p257-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-258",
+      "theme": "smart-energy",
+      "symbol": "S258",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p258-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-259",
+      "theme": "cybersecurity",
+      "symbol": "S259",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p259-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-260",
+      "theme": "robotics-ai",
+      "symbol": "S260",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p260-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-261",
+      "theme": "smart-energy",
+      "symbol": "S261",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p261-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-262",
+      "theme": "cybersecurity",
+      "symbol": "S262",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p262-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-263",
+      "theme": "robotics-ai",
+      "symbol": "S263",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p263-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-264",
+      "theme": "smart-energy",
+      "symbol": "S264",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p264-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-265",
+      "theme": "cybersecurity",
+      "symbol": "S265",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p265-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-266",
+      "theme": "robotics-ai",
+      "symbol": "S266",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p266-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-267",
+      "theme": "smart-energy",
+      "symbol": "S267",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p267-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-268",
+      "theme": "cybersecurity",
+      "symbol": "S268",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p268-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-269",
+      "theme": "robotics-ai",
+      "symbol": "S269",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p269-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-270",
+      "theme": "smart-energy",
+      "symbol": "S270",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p270-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-271",
+      "theme": "cybersecurity",
+      "symbol": "S271",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p271-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-272",
+      "theme": "robotics-ai",
+      "symbol": "S272",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p272-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-273",
+      "theme": "smart-energy",
+      "symbol": "S273",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p273-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-274",
+      "theme": "cybersecurity",
+      "symbol": "S274",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p274-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-275",
+      "theme": "robotics-ai",
+      "symbol": "S275",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-276",
+      "theme": "smart-energy",
+      "symbol": "S276",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p276-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-277",
+      "theme": "cybersecurity",
+      "symbol": "S277",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p277-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-278",
+      "theme": "robotics-ai",
+      "symbol": "S278",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p278-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-279",
+      "theme": "smart-energy",
+      "symbol": "S279",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p279-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-280",
+      "theme": "cybersecurity",
+      "symbol": "S280",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p280-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-281",
+      "theme": "robotics-ai",
+      "symbol": "S281",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p281-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-282",
+      "theme": "smart-energy",
+      "symbol": "S282",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p282-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-283",
+      "theme": "cybersecurity",
+      "symbol": "S283",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p283-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-284",
+      "theme": "robotics-ai",
+      "symbol": "S284",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p284-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-285",
+      "theme": "smart-energy",
+      "symbol": "S285",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p285-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-286",
+      "theme": "cybersecurity",
+      "symbol": "S286",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p286-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-287",
+      "theme": "robotics-ai",
+      "symbol": "S287",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p287-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-288",
+      "theme": "smart-energy",
+      "symbol": "S288",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p288-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-289",
+      "theme": "cybersecurity",
+      "symbol": "S289",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p289-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-290",
+      "theme": "robotics-ai",
+      "symbol": "S290",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p290-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-291",
+      "theme": "smart-energy",
+      "symbol": "S291",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p291-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-292",
+      "theme": "cybersecurity",
+      "symbol": "S292",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p292-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-293",
+      "theme": "robotics-ai",
+      "symbol": "S293",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p293-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-294",
+      "theme": "smart-energy",
+      "symbol": "S294",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p294-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-295",
+      "theme": "cybersecurity",
+      "symbol": "S295",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p295-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-296",
+      "theme": "robotics-ai",
+      "symbol": "S296",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p296-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-297",
+      "theme": "smart-energy",
+      "symbol": "S297",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p297-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-298",
+      "theme": "cybersecurity",
+      "symbol": "S298",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p298-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-299",
+      "theme": "robotics-ai",
+      "symbol": "S299",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p299-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-300",
+      "theme": "smart-energy",
+      "symbol": "S300",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-301",
+      "theme": "cybersecurity",
+      "symbol": "S301",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p301-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-302",
+      "theme": "robotics-ai",
+      "symbol": "S302",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p302-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-303",
+      "theme": "smart-energy",
+      "symbol": "S303",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p303-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-304",
+      "theme": "cybersecurity",
+      "symbol": "S304",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p304-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-305",
+      "theme": "robotics-ai",
+      "symbol": "S305",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p305-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-306",
+      "theme": "smart-energy",
+      "symbol": "S306",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p306-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-307",
+      "theme": "cybersecurity",
+      "symbol": "S307",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p307-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-308",
+      "theme": "robotics-ai",
+      "symbol": "S308",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p308-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-309",
+      "theme": "smart-energy",
+      "symbol": "S309",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p309-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-310",
+      "theme": "cybersecurity",
+      "symbol": "S310",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p310-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-311",
+      "theme": "robotics-ai",
+      "symbol": "S311",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p311-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-312",
+      "theme": "smart-energy",
+      "symbol": "S312",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p312-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-313",
+      "theme": "cybersecurity",
+      "symbol": "S313",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p313-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-314",
+      "theme": "robotics-ai",
+      "symbol": "S314",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p314-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-315",
+      "theme": "smart-energy",
+      "symbol": "S315",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p315-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-316",
+      "theme": "cybersecurity",
+      "symbol": "S316",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p316-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-317",
+      "theme": "robotics-ai",
+      "symbol": "S317",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p317-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-318",
+      "theme": "smart-energy",
+      "symbol": "S318",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p318-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-319",
+      "theme": "cybersecurity",
+      "symbol": "S319",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p319-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-320",
+      "theme": "robotics-ai",
+      "symbol": "S320",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p320-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-321",
+      "theme": "smart-energy",
+      "symbol": "S321",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p321-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-322",
+      "theme": "cybersecurity",
+      "symbol": "S322",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p322-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-323",
+      "theme": "robotics-ai",
+      "symbol": "S323",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p323-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-324",
+      "theme": "smart-energy",
+      "symbol": "S324",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p324-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-325",
+      "theme": "cybersecurity",
+      "symbol": "S325",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-326",
+      "theme": "robotics-ai",
+      "symbol": "S326",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p326-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-327",
+      "theme": "smart-energy",
+      "symbol": "S327",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p327-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-328",
+      "theme": "cybersecurity",
+      "symbol": "S328",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p328-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-329",
+      "theme": "robotics-ai",
+      "symbol": "S329",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p329-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-330",
+      "theme": "smart-energy",
+      "symbol": "S330",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p330-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-331",
+      "theme": "cybersecurity",
+      "symbol": "S331",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p331-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-332",
+      "theme": "robotics-ai",
+      "symbol": "S332",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p332-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-333",
+      "theme": "smart-energy",
+      "symbol": "S333",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p333-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-334",
+      "theme": "cybersecurity",
+      "symbol": "S334",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p334-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-335",
+      "theme": "robotics-ai",
+      "symbol": "S335",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p335-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-336",
+      "theme": "smart-energy",
+      "symbol": "S336",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p336-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-337",
+      "theme": "cybersecurity",
+      "symbol": "S337",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p337-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-338",
+      "theme": "robotics-ai",
+      "symbol": "S338",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p338-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-339",
+      "theme": "smart-energy",
+      "symbol": "S339",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p339-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-340",
+      "theme": "cybersecurity",
+      "symbol": "S340",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p340-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-341",
+      "theme": "robotics-ai",
+      "symbol": "S341",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p341-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-342",
+      "theme": "smart-energy",
+      "symbol": "S342",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p342-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-343",
+      "theme": "cybersecurity",
+      "symbol": "S343",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p343-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-344",
+      "theme": "robotics-ai",
+      "symbol": "S344",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p344-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-345",
+      "theme": "smart-energy",
+      "symbol": "S345",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p345-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-346",
+      "theme": "cybersecurity",
+      "symbol": "S346",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p346-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-347",
+      "theme": "robotics-ai",
+      "symbol": "S347",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p347-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-348",
+      "theme": "smart-energy",
+      "symbol": "S348",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p348-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-349",
+      "theme": "cybersecurity",
+      "symbol": "S349",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p349-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-350",
+      "theme": "robotics-ai",
+      "symbol": "S350",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-351",
+      "theme": "smart-energy",
+      "symbol": "S351",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p351-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-352",
+      "theme": "cybersecurity",
+      "symbol": "S352",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p352-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-353",
+      "theme": "robotics-ai",
+      "symbol": "S353",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p353-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-354",
+      "theme": "smart-energy",
+      "symbol": "S354",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p354-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-355",
+      "theme": "cybersecurity",
+      "symbol": "S355",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p355-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-356",
+      "theme": "robotics-ai",
+      "symbol": "S356",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p356-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-357",
+      "theme": "smart-energy",
+      "symbol": "S357",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p357-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-358",
+      "theme": "cybersecurity",
+      "symbol": "S358",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p358-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-359",
+      "theme": "robotics-ai",
+      "symbol": "S359",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p359-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-360",
+      "theme": "smart-energy",
+      "symbol": "S360",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p360-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-361",
+      "theme": "cybersecurity",
+      "symbol": "S361",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p361-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-362",
+      "theme": "robotics-ai",
+      "symbol": "S362",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p362-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-363",
+      "theme": "smart-energy",
+      "symbol": "S363",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p363-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-364",
+      "theme": "cybersecurity",
+      "symbol": "S364",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p364-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-365",
+      "theme": "robotics-ai",
+      "symbol": "S365",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p365-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-366",
+      "theme": "smart-energy",
+      "symbol": "S366",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p366-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-367",
+      "theme": "cybersecurity",
+      "symbol": "S367",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p367-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-368",
+      "theme": "robotics-ai",
+      "symbol": "S368",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p368-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-369",
+      "theme": "smart-energy",
+      "symbol": "S369",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p369-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-370",
+      "theme": "cybersecurity",
+      "symbol": "S370",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p370-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-371",
+      "theme": "robotics-ai",
+      "symbol": "S371",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p371-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-372",
+      "theme": "smart-energy",
+      "symbol": "S372",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p372-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-373",
+      "theme": "cybersecurity",
+      "symbol": "S373",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p373-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-374",
+      "theme": "robotics-ai",
+      "symbol": "S374",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p374-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-375",
+      "theme": "smart-energy",
+      "symbol": "S375",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-376",
+      "theme": "cybersecurity",
+      "symbol": "S376",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p376-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-377",
+      "theme": "robotics-ai",
+      "symbol": "S377",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p377-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-378",
+      "theme": "smart-energy",
+      "symbol": "S378",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p378-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-379",
+      "theme": "cybersecurity",
+      "symbol": "S379",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p379-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-380",
+      "theme": "robotics-ai",
+      "symbol": "S380",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p380-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-381",
+      "theme": "smart-energy",
+      "symbol": "S381",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p381-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-382",
+      "theme": "cybersecurity",
+      "symbol": "S382",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p382-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-383",
+      "theme": "robotics-ai",
+      "symbol": "S383",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p383-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-384",
+      "theme": "smart-energy",
+      "symbol": "S384",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p384-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-385",
+      "theme": "cybersecurity",
+      "symbol": "S385",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p385-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-386",
+      "theme": "robotics-ai",
+      "symbol": "S386",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p386-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-387",
+      "theme": "smart-energy",
+      "symbol": "S387",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p387-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-388",
+      "theme": "cybersecurity",
+      "symbol": "S388",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p388-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-389",
+      "theme": "robotics-ai",
+      "symbol": "S389",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p389-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-390",
+      "theme": "smart-energy",
+      "symbol": "S390",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p390-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-391",
+      "theme": "cybersecurity",
+      "symbol": "S391",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p391-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-392",
+      "theme": "robotics-ai",
+      "symbol": "S392",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p392-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-393",
+      "theme": "smart-energy",
+      "symbol": "S393",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p393-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-394",
+      "theme": "cybersecurity",
+      "symbol": "S394",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p394-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-395",
+      "theme": "robotics-ai",
+      "symbol": "S395",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p395-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-396",
+      "theme": "smart-energy",
+      "symbol": "S396",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p396-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-397",
+      "theme": "cybersecurity",
+      "symbol": "S397",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p397-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-398",
+      "theme": "robotics-ai",
+      "symbol": "S398",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p398-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-399",
+      "theme": "smart-energy",
+      "symbol": "S399",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p399-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-400",
+      "theme": "cybersecurity",
+      "symbol": "S400",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-401",
+      "theme": "robotics-ai",
+      "symbol": "S401",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p401-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-402",
+      "theme": "smart-energy",
+      "symbol": "S402",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p402-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-403",
+      "theme": "cybersecurity",
+      "symbol": "S403",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p403-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-404",
+      "theme": "robotics-ai",
+      "symbol": "S404",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p404-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-405",
+      "theme": "smart-energy",
+      "symbol": "S405",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p405-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-406",
+      "theme": "cybersecurity",
+      "symbol": "S406",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p406-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-407",
+      "theme": "robotics-ai",
+      "symbol": "S407",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p407-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-408",
+      "theme": "smart-energy",
+      "symbol": "S408",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p408-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-409",
+      "theme": "cybersecurity",
+      "symbol": "S409",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p409-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-410",
+      "theme": "robotics-ai",
+      "symbol": "S410",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p410-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-411",
+      "theme": "smart-energy",
+      "symbol": "S411",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p411-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-412",
+      "theme": "cybersecurity",
+      "symbol": "S412",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p412-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-413",
+      "theme": "robotics-ai",
+      "symbol": "S413",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p413-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-414",
+      "theme": "smart-energy",
+      "symbol": "S414",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p414-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-415",
+      "theme": "cybersecurity",
+      "symbol": "S415",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p415-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-416",
+      "theme": "robotics-ai",
+      "symbol": "S416",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p416-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-417",
+      "theme": "smart-energy",
+      "symbol": "S417",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p417-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-418",
+      "theme": "cybersecurity",
+      "symbol": "S418",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p418-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-419",
+      "theme": "robotics-ai",
+      "symbol": "S419",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p419-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-420",
+      "theme": "smart-energy",
+      "symbol": "S420",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p420-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-421",
+      "theme": "cybersecurity",
+      "symbol": "S421",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p421-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-422",
+      "theme": "robotics-ai",
+      "symbol": "S422",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p422-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-423",
+      "theme": "smart-energy",
+      "symbol": "S423",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p423-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-424",
+      "theme": "cybersecurity",
+      "symbol": "S424",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p424-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-425",
+      "theme": "robotics-ai",
+      "symbol": "S425",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-426",
+      "theme": "smart-energy",
+      "symbol": "S426",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p426-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-427",
+      "theme": "cybersecurity",
+      "symbol": "S427",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p427-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-428",
+      "theme": "robotics-ai",
+      "symbol": "S428",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p428-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-429",
+      "theme": "smart-energy",
+      "symbol": "S429",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p429-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-430",
+      "theme": "cybersecurity",
+      "symbol": "S430",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p430-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-431",
+      "theme": "robotics-ai",
+      "symbol": "S431",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p431-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-432",
+      "theme": "smart-energy",
+      "symbol": "S432",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p432-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-433",
+      "theme": "cybersecurity",
+      "symbol": "S433",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p433-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-434",
+      "theme": "robotics-ai",
+      "symbol": "S434",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p434-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-435",
+      "theme": "smart-energy",
+      "symbol": "S435",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p435-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-436",
+      "theme": "cybersecurity",
+      "symbol": "S436",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p436-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-437",
+      "theme": "robotics-ai",
+      "symbol": "S437",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p437-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-438",
+      "theme": "smart-energy",
+      "symbol": "S438",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p438-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-439",
+      "theme": "cybersecurity",
+      "symbol": "S439",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p439-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-440",
+      "theme": "robotics-ai",
+      "symbol": "S440",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p440-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-441",
+      "theme": "smart-energy",
+      "symbol": "S441",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p441-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-442",
+      "theme": "cybersecurity",
+      "symbol": "S442",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p442-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-443",
+      "theme": "robotics-ai",
+      "symbol": "S443",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p443-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-444",
+      "theme": "smart-energy",
+      "symbol": "S444",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p444-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-445",
+      "theme": "cybersecurity",
+      "symbol": "S445",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p445-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-446",
+      "theme": "robotics-ai",
+      "symbol": "S446",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p446-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-447",
+      "theme": "smart-energy",
+      "symbol": "S447",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p447-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-448",
+      "theme": "cybersecurity",
+      "symbol": "S448",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p448-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-449",
+      "theme": "robotics-ai",
+      "symbol": "S449",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p449-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-450",
+      "theme": "smart-energy",
+      "symbol": "S450",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": true
+    },
+    {
+      "id": "rel-451",
+      "theme": "cybersecurity",
+      "symbol": "S451",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p451-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-452",
+      "theme": "robotics-ai",
+      "symbol": "S452",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p452-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-453",
+      "theme": "smart-energy",
+      "symbol": "S453",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p453-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-454",
+      "theme": "cybersecurity",
+      "symbol": "S454",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p454-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-455",
+      "theme": "robotics-ai",
+      "symbol": "S455",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p455-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-456",
+      "theme": "smart-energy",
+      "symbol": "S456",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p456-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-457",
+      "theme": "cybersecurity",
+      "symbol": "S457",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p457-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-458",
+      "theme": "robotics-ai",
+      "symbol": "S458",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p458-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-459",
+      "theme": "smart-energy",
+      "symbol": "S459",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p459-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-460",
+      "theme": "cybersecurity",
+      "symbol": "S460",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p460-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-461",
+      "theme": "robotics-ai",
+      "symbol": "S461",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p461-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-462",
+      "theme": "smart-energy",
+      "symbol": "S462",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p462-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-463",
+      "theme": "cybersecurity",
+      "symbol": "S463",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p463-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-464",
+      "theme": "robotics-ai",
+      "symbol": "S464",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p464-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-465",
+      "theme": "smart-energy",
+      "symbol": "S465",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p465-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-466",
+      "theme": "cybersecurity",
+      "symbol": "S466",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p466-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-467",
+      "theme": "robotics-ai",
+      "symbol": "S467",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p467-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-468",
+      "theme": "smart-energy",
+      "symbol": "S468",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p468-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-469",
+      "theme": "cybersecurity",
+      "symbol": "S469",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p469-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-470",
+      "theme": "robotics-ai",
+      "symbol": "S470",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p470-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-471",
+      "theme": "smart-energy",
+      "symbol": "S471",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p471-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-472",
+      "theme": "cybersecurity",
+      "symbol": "S472",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p472-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-473",
+      "theme": "robotics-ai",
+      "symbol": "S473",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p473-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-474",
+      "theme": "smart-energy",
+      "symbol": "S474",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p474-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-475",
+      "theme": "cybersecurity",
+      "symbol": "S475",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [],
+      "relevant": false
+    },
+    {
+      "id": "rel-476",
+      "theme": "robotics-ai",
+      "symbol": "S476",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p476-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-477",
+      "theme": "smart-energy",
+      "symbol": "S477",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p477-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-478",
+      "theme": "cybersecurity",
+      "symbol": "S478",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p478-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-479",
+      "theme": "robotics-ai",
+      "symbol": "S479",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p479-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-480",
+      "theme": "smart-energy",
+      "symbol": "S480",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p480-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-481",
+      "theme": "cybersecurity",
+      "symbol": "S481",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p481-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-482",
+      "theme": "robotics-ai",
+      "symbol": "S482",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p482-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-483",
+      "theme": "smart-energy",
+      "symbol": "S483",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p483-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-484",
+      "theme": "cybersecurity",
+      "symbol": "S484",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p484-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-485",
+      "theme": "robotics-ai",
+      "symbol": "S485",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p485-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-486",
+      "theme": "smart-energy",
+      "symbol": "S486",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p486-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-487",
+      "theme": "cybersecurity",
+      "symbol": "S487",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p487-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-488",
+      "theme": "robotics-ai",
+      "symbol": "S488",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p488-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-489",
+      "theme": "smart-energy",
+      "symbol": "S489",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p489-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-490",
+      "theme": "cybersecurity",
+      "symbol": "S490",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p490-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-491",
+      "theme": "robotics-ai",
+      "symbol": "S491",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p491-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-492",
+      "theme": "smart-energy",
+      "symbol": "S492",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p492-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-493",
+      "theme": "cybersecurity",
+      "symbol": "S493",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p493-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-494",
+      "theme": "robotics-ai",
+      "symbol": "S494",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p494-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-495",
+      "theme": "smart-energy",
+      "symbol": "S495",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p495-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-496",
+      "theme": "cybersecurity",
+      "symbol": "S496",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p496-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-497",
+      "theme": "robotics-ai",
+      "symbol": "S497",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p497-a"
+      ],
+      "relevant": false
+    },
+    {
+      "id": "rel-498",
+      "theme": "smart-energy",
+      "symbol": "S498",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p498-a"
+      ],
+      "relevant": true
+    },
+    {
+      "id": "rel-499",
+      "theme": "cybersecurity",
+      "symbol": "S499",
+      "snapshotId": "snap-1",
+      "labelledBy": "labeller-a",
+      "evidenceIds": [
+        "p499-a"
+      ],
+      "relevant": false
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+security_name,identifier,cusip,classification,shares,market_value_usd,weight_pct
+"CrowdStrike Holdings, Inc. (Class A)",CRWD,22788C105,Software and Computer Services,6181835,1418360222.40,8.70
+"Palo Alto Networks, Inc.",PANW,697435105,Software and Computer Services,3737018,1282993019.76,7.87
+Broadcom Inc.,AVGO,11135F101,Technology Hardware and Equipment,3855900,1173774519.00,7.20
+"Cisco Systems, Inc.",CSCO,17275R102,Telecommunications Equipment,12924312,1171459639.68,7.18
+"Fortinet, Inc.",FTNT,34959E109,Software and Computer Services,8354327,1040614971.12,6.38
+"Okta, Inc.",OKTA,679295105,Software and Computer Services,3888852,744559603.92,4.57
+"Zscaler, Inc.",ZS,98980G102,Software and Computer Services,3316948,646207809.36,3.96
+"Cloudflare, Inc. (Class A)",NET,18915M107,Software and Computer Services,2340175,643454518.00,3.95
+"Rubrik, Inc. (Class A)",RBRK,781154109,Software and Computer Services,4316159,460663650.07,2.82
+"F5, Inc.",FFIV,315616102,Software and Computer Services,1490876,453211395.24,2.78
+Accenture plc,ACN,G1151C101,Industrial Support Services,1881475,416125825.75,2.55
+Check Point Software Technologies Ltd.,CHKP,M22465104,Software and Computer Services,2491326,385856570.88,2.37
+Gen Digital Inc.,GEN,668771108,Software and Computer Services,12994138,379298888.22,2.33
+JFrog Ltd.,FROG,M6191J100,Software and Computer Services,3567403,360182843.99,2.21
+Infosys Limited (ADR),INFY,456788108,Software and Computer Services,29602297,356115632.91,2.18
+International Business Machines Corporation,IBM,459200101,Software and Computer Services,1526438,342593744.72,2.10
+Microsoft Corporation,MSFT,594918104,Software and Computer Services,703758,340984826.16,2.09
+"Leidos Holdings, Inc.",LDOS,525327102,Software and Computer Services,2546316,311185278.36,1.91
+"Arista Networks, Inc.",ANET,040413205,Telecommunications Equipment,1824452,305814644.24,1.88
+Thales S.A.,HO.FP,F9156M108,Aerospace and Defense,1261143,305523552.47,1.87
+"NetApp, Inc.",NTAP,64110D104,Technology Hardware and Equipment,1926658,303737633.70,1.86
+"Akamai Technologies, Inc.",AKAM,00971T101,Software and Computer Services,3460877,294555241.47,1.81
+"Dynatrace, Inc.",DT,268150109,Software and Computer Services,6539636,284147184.20,1.74
+Alphabet Inc. (Class A),GOOGL,02079K305,Software and Computer Services,1051896,279057489.84,1.71
+Booz Allen Hamilton Holding Corporation,BAH,099502106,Industrial Support Services,3051023,247193883.46,1.52
+"Datadog, Inc. (Class A)",DDOG,23804L103,Software and Computer Services,1506229,237035257.73,1.45
+"SentinelOne, Inc. (Class A)",S,81730H109,Software and Computer Services,9778173,224017943.43,1.37
+Elastic N.V.,ESTC,N14506104,Software and Computer Services,2797893,209254417.47,1.28
+Trend Micro Incorporated,4704.JP,J9298Q104,Software and Computer Services,4060173,189197273.44,1.16
+Science Applications International Corporation,SAIC,808625107,Software and Computer Services,1143429,162675643.83,1.00
+"Qualys, Inc.",QLYS,74758T303,Software and Computer Services,866246,161052456.32,0.99
+"Commvault Systems, Inc.",CVLT,204166102,Software and Computer Services,1051168,153365411.20,0.94
+"Varonis Systems, Inc.",VRNS,922280102,Software and Computer Services,3097796,152473519.12,0.94
+BlackBerry Ltd.,BB,09228F103,Software and Computer Services,18818141,146216955.57,0.90
+"Netskope, Inc. (Class A)",NTSK,64119N608,Software and Computer Services,5983255,143179292.15,0.88
+"Tenable Holdings, Inc.",TENB,88025T102,Software and Computer Services,2864489,120279893.11,0.74
+Open Text Corporation,OTEX.CN,683715106,Software and Computer Services,5286472,119724288.33,0.73
+"A10 Networks, Inc.",ATEN,002121101,Software and Computer Services,1935088,58749271.68,0.36
+"Fastly, Inc. (Class A)",FSLY,31188V100,Software and Computer Services,3784780,56431069.80,0.35
+"NetScout Systems, Inc.",NTCT,64115T104,Software and Computer Services,1820967,55812638.55,0.34
+US Dollar,$USD,,Other,42806190,42806189.86,0.26
+"Ziff Davis, Inc.",ZD,48123V102,Software and Computer Services,781686,38576204.10,0.24
+Radware Ltd.,RDWR,M81873107,Software and Computer Services,851157,27424278.54,0.17
+OneSpan Inc.,OSPN,68287N100,Software and Computer Services,1080404,23682455.68,0.15
+"Rapid7, Inc.",RPD,753422104,Software and Computer Services,1709352,24443733.60,0.15
+Atos Group,ATO.FP,F04805275,Software and Computer Services,596126,13164004.19,0.08
+Canadian Dollar,$CAD,,Other,1,0.72,0.00
