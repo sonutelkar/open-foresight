@@ -9,7 +9,7 @@ import {
   basketMembers, baskets, createSnapshot, esefFilingsAsOf, exchangeListings, figiMappings, filingsAsOf, kpiFrameworkVersions, kpiScores, priceBars,
   runUniverse, runs, secListings, securities,
 } from '@open-foresight/db';
-import { scoreFramework, type SpanJudge, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
+import { applyExposure, scoreFramework, type SpanJudge, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
 import { issuerKeysForSecurity } from '@open-foresight/retrieval';
 
 export type RunStatus = typeof runs.$inferSelect['status'];
@@ -21,6 +21,8 @@ export type WorkerDeps = {
   retriever: EvidenceSearcher;
   /** Optional Jev span check for level 3 and 4 scores. Off unless the worker is started with JEV_SPAN_CHECK=1. */
   judge?: SpanJudge;
+  /** Optional Jev exposure check that settles the gate KPI at level 0 for names plainly outside the theme. Off unless the worker starts with JEV_EXPOSURE_CHECK=1. */
+  exposureJudge?: SpanJudge;
   availableSources: readonly SourceId[];
   /** Securities scored at once. Each runs a few KPIs at once, so this multiplies the model calls in flight. Default 3. */
   scoreConcurrency?: number;
@@ -184,18 +186,21 @@ const frameworkVersionOf = async (db: PostgresJsDatabase, run: Run) => {
 };
 
 /** Scores every KPI for every included name. Scores already saved for this run are reused, so a retry only does the work that is left. */
-const analyseStage: Stage = async ({ db, gateway, retriever, judge, scoreConcurrency, log }, run) => {
+const analyseStage: Stage = async ({ db, gateway, retriever, judge, exposureJudge, scoreConcurrency, log }, run) => {
   const brief = briefOf(run.settings);
   if (!run.snapshotId) throw new StageFailure('The run has no data snapshot');
   const version = await frameworkVersionOf(db, run);
   const framework = version.framework as Framework;
   const rows = await db.select().from(runUniverse).where(and(eq(runUniverse.runId, run.id), eq(runUniverse.included, true)));
   let done = 0;
+  const gate = framework.kpis.find(k => k.isGate);
   await pool(rows, scoreConcurrency ?? 3, async row => {
-    await scoreFramework({
+    const ctx = {
       db, gateway, retriever, judge, runId: run.id, frameworkDraftId: version.sourceDraftId, snapshotId: run.snapshotId!, asOf: brief.asOf,
       security: { id: row.securityId!, name: row.name ?? row.symbol, symbol: row.symbol, ciks: (row.ciks as string[] | null) ?? [], issuerKeys: (row.issuerKeys as string[] | null) ?? [] },
-    }, framework, { concurrency: 3 });
+    };
+    if (exposureJudge && gate) await applyExposure({ ...ctx, judge: exposureJudge }, gate, brief.brief);
+    await scoreFramework(ctx, framework, { concurrency: 3 });
     log?.(`scored ${row.symbol} (${++done}/${rows.length})`);
   });
   return 'packaging';

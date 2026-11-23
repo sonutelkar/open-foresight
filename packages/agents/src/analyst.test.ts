@@ -7,6 +7,8 @@ import postgres from 'postgres';
 import type { ZodTypeAny } from 'zod';
 import { enabledSources, validateFramework, type FrameworkDraft, type Kpi } from '@open-foresight/core';
 import { createSnapshot, documentChunks, kpiFrameworkDrafts, kpiScores, llmCalls, runs, secFacts, secSourceDocuments, securities } from '@open-foresight/db';
+import { applyExposure } from './exposure.js';
+import type { SpanJudge } from './verifier.js';
 import { scoreFramework, scoreKpi, type AnalystContext, type EvidenceSearcher } from './analyst.js';
 import type { StructuredGenerator } from './designer.js';
 
@@ -144,6 +146,62 @@ integration('Analyst on Postgres', () => {
     expect((row?.raw as { level: string }).level).toBe('4');
     expect(row?.adjustments).toMatchObject([{ code: 'jev_unsupported', from: '4', to: '2' }]);
     expect(asked).toEqual([judgeKpi.rubric.levels['4'], judgeKpi.rubric.levels['3'], judgeKpi.rubric.levels['2']]);
+  });
+
+  describe('exposure check', () => {
+    const gate = { ...judgeKpi, isGate: true } as Kpi;
+    const choice = (pick: string, p: Record<string, number>) => ({ type: 'choice' as const, choice: pick, probabilities: { core: 0, partial: 0, none: 0, cannot_tell: 0, ...p }, confidence: 0.9 });
+    const judgeOf = (answer: ReturnType<typeof choice> | 'fail') => {
+      const requests: Array<{ state: string; role: string; questions: Record<string, { type: string; criteria?: Record<string, string> }>; inputEvidenceIds: string[] }> = [];
+      const judge: SpanJudge = { async decide(input) { requests.push({ state: input.state, role: input.role, questions: input.questions as (typeof requests)[number]['questions'], inputEvidenceIds: input.inputEvidenceIds }); if (answer === 'fail') throw new Error('Decision call failed: 503'); return { id: 'dec-1', answers: { exposure: answer } }; } };
+      return { requests, judge };
+    };
+    const gateRows = async (s: { runId: string; securityId: string }) => (await db.select().from(kpiScores).where(eq(kpiScores.runId, s.runId))).filter(r => r.securityId === s.securityId && r.kpiId === gate.id);
+    const ctx2 = (s: Awaited<ReturnType<typeof setup>>, hits: Array<ReturnType<typeof evidenceHit>>, judge: SpanJudge) => ({ ...ctxFor(s, stubGateway(s.runId, []).generator, stubSearcher(hits).retriever), judge });
+
+    it('settles the gate KPI at level 0 on a confident none, and the Analyst then reuses it without a model call', async () => {
+      const s = await setup();
+      const { judge, requests } = judgeOf(choice('none', { none: 0.97 }));
+      expect(await applyExposure(ctx2(s, [evidenceHit()], judge), gate, 'Smart energy')).toBe('settled');
+      const rows = await gateRows(s);
+      expect(rows).toHaveLength(1);
+      expect(rows[0]).toMatchObject({ level: '0', valid: true, method: 'judgement', citations: [], promptVersion: 'exposure-choice@v1', llmCallId: null });
+      expect(rows[0]?.raw).toMatchObject({ choice: 'none', decisionId: 'dec-1' });
+      expect(requests[0]).toMatchObject({ role: 'exposure' });
+      expect(Object.keys(requests[0]!.questions.exposure!.criteria!)).toEqual(['core', 'partial', 'none', 'cannot_tell']);
+      expect(requests[0]!.state).toContain('Alpha Energy Inc');
+      const g = stubGateway(s.runId, []);
+      expect(await scoreKpi(ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever), gate)).toMatchObject({ level: '0', reused: true });
+      expect(g.calls).toHaveLength(0);
+    });
+
+    it('saves nothing for core, partial, a doubtful none, cannot_tell or a failed call, so the Analyst scores the name', async () => {
+      for (const answer of [choice('core', { core: 0.9 }), choice('partial', { partial: 0.6 }), choice('none', { none: 0.7 }), choice('cannot_tell', { cannot_tell: 0.99 }), 'fail' as const]) {
+        const s = await setup();
+        expect(await applyExposure(ctx2(s, [evidenceHit()], judgeOf(answer).judge), gate, 'Smart energy')).toBe('left_to_analyst');
+        expect(await gateRows(s)).toHaveLength(0);
+      }
+    });
+
+    it('does not call Jev without passages from this security\'s own issuers, and skips a name that already has a valid gate score', async () => {
+      const s = await setup();
+      const none = judgeOf(choice('none', { none: 0.99 }));
+      expect(await applyExposure(ctx2(s, [], none.judge), gate, 'Smart energy')).toBe('left_to_analyst');
+      expect(await applyExposure(ctx2(s, [evidenceHit({ issuerKey: 'cik:somebodyelse' })], none.judge), gate, 'Smart energy')).toBe('left_to_analyst');
+      expect(none.requests).toHaveLength(0);
+      expect(await applyExposure(ctx2(s, [evidenceHit({ availableOn: '2027-01-01' })], none.judge), gate, 'Smart energy')).toBe('left_to_analyst');
+      expect(none.requests).toHaveLength(0);
+      await applyExposure(ctx2(s, [evidenceHit()], none.judge), gate, 'Smart energy');
+      expect(await applyExposure(ctx2(s, [evidenceHit()], none.judge), gate, 'Smart energy')).toBe('skipped');
+      expect(none.requests).toHaveLength(1);
+    });
+
+    it('leaves a gate KPI that is not a judgement to the Analyst', async () => {
+      const s = await setup();
+      const { judge, requests } = judgeOf(choice('none', { none: 0.99 }));
+      expect(await applyExposure(ctx2(s, [evidenceHit()], judge), { ...extractKpi, isGate: true } as Kpi, 'Smart energy')).toBe('skipped');
+      expect(requests).toHaveLength(0);
+    });
   });
 
   it('repairs a non verbatim quote once and saves both attempts', async () => {
