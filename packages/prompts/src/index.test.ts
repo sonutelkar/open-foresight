@@ -66,3 +66,36 @@ describe('Labeller prompt', () => {
     expect(l.system).not.toContain('evidenceId');
   });
 });
+
+describe('Reviewer prompt', () => {
+  it('loads with the placeholders the Reviewer fills and names every issue it must check', () => {
+    const p = loadPrompt('reviewer', 'v1');
+    const names = (t: string) => [...new Set([...t.matchAll(/\{\{([a-z_]+)\}\}/g)].map(m => m[1]))].sort();
+    expect(p.promptVersion).toMatch(/^reviewer@v1:[0-9a-f]{12}$/);
+    expect(names(p.system)).toEqual([]);
+    expect(names(p.user)).toEqual(['as_of', 'company', 'definition', 'kpi_name', 'level', 'lookback_days', 'passages', 'rubric', 'symbol', 'unknown_rule']);
+    expect(p.system).toContain('Use only the passages and the rubric');
+    for (const issue of ['wrong_entity', 'stale_evidence', 'talk_not_numbers', 'unsupported_level', 'conflict']) expect(p.system).toContain(`\`${issue}\``);
+  });
+});
+
+describe('Release labeller prompts', () => {
+  const names = (t: string) => [...new Set([...t.matchAll(/\{\{([a-z_]+)\}\}/g)].map(m => m[1]))].sort();
+  it('asks the flaw labeller for every flaw the reviewer manifest carries, in the order it checks them', () => {
+    const p = loadPrompt('labeller-flaw', 'v1');
+    expect(p.promptVersion).toMatch(/^labeller-flaw@v1:[0-9a-f]{12}$/);
+    expect(names(p.user)).toEqual(['as_of', 'company', 'definition', 'issuers', 'kpi_name', 'level', 'lookback_days', 'passages', 'rubric', 'symbol', 'web_passages', 'window_start']);
+    const order = ['wrong_issuer', 'stale_evidence', 'talk_without_numbers', 'other', 'none'].map(f => p.system.indexOf(`\`${f}\``));
+    expect(order.every((at, i) => at > 0 && (i === 0 || at > order[i - 1]!))).toBe(true);
+  });
+  it('asks the relevance labeller to judge from the passages, and from the name alone only when there are none', () => {
+    const p = loadPrompt('labeller-relevance', 'v1');
+    expect(names(p.user)).toEqual(['as_of', 'company', 'passages', 'symbol', 'theme_description', 'theme_name', 'web_passages']);
+    expect(p.system).toContain('when there are no passages of either kind, judge from the company name alone');
+  });
+  it('asks every release labeller to cite a shown web passage whenever one is shown', () => {
+    const kpi = loadPrompt('labeller-kpi', 'v1');
+    expect(names(kpi.user)).toEqual(['as_of', 'company', 'definition', 'kpi_name', 'passages', 'rubric', 'symbol', 'unknown_rule', 'web_passages']);
+    for (const name of ['labeller-kpi', 'labeller-flaw', 'labeller-relevance']) expect(loadPrompt(name, 'v1').system).toMatch(/When any web passage is shown, (also give|include at least one)/);
+  });
+});

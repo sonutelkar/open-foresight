@@ -1,0 +1,4856 @@
+{
+  "schemaVersion": 1,
+  "provenance": "fixture: Reviewer answers written by syntheticReviewerFixture in the recorded format, not model output",
+  "manifest": {
+    "schemaVersion": 1,
+    "manifestId": "fixture-reviewer-100",
+    "version": 1,
+    "supersedes": null,
+    "createdAt": "2026-11-23T00:00:00.000Z",
+    "fixture": true,
+    "provenance": "ai-generated-human-sampled",
+    "themes": [
+      "smart-energy",
+      "cybersecurity",
+      "robotics-ai"
+    ],
+    "labellers": [
+      {
+        "name": "labeller-a",
+        "kind": "ai",
+        "vendor": "anthropic",
+        "model": "labeller-a"
+      }
+    ],
+    "scorerVendors": [
+      "openai",
+      "jev"
+    ],
+    "sampling": {
+      "seed": 20261123,
+      "requested": 100,
+      "pool": 100
+    },
+    "adjudication": {
+      "method": "single-ai-labeller",
+      "adjudicators": []
+    },
+    "humanSample": {
+      "n": 10,
+      "agreed": 10,
+      "reviewers": [
+        "fixture-colleague"
+      ]
+    },
+    "missingPolicy": {
+      "unknown": "kappa-excludes-and-reports",
+      "missing": "counted-and-incomplete"
+    },
+    "contentHash": "afa6f8b33d4e38b0fcf91394a94388de02d1421c46f752488d6ebd6691341acb",
+    "kind": "reviewer",
+    "records": [
+      {
+        "id": "rvf-0",
+        "theme": "smart-energy",
+        "symbol": "S0",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-0"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-1",
+        "theme": "cybersecurity",
+        "symbol": "S1",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-1"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-2",
+        "theme": "robotics-ai",
+        "symbol": "S2",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-2"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-3",
+        "theme": "smart-energy",
+        "symbol": "S3",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-3"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-4",
+        "theme": "cybersecurity",
+        "symbol": "S4",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-4"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-5",
+        "theme": "robotics-ai",
+        "symbol": "S5",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-5"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-6",
+        "theme": "smart-energy",
+        "symbol": "S6",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-6"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-7",
+        "theme": "cybersecurity",
+        "symbol": "S7",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-7"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-8",
+        "theme": "robotics-ai",
+        "symbol": "S8",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-8"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-9",
+        "theme": "smart-energy",
+        "symbol": "S9",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-9"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-10",
+        "theme": "cybersecurity",
+        "symbol": "S10",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-10"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-11",
+        "theme": "robotics-ai",
+        "symbol": "S11",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-11"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-12",
+        "theme": "smart-energy",
+        "symbol": "S12",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-12"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-13",
+        "theme": "cybersecurity",
+        "symbol": "S13",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-13"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-14",
+        "theme": "robotics-ai",
+        "symbol": "S14",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-14"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-15",
+        "theme": "smart-energy",
+        "symbol": "S15",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-15"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-16",
+        "theme": "cybersecurity",
+        "symbol": "S16",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-16"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-17",
+        "theme": "robotics-ai",
+        "symbol": "S17",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-17"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-18",
+        "theme": "smart-energy",
+        "symbol": "S18",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-18"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-19",
+        "theme": "cybersecurity",
+        "symbol": "S19",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-19"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-20",
+        "theme": "robotics-ai",
+        "symbol": "S20",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-20"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-21",
+        "theme": "smart-energy",
+        "symbol": "S21",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-21"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-22",
+        "theme": "cybersecurity",
+        "symbol": "S22",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-22"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-23",
+        "theme": "robotics-ai",
+        "symbol": "S23",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-23"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-24",
+        "theme": "smart-energy",
+        "symbol": "S24",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-24"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-25",
+        "theme": "cybersecurity",
+        "symbol": "S25",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-25"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-26",
+        "theme": "robotics-ai",
+        "symbol": "S26",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-26"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-27",
+        "theme": "smart-energy",
+        "symbol": "S27",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-27"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-28",
+        "theme": "cybersecurity",
+        "symbol": "S28",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-28"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-29",
+        "theme": "robotics-ai",
+        "symbol": "S29",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-29"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-30",
+        "theme": "smart-energy",
+        "symbol": "S30",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-30"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-31",
+        "theme": "cybersecurity",
+        "symbol": "S31",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-31"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-32",
+        "theme": "robotics-ai",
+        "symbol": "S32",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-32"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-33",
+        "theme": "smart-energy",
+        "symbol": "S33",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-33"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-34",
+        "theme": "cybersecurity",
+        "symbol": "S34",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-34"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-35",
+        "theme": "robotics-ai",
+        "symbol": "S35",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-35"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-36",
+        "theme": "smart-energy",
+        "symbol": "S36",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-36"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-37",
+        "theme": "cybersecurity",
+        "symbol": "S37",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-37"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-38",
+        "theme": "robotics-ai",
+        "symbol": "S38",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-38"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-39",
+        "theme": "smart-energy",
+        "symbol": "S39",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-39"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-40",
+        "theme": "cybersecurity",
+        "symbol": "S40",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-40"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-41",
+        "theme": "robotics-ai",
+        "symbol": "S41",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-41"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-42",
+        "theme": "smart-energy",
+        "symbol": "S42",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-42"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-43",
+        "theme": "cybersecurity",
+        "symbol": "S43",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-43"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-44",
+        "theme": "robotics-ai",
+        "symbol": "S44",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-44"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-45",
+        "theme": "smart-energy",
+        "symbol": "S45",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-45"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-46",
+        "theme": "cybersecurity",
+        "symbol": "S46",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-46"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-47",
+        "theme": "robotics-ai",
+        "symbol": "S47",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-47"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-48",
+        "theme": "smart-energy",
+        "symbol": "S48",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-48"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-49",
+        "theme": "cybersecurity",
+        "symbol": "S49",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-49"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-50",
+        "theme": "robotics-ai",
+        "symbol": "S50",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-50"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-51",
+        "theme": "smart-energy",
+        "symbol": "S51",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-51"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-52",
+        "theme": "cybersecurity",
+        "symbol": "S52",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-52"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-53",
+        "theme": "robotics-ai",
+        "symbol": "S53",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-53"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-54",
+        "theme": "smart-energy",
+        "symbol": "S54",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-54"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-55",
+        "theme": "cybersecurity",
+        "symbol": "S55",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-55"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-56",
+        "theme": "robotics-ai",
+        "symbol": "S56",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-56"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-57",
+        "theme": "smart-energy",
+        "symbol": "S57",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-57"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-58",
+        "theme": "cybersecurity",
+        "symbol": "S58",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-58"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-59",
+        "theme": "robotics-ai",
+        "symbol": "S59",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-59"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-60",
+        "theme": "smart-energy",
+        "symbol": "S60",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-60"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-61",
+        "theme": "cybersecurity",
+        "symbol": "S61",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-61"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-62",
+        "theme": "robotics-ai",
+        "symbol": "S62",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-62"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-63",
+        "theme": "smart-energy",
+        "symbol": "S63",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-63"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-64",
+        "theme": "cybersecurity",
+        "symbol": "S64",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-64"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-65",
+        "theme": "robotics-ai",
+        "symbol": "S65",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-65"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-66",
+        "theme": "smart-energy",
+        "symbol": "S66",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-66"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-67",
+        "theme": "cybersecurity",
+        "symbol": "S67",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-67"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-68",
+        "theme": "robotics-ai",
+        "symbol": "S68",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-68"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-69",
+        "theme": "smart-energy",
+        "symbol": "S69",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-69"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-70",
+        "theme": "cybersecurity",
+        "symbol": "S70",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-70"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-71",
+        "theme": "robotics-ai",
+        "symbol": "S71",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-71"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-72",
+        "theme": "smart-energy",
+        "symbol": "S72",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-72"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-73",
+        "theme": "cybersecurity",
+        "symbol": "S73",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-73"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-74",
+        "theme": "robotics-ai",
+        "symbol": "S74",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-74"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-75",
+        "theme": "smart-energy",
+        "symbol": "S75",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-75"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-76",
+        "theme": "cybersecurity",
+        "symbol": "S76",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-76"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-77",
+        "theme": "robotics-ai",
+        "symbol": "S77",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-77"
+        ],
+        "flaw": "talk_without_numbers"
+      },
+      {
+        "id": "rvf-78",
+        "theme": "smart-energy",
+        "symbol": "S78",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-78"
+        ],
+        "flaw": "wrong_issuer"
+      },
+      {
+        "id": "rvf-79",
+        "theme": "cybersecurity",
+        "symbol": "S79",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-79"
+        ],
+        "flaw": "stale_evidence"
+      },
+      {
+        "id": "rvf-80",
+        "theme": "robotics-ai",
+        "symbol": "S80",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-80"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-81",
+        "theme": "smart-energy",
+        "symbol": "S81",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-81"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-82",
+        "theme": "cybersecurity",
+        "symbol": "S82",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-82"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-83",
+        "theme": "robotics-ai",
+        "symbol": "S83",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-83"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-84",
+        "theme": "smart-energy",
+        "symbol": "S84",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-84"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-85",
+        "theme": "cybersecurity",
+        "symbol": "S85",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-85"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-86",
+        "theme": "robotics-ai",
+        "symbol": "S86",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-86"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-87",
+        "theme": "smart-energy",
+        "symbol": "S87",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-87"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-88",
+        "theme": "cybersecurity",
+        "symbol": "S88",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-88"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-89",
+        "theme": "robotics-ai",
+        "symbol": "S89",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-89"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-90",
+        "theme": "smart-energy",
+        "symbol": "S90",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-90"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-91",
+        "theme": "cybersecurity",
+        "symbol": "S91",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-91"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-92",
+        "theme": "robotics-ai",
+        "symbol": "S92",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-92"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-93",
+        "theme": "smart-energy",
+        "symbol": "S93",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-93"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-94",
+        "theme": "cybersecurity",
+        "symbol": "S94",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-94"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-95",
+        "theme": "robotics-ai",
+        "symbol": "S95",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-95"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-96",
+        "theme": "smart-energy",
+        "symbol": "S96",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-96"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-97",
+        "theme": "cybersecurity",
+        "symbol": "S97",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-97"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-98",
+        "theme": "robotics-ai",
+        "symbol": "S98",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-98"
+        ],
+        "flaw": "none"
+      },
+      {
+        "id": "rvf-99",
+        "theme": "smart-energy",
+        "symbol": "S99",
+        "snapshotId": "snap-1",
+        "labelledBy": "labeller-a",
+        "kpiId": "grid_revenue_share",
+        "evidenceIds": [
+          "chunk-99"
+        ],
+        "flaw": "none"
+      }
+    ]
+  },
+  "calls": {
+    "rvf-0": {
+      "input": {
+        "score": {
+          "company": "Company 0 Inc",
+          "symbol": "S0",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-0",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009000",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 0 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-1": {
+      "input": {
+        "score": {
+          "company": "Company 1 Inc",
+          "symbol": "S1",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-1",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001001",
+            "availableOn": "2019-02-15",
+            "text": "Company 1 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-2": {
+      "input": {
+        "score": {
+          "company": "Company 2 Inc",
+          "symbol": "S2",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-2",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001002",
+            "availableOn": "2026-03-02",
+            "text": "Company 2 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-3": {
+      "input": {
+        "score": {
+          "company": "Company 3 Inc",
+          "symbol": "S3",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-3",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009003",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 3 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-4": {
+      "input": {
+        "score": {
+          "company": "Company 4 Inc",
+          "symbol": "S4",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-4",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001004",
+            "availableOn": "2019-02-15",
+            "text": "Company 4 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-5": {
+      "input": {
+        "score": {
+          "company": "Company 5 Inc",
+          "symbol": "S5",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-5",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001005",
+            "availableOn": "2026-03-02",
+            "text": "Company 5 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-6": {
+      "input": {
+        "score": {
+          "company": "Company 6 Inc",
+          "symbol": "S6",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-6",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009006",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 6 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-7": {
+      "input": {
+        "score": {
+          "company": "Company 7 Inc",
+          "symbol": "S7",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-7",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001007",
+            "availableOn": "2019-02-15",
+            "text": "Company 7 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-8": {
+      "input": {
+        "score": {
+          "company": "Company 8 Inc",
+          "symbol": "S8",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-8",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001008",
+            "availableOn": "2026-03-02",
+            "text": "Company 8 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-9": {
+      "input": {
+        "score": {
+          "company": "Company 9 Inc",
+          "symbol": "S9",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-9",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009009",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 9 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-10": {
+      "input": {
+        "score": {
+          "company": "Company 10 Inc",
+          "symbol": "S10",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-10",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001010",
+            "availableOn": "2019-02-15",
+            "text": "Company 10 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-11": {
+      "input": {
+        "score": {
+          "company": "Company 11 Inc",
+          "symbol": "S11",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-11",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001011",
+            "availableOn": "2026-03-02",
+            "text": "Company 11 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-12": {
+      "input": {
+        "score": {
+          "company": "Company 12 Inc",
+          "symbol": "S12",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-12",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009012",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 12 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-13": {
+      "input": {
+        "score": {
+          "company": "Company 13 Inc",
+          "symbol": "S13",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-13",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001013",
+            "availableOn": "2019-02-15",
+            "text": "Company 13 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-14": {
+      "input": {
+        "score": {
+          "company": "Company 14 Inc",
+          "symbol": "S14",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-14",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001014",
+            "availableOn": "2026-03-02",
+            "text": "Company 14 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-15": {
+      "input": {
+        "score": {
+          "company": "Company 15 Inc",
+          "symbol": "S15",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-15",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009015",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 15 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-16": {
+      "input": {
+        "score": {
+          "company": "Company 16 Inc",
+          "symbol": "S16",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-16",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001016",
+            "availableOn": "2019-02-15",
+            "text": "Company 16 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-17": {
+      "input": {
+        "score": {
+          "company": "Company 17 Inc",
+          "symbol": "S17",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-17",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001017",
+            "availableOn": "2026-03-02",
+            "text": "Company 17 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-18": {
+      "input": {
+        "score": {
+          "company": "Company 18 Inc",
+          "symbol": "S18",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-18",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009018",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 18 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-19": {
+      "input": {
+        "score": {
+          "company": "Company 19 Inc",
+          "symbol": "S19",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-19",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001019",
+            "availableOn": "2019-02-15",
+            "text": "Company 19 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"reject\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 is about another company.\",\"suggestedLevel\":null}"
+    },
+    "rvf-20": {
+      "input": {
+        "score": {
+          "company": "Company 20 Inc",
+          "symbol": "S20",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-20",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001020",
+            "availableOn": "2026-03-02",
+            "text": "Company 20 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-21": {
+      "input": {
+        "score": {
+          "company": "Company 21 Inc",
+          "symbol": "S21",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-21",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009021",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 21 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-22": {
+      "input": {
+        "score": {
+          "company": "Company 22 Inc",
+          "symbol": "S22",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-22",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001022",
+            "availableOn": "2019-02-15",
+            "text": "Company 22 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-23": {
+      "input": {
+        "score": {
+          "company": "Company 23 Inc",
+          "symbol": "S23",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-23",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001023",
+            "availableOn": "2026-03-02",
+            "text": "Company 23 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-24": {
+      "input": {
+        "score": {
+          "company": "Company 24 Inc",
+          "symbol": "S24",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-24",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009024",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 24 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-25": {
+      "input": {
+        "score": {
+          "company": "Company 25 Inc",
+          "symbol": "S25",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-25",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001025",
+            "availableOn": "2019-02-15",
+            "text": "Company 25 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-26": {
+      "input": {
+        "score": {
+          "company": "Company 26 Inc",
+          "symbol": "S26",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-26",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001026",
+            "availableOn": "2026-03-02",
+            "text": "Company 26 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-27": {
+      "input": {
+        "score": {
+          "company": "Company 27 Inc",
+          "symbol": "S27",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-27",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009027",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 27 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-28": {
+      "input": {
+        "score": {
+          "company": "Company 28 Inc",
+          "symbol": "S28",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-28",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001028",
+            "availableOn": "2019-02-15",
+            "text": "Company 28 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-29": {
+      "input": {
+        "score": {
+          "company": "Company 29 Inc",
+          "symbol": "S29",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-29",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001029",
+            "availableOn": "2026-03-02",
+            "text": "Company 29 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-30": {
+      "input": {
+        "score": {
+          "company": "Company 30 Inc",
+          "symbol": "S30",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-30",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009030",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 30 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-31": {
+      "input": {
+        "score": {
+          "company": "Company 31 Inc",
+          "symbol": "S31",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-31",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001031",
+            "availableOn": "2019-02-15",
+            "text": "Company 31 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-32": {
+      "input": {
+        "score": {
+          "company": "Company 32 Inc",
+          "symbol": "S32",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-32",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001032",
+            "availableOn": "2026-03-02",
+            "text": "Company 32 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-33": {
+      "input": {
+        "score": {
+          "company": "Company 33 Inc",
+          "symbol": "S33",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-33",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009033",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 33 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-34": {
+      "input": {
+        "score": {
+          "company": "Company 34 Inc",
+          "symbol": "S34",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-34",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001034",
+            "availableOn": "2019-02-15",
+            "text": "Company 34 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-35": {
+      "input": {
+        "score": {
+          "company": "Company 35 Inc",
+          "symbol": "S35",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-35",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001035",
+            "availableOn": "2026-03-02",
+            "text": "Company 35 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-36": {
+      "input": {
+        "score": {
+          "company": "Company 36 Inc",
+          "symbol": "S36",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-36",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009036",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 36 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-37": {
+      "input": {
+        "score": {
+          "company": "Company 37 Inc",
+          "symbol": "S37",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-37",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001037",
+            "availableOn": "2019-02-15",
+            "text": "Company 37 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-38": {
+      "input": {
+        "score": {
+          "company": "Company 38 Inc",
+          "symbol": "S38",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-38",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001038",
+            "availableOn": "2026-03-02",
+            "text": "Company 38 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-39": {
+      "input": {
+        "score": {
+          "company": "Company 39 Inc",
+          "symbol": "S39",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-39",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009039",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 39 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. Passage e1 is old. \",\"suggestedLevel\":null}"
+    },
+    "rvf-40": {
+      "input": {
+        "score": {
+          "company": "Company 40 Inc",
+          "symbol": "S40",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-40",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001040",
+            "availableOn": "2019-02-15",
+            "text": "Company 40 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-41": {
+      "input": {
+        "score": {
+          "company": "Company 41 Inc",
+          "symbol": "S41",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-41",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001041",
+            "availableOn": "2026-03-02",
+            "text": "Company 41 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-42": {
+      "input": {
+        "score": {
+          "company": "Company 42 Inc",
+          "symbol": "S42",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-42",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009042",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 42 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-43": {
+      "input": {
+        "score": {
+          "company": "Company 43 Inc",
+          "symbol": "S43",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-43",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001043",
+            "availableOn": "2019-02-15",
+            "text": "Company 43 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-44": {
+      "input": {
+        "score": {
+          "company": "Company 44 Inc",
+          "symbol": "S44",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-44",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001044",
+            "availableOn": "2026-03-02",
+            "text": "Company 44 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-45": {
+      "input": {
+        "score": {
+          "company": "Company 45 Inc",
+          "symbol": "S45",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-45",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009045",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 45 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-46": {
+      "input": {
+        "score": {
+          "company": "Company 46 Inc",
+          "symbol": "S46",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-46",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001046",
+            "availableOn": "2019-02-15",
+            "text": "Company 46 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-47": {
+      "input": {
+        "score": {
+          "company": "Company 47 Inc",
+          "symbol": "S47",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-47",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001047",
+            "availableOn": "2026-03-02",
+            "text": "Company 47 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-48": {
+      "input": {
+        "score": {
+          "company": "Company 48 Inc",
+          "symbol": "S48",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-48",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009048",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 48 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-49": {
+      "input": {
+        "score": {
+          "company": "Company 49 Inc",
+          "symbol": "S49",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-49",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001049",
+            "availableOn": "2019-02-15",
+            "text": "Company 49 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-50": {
+      "input": {
+        "score": {
+          "company": "Company 50 Inc",
+          "symbol": "S50",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-50",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001050",
+            "availableOn": "2026-03-02",
+            "text": "Company 50 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-51": {
+      "input": {
+        "score": {
+          "company": "Company 51 Inc",
+          "symbol": "S51",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-51",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009051",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 51 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-52": {
+      "input": {
+        "score": {
+          "company": "Company 52 Inc",
+          "symbol": "S52",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-52",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001052",
+            "availableOn": "2019-02-15",
+            "text": "Company 52 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-53": {
+      "input": {
+        "score": {
+          "company": "Company 53 Inc",
+          "symbol": "S53",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-53",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001053",
+            "availableOn": "2026-03-02",
+            "text": "Company 53 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-54": {
+      "input": {
+        "score": {
+          "company": "Company 54 Inc",
+          "symbol": "S54",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-54",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009054",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 54 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-55": {
+      "input": {
+        "score": {
+          "company": "Company 55 Inc",
+          "symbol": "S55",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-55",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001055",
+            "availableOn": "2019-02-15",
+            "text": "Company 55 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-56": {
+      "input": {
+        "score": {
+          "company": "Company 56 Inc",
+          "symbol": "S56",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-56",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001056",
+            "availableOn": "2026-03-02",
+            "text": "Company 56 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-57": {
+      "input": {
+        "score": {
+          "company": "Company 57 Inc",
+          "symbol": "S57",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-57",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009057",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 57 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-58": {
+      "input": {
+        "score": {
+          "company": "Company 58 Inc",
+          "symbol": "S58",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-58",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001058",
+            "availableOn": "2019-02-15",
+            "text": "Company 58 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-59": {
+      "input": {
+        "score": {
+          "company": "Company 59 Inc",
+          "symbol": "S59",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-59",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001059",
+            "availableOn": "2026-03-02",
+            "text": "Company 59 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"note\":\"Passage e1 states plans only.\",\"suggestedLevel\":null}"
+    },
+    "rvf-60": {
+      "input": {
+        "score": {
+          "company": "Company 60 Inc",
+          "symbol": "S60",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-60",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009060",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 60 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-61": {
+      "input": {
+        "score": {
+          "company": "Company 61 Inc",
+          "symbol": "S61",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-61",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001061",
+            "availableOn": "2019-02-15",
+            "text": "Company 61 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-62": {
+      "input": {
+        "score": {
+          "company": "Company 62 Inc",
+          "symbol": "S62",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-62",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001062",
+            "availableOn": "2026-03-02",
+            "text": "Company 62 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-63": {
+      "input": {
+        "score": {
+          "company": "Company 63 Inc",
+          "symbol": "S63",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-63",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009063",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 63 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-64": {
+      "input": {
+        "score": {
+          "company": "Company 64 Inc",
+          "symbol": "S64",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-64",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001064",
+            "availableOn": "2019-02-15",
+            "text": "Company 64 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-65": {
+      "input": {
+        "score": {
+          "company": "Company 65 Inc",
+          "symbol": "S65",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-65",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001065",
+            "availableOn": "2026-03-02",
+            "text": "Company 65 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 states no share of revenue, so it cannot support level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-66": {
+      "input": {
+        "score": {
+          "company": "Company 66 Inc",
+          "symbol": "S66",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-66",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009066",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 66 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-67": {
+      "input": {
+        "score": {
+          "company": "Company 67 Inc",
+          "symbol": "S67",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-67",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001067",
+            "availableOn": "2019-02-15",
+            "text": "Company 67 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-68": {
+      "input": {
+        "score": {
+          "company": "Company 68 Inc",
+          "symbol": "S68",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-68",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001068",
+            "availableOn": "2026-03-02",
+            "text": "Company 68 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-69": {
+      "input": {
+        "score": {
+          "company": "Company 69 Inc",
+          "symbol": "S69",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-69",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009069",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 69 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-70": {
+      "input": {
+        "score": {
+          "company": "Company 70 Inc",
+          "symbol": "S70",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-70",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001070",
+            "availableOn": "2019-02-15",
+            "text": "Company 70 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-71": {
+      "input": {
+        "score": {
+          "company": "Company 71 Inc",
+          "symbol": "S71",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-71",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001071",
+            "availableOn": "2026-03-02",
+            "text": "Company 71 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-72": {
+      "input": {
+        "score": {
+          "company": "Company 72 Inc",
+          "symbol": "S72",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-72",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009072",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 72 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-73": {
+      "input": {
+        "score": {
+          "company": "Company 73 Inc",
+          "symbol": "S73",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-73",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001073",
+            "availableOn": "2019-02-15",
+            "text": "Company 73 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":null}"
+    },
+    "rvf-74": {
+      "input": {
+        "score": {
+          "company": "Company 74 Inc",
+          "symbol": "S74",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-74",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001074",
+            "availableOn": "2026-03-02",
+            "text": "Company 74 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-75": {
+      "input": {
+        "score": {
+          "company": "Company 75 Inc",
+          "symbol": "S75",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-75",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009075",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 75 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-76": {
+      "input": {
+        "score": {
+          "company": "Company 76 Inc",
+          "symbol": "S76",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-76",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001076",
+            "availableOn": "2019-02-15",
+            "text": "Company 76 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"stale_evidence\",\"note\":\"Passage e1 is from 2019, outside the 730 day lookback to the as-of date.\",\"suggestedLevel\":\"unknown\"}"
+    },
+    "rvf-77": {
+      "input": {
+        "score": {
+          "company": "Company 77 Inc",
+          "symbol": "S77",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-77",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001077",
+            "availableOn": "2026-03-02",
+            "text": "Company 77 Inc plans to become a leader in grid modernisation and sees strong demand ahead."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"talk_not_numbers\",\"note\":\"Passage e1 states plans only. Level 3 needs a disclosed share of revenue.\",\"suggestedLevel\":null}"
+    },
+    "rvf-78": {
+      "input": {
+        "score": {
+          "company": "Company 78 Inc",
+          "symbol": "S78",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-78",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000009078",
+            "availableOn": "2026-03-02",
+            "text": "Other Holdings 78 Corp reported that its grid segment generated 31% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"wrong_entity\",\"note\":\"Passage e1 reports the revenue of a different company, so it is no evidence for this one.\",\"suggestedLevel\":null}"
+    },
+    "rvf-79": {
+      "input": {
+        "score": {
+          "company": "Company 79 Inc",
+          "symbol": "S79",
+          "asOf": "2026-11-20",
+          "level": "3"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-79",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001079",
+            "availableOn": "2019-02-15",
+            "text": "Company 79 Inc reported that grid products generated 28% of total revenue in fiscal 2018."
+          }
+        ]
+      },
+      "response": "The score looks fine to me."
+    },
+    "rvf-80": {
+      "input": {
+        "score": {
+          "company": "Company 80 Inc",
+          "symbol": "S80",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-80",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001080",
+            "availableOn": "2026-03-02",
+            "text": "Company 80 Inc reported that grid products generated 12% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-81": {
+      "input": {
+        "score": {
+          "company": "Company 81 Inc",
+          "symbol": "S81",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-81",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001081",
+            "availableOn": "2026-03-02",
+            "text": "Company 81 Inc reported that grid products generated 13% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-82": {
+      "input": {
+        "score": {
+          "company": "Company 82 Inc",
+          "symbol": "S82",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-82",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001082",
+            "availableOn": "2026-03-02",
+            "text": "Company 82 Inc reported that grid products generated 14% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"conflict\",\"note\":\"Passage e1 could be read as level 2 or 3.\",\"suggestedLevel\":null}"
+    },
+    "rvf-83": {
+      "input": {
+        "score": {
+          "company": "Company 83 Inc",
+          "symbol": "S83",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-83",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001083",
+            "availableOn": "2026-03-02",
+            "text": "Company 83 Inc reported that grid products generated 15% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-84": {
+      "input": {
+        "score": {
+          "company": "Company 84 Inc",
+          "symbol": "S84",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-84",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001084",
+            "availableOn": "2026-03-02",
+            "text": "Company 84 Inc reported that grid products generated 16% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-85": {
+      "input": {
+        "score": {
+          "company": "Company 85 Inc",
+          "symbol": "S85",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-85",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001085",
+            "availableOn": "2026-03-02",
+            "text": "Company 85 Inc reported that grid products generated 17% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-86": {
+      "input": {
+        "score": {
+          "company": "Company 86 Inc",
+          "symbol": "S86",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-86",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001086",
+            "availableOn": "2026-03-02",
+            "text": "Company 86 Inc reported that grid products generated 18% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-87": {
+      "input": {
+        "score": {
+          "company": "Company 87 Inc",
+          "symbol": "S87",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-87",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001087",
+            "availableOn": "2026-03-02",
+            "text": "Company 87 Inc reported that grid products generated 19% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-88": {
+      "input": {
+        "score": {
+          "company": "Company 88 Inc",
+          "symbol": "S88",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-88",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001088",
+            "availableOn": "2026-03-02",
+            "text": "Company 88 Inc reported that grid products generated 20% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"escalate\",\"issue\":\"other\",\"note\":\"The fiscal year of passage e1 is unclear.\",\"suggestedLevel\":null}"
+    },
+    "rvf-89": {
+      "input": {
+        "score": {
+          "company": "Company 89 Inc",
+          "symbol": "S89",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-89",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001089",
+            "availableOn": "2026-03-02",
+            "text": "Company 89 Inc reported that grid products generated 21% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-90": {
+      "input": {
+        "score": {
+          "company": "Company 90 Inc",
+          "symbol": "S90",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-90",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001090",
+            "availableOn": "2026-03-02",
+            "text": "Company 90 Inc reported that grid products generated 12% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-91": {
+      "input": {
+        "score": {
+          "company": "Company 91 Inc",
+          "symbol": "S91",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-91",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001091",
+            "availableOn": "2026-03-02",
+            "text": "Company 91 Inc reported that grid products generated 13% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-92": {
+      "input": {
+        "score": {
+          "company": "Company 92 Inc",
+          "symbol": "S92",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-92",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001092",
+            "availableOn": "2026-03-02",
+            "text": "Company 92 Inc reported that grid products generated 14% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-93": {
+      "input": {
+        "score": {
+          "company": "Company 93 Inc",
+          "symbol": "S93",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-93",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001093",
+            "availableOn": "2026-03-02",
+            "text": "Company 93 Inc reported that grid products generated 15% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-94": {
+      "input": {
+        "score": {
+          "company": "Company 94 Inc",
+          "symbol": "S94",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-94",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001094",
+            "availableOn": "2026-03-02",
+            "text": "Company 94 Inc reported that grid products generated 16% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"retry\",\"issue\":\"unsupported_level\",\"note\":\"Passage e1 supports level 1 at most.\",\"suggestedLevel\":\"1\"}"
+    },
+    "rvf-95": {
+      "input": {
+        "score": {
+          "company": "Company 95 Inc",
+          "symbol": "S95",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-95",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001095",
+            "availableOn": "2026-03-02",
+            "text": "Company 95 Inc reported that grid products generated 17% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-96": {
+      "input": {
+        "score": {
+          "company": "Company 96 Inc",
+          "symbol": "S96",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-96",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001096",
+            "availableOn": "2026-03-02",
+            "text": "Company 96 Inc reported that grid products generated 18% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-97": {
+      "input": {
+        "score": {
+          "company": "Company 97 Inc",
+          "symbol": "S97",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-97",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001097",
+            "availableOn": "2026-03-02",
+            "text": "Company 97 Inc reported that grid products generated 19% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-98": {
+      "input": {
+        "score": {
+          "company": "Company 98 Inc",
+          "symbol": "S98",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-98",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001098",
+            "availableOn": "2026-03-02",
+            "text": "Company 98 Inc reported that grid products generated 20% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 discloses a grid share of revenue within level 2.\",\"suggestedLevel\":null}"
+    },
+    "rvf-99": {
+      "input": {
+        "score": {
+          "company": "Company 99 Inc",
+          "symbol": "S99",
+          "asOf": "2026-11-20",
+          "level": "2"
+        },
+        "kpi": {
+          "name": "Grid revenue share",
+          "definition": "Share of total revenue from grid equipment and grid services.",
+          "lookbackDays": 730,
+          "rubric": {
+            "levels": {
+              "0": "No grid revenue is disclosed.",
+              "1": "Grid revenue is below 10% of total revenue.",
+              "2": "Grid revenue is 10% to 25% of total revenue.",
+              "3": "Grid revenue is 25% to 50% of total revenue.",
+              "4": "Grid revenue is above 50% of total revenue."
+            },
+            "unknown": "The passages state no share of revenue for grid products."
+          }
+        },
+        "passages": [
+          {
+            "id": "e1",
+            "chunkId": "chunk-99",
+            "section": "Item 7. Management discussion",
+            "issuer": "cik:0000001099",
+            "availableOn": "2026-03-02",
+            "text": "Company 99 Inc reported that grid products generated 21% of total revenue in fiscal 2025."
+          }
+        ]
+      },
+      "response": "{\"verdict\":\"accept\",\"issue\":\"none\",\"note\":\"Passage e1 supports level 2.\",\"suggestedLevel\":null,\"reasoning\":\"hidden\"}"
+    }
+  }
+}

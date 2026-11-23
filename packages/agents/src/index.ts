@@ -4,3 +4,4 @@ export * from './verifier.js';
 export * from './exposure.js';
 export * from './jev-scorer.js';
 export * from './discovery.js';
+export * from './reviewer.js';

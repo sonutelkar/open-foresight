@@ -122,6 +122,7 @@
       "name": "@open-foresight/evals",
       "version": "0.0.0",
       "dependencies": {
+        "@open-foresight/core": "workspace:*",
         "zod": "3.25.76",
       },
       "devDependencies": {

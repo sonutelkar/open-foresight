@@ -10,4 +10,7 @@ export * from './validate.js';
 export * from './leakage.js';
 export * from './metrics.js';
 export * from './phase2.js';
+export * from './reviewer.js';
 export * from './synthetic.js';
+export * from './release-labels.js';
+export * from './release-fixture.js';
