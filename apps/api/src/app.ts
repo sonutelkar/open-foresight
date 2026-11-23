@@ -1,13 +1,13 @@
 import { timingSafeEqual } from 'node:crypto';
 import { readFile } from 'node:fs/promises';
 import { extname, join, normalize } from 'node:path';
-import { desc, eq } from 'drizzle-orm';
+import { and, desc, eq, inArray } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { z } from 'zod';
-import { availableQuantIds, briefLimits, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
-import { basketMembers, baskets, humanDecisions, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
+import { availableQuantIds, briefLimits, esefReportLink, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, quoteInPassage, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
+import { basketMembers, baskets, documentChunks, esefFilings, humanDecisions, kpiScores, secFilings, secSourceDocuments, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
 
 export type AppDeps = {
   db: PostgresJsDatabase;
@@ -107,6 +107,52 @@ export function createApp(deps: AppDeps) {
         status: basket.status, unknownMode: basket.unknownMode, rules: basket.rules, funnel: basket.funnel, cap: basket.cap, excluded: basket.excluded, createdAt: basket.createdAt,
         members: members.map(m => ({ rank: m.rank, symbol: m.symbol, name: m.name, score: Number(m.score), confidence: Number(m.confidence), weightPercent: Number(m.weightPercent), atCap: m.atCap, unknownWeight: Number(m.unknownWeight), capAdjustment: Number(m.capAdjustment), contributions: m.contributions })),
       } : null,
+    });
+  });
+
+  /**
+   * The evidence behind one basket member: per KPI, the latest valid score with its rationale and cited quotes.
+   * Each quote carries a link to its source filing and a flag for whether it appears verbatim in the stored passage, so a reader can trace it.
+   */
+  app.get('/api/runs/:id/members/:symbol/evidence', async c => {
+    const id = c.req.param('id'), symbol = c.req.param('symbol');
+    if (!z.string().uuid().safeParse(id).success) return c.json({ error: 'Invalid run id' }, 400);
+    const [basket] = await deps.db.select({ id: baskets.id, frameworkVersionId: baskets.frameworkVersionId }).from(baskets).where(eq(baskets.runId, id));
+    if (!basket) return c.json({ error: 'The run has no basket' }, 404);
+    const [member] = await deps.db.select({ securityId: basketMembers.securityId, symbol: basketMembers.symbol, name: basketMembers.name }).from(basketMembers).where(and(eq(basketMembers.basketId, basket.id), eq(basketMembers.symbol, symbol)));
+    if (!member) return c.json({ error: 'That name is not in the basket' }, 404);
+    const [version] = await deps.db.select({ framework: kpiFrameworkVersions.framework }).from(kpiFrameworkVersions).where(eq(kpiFrameworkVersions.id, basket.frameworkVersionId));
+    const rows = await deps.db.select().from(kpiScores).where(and(eq(kpiScores.runId, id), eq(kpiScores.securityId, member.securityId))).orderBy(desc(kpiScores.attempt));
+    const latest = new Map<string, (typeof rows)[number]>();
+    for (const r of rows) { const have = latest.get(r.kpiId); if (!have || (r.valid && !have.valid)) latest.set(r.kpiId, r); }
+    type Cited = { evidenceId: string; quote: string; chunkId: string; docKind: string; docId: string; section: string; availableOn: string; startOffset: number; endOffset: number };
+    const cited = [...latest.values()].flatMap(r => (r.citations as Cited[]));
+    const chunks = cited.length ? await deps.db.select({ id: documentChunks.id, text: documentChunks.text }).from(documentChunks).where(inArray(documentChunks.id, [...new Set(cited.map(x => x.chunkId))])) : [];
+    const chunkText = new Map(chunks.map(x => [x.id, x.text]));
+    const secIds = [...new Set(cited.filter(x => x.docKind === 'sec_filing').map(x => x.docId))], esefIds = [...new Set(cited.filter(x => x.docKind === 'esef_filing').map(x => x.docId))];
+    const [secDocs, esefDocs] = await Promise.all([
+      secIds.length ? deps.db.select({ id: secFilings.id, form: secFilings.form, filedAt: secFilings.filedAt, url: secSourceDocuments.url }).from(secFilings).innerJoin(secSourceDocuments, eq(secSourceDocuments.id, secFilings.documentSourceId)).where(inArray(secFilings.id, secIds)) : [],
+      esefIds.length ? deps.db.select({ id: esefFilings.id, entity: esefFilings.entityName, periodEnd: esefFilings.periodEnd, reportUrl: esefFilings.reportUrl }).from(esefFilings).where(inArray(esefFilings.id, esefIds)) : [],
+    ]);
+    const source = new Map<string, { label: string; url: string }>([
+      ...secDocs.map(d => [d.id, { label: `SEC ${d.form} filed ${d.filedAt}`, url: d.url }] as const),
+      ...esefDocs.map(d => [d.id, { label: `${d.entity} ESEF report for the period ending ${d.periodEnd}`, url: esefReportLink(d.reportUrl) }] as const),
+    ]);
+    const kpis = (version?.framework as Framework | undefined)?.kpis ?? [];
+    return c.json({
+      symbol: member.symbol, name: member.name,
+      kpis: kpis.map(k => {
+        const r = latest.get(k.id);
+        if (!r) return { kpiId: k.id, name: k.name, method: k.method, scored: false };
+        return {
+          kpiId: k.id, name: k.name, method: r.method, scored: true, level: r.level, confidence: Number(r.confidence), valid: r.valid, rationale: r.rationale, conflicts: r.conflicts,
+          extractedValue: r.extractedValue === null ? null : Number(r.extractedValue), unit: r.unit, quantValue: r.quantValue === null ? null : Number(r.quantValue), quantInputs: r.quantInputs,
+          citations: (r.citations as Cited[]).map(x => {
+            const text = chunkText.get(x.chunkId), src = source.get(x.docId);
+            return { evidenceId: x.evidenceId, quote: x.quote, section: x.section, availableOn: x.availableOn, docKind: x.docKind, chunkId: x.chunkId, startOffset: x.startOffset, endOffset: x.endOffset, sourceLabel: src?.label ?? null, sourceUrl: src?.url ?? null, quoteVerified: text !== undefined && quoteInPassage(x.quote, text) };
+          }),
+        };
+      }),
     });
   });
 

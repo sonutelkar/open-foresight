@@ -21,7 +21,7 @@ export type Basket = {
   status: 'provisional'; unknownMode: 'strict' | 'lenient';
   funnel: { universe: number; screened: number; candidates: number; gateFailed: number; gateUnknown: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
   cap: { requestedPercent: number; usedPercent: number; relaxed: boolean };
-  members: Array<{ rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
+  members: Array<{ rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; capAdjustment: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
 };
 export type Auth = { analyst: string; token: string };
 export class ApiError extends Error {
@@ -40,3 +40,7 @@ export const listRuns = () => call<RunSummary[]>('/api/runs');
 export const getRun = (id: string) => call<RunDetail>(`/api/runs/${id}`);
 export const createRun = (brief: Brief | Record<string, unknown>, a: Auth) => call<{ runId: string }>('/api/runs', { method: 'POST', headers: headers(a), body: JSON.stringify(brief) });
 export const approveRun = (id: string, body: { framework: Framework; exclusions: string[]; reason?: string }, a: Auth) => call<{ versionId: string; version: number; status: string }>(`/api/runs/${id}/approve`, { method: 'POST', headers: headers(a), body: JSON.stringify(body) });
+export type Citation = { evidenceId: string; quote: string; section: string; availableOn: string; docKind: string; chunkId: string; startOffset: number; endOffset: number; sourceLabel: string | null; sourceUrl: string | null; quoteVerified: boolean };
+export type KpiEvidence = { kpiId: string; name: string; method: string; scored: boolean; level?: string; confidence?: number; valid?: boolean; rationale?: string; conflicts?: string[]; extractedValue?: number | null; unit?: string | null; quantValue?: number | null; citations?: Citation[] };
+export type MemberEvidence = { symbol: string; name: string; kpis: KpiEvidence[] };
+export const getEvidence = (runId: string, symbol: string) => call<MemberEvidence>(`/api/runs/${runId}/members/${encodeURIComponent(symbol)}/evidence`);
