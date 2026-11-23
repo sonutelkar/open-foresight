@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { frameworkToDraft, validateFramework, type Framework, type FrameworkError, type Kpi, type SourceId } from '@open-foresight/core';
+import { BasketSection } from './BasketSection';
 import { ApiError, approveRun, getRun, type Auth, type Config, type RunDetail } from './api';
 
 const stages = ['Brief', 'Universe', 'Designer', 'KPI approval', 'Scoring', 'Basket'] as const;
@@ -49,7 +50,7 @@ export function RunPage({ id, config, auth }: { id: string; config: Config; auth
       {['prescreening', 'analysing', 'packaging'].includes(run.status) && <div className="banner info" data-testid="scoring"><span className="spinner" aria-hidden /> The worker is scoring every name against the approved KPIs. This takes a few minutes for 50 names.</div>}
       {run.status === 'failed' && <div className="banner bad" role="alert" data-testid="run-failed"><strong>The run failed.</strong>{[run.settings.failure?.message, ...(run.settings.designError ?? [])].filter(Boolean).map((m, i) => <p key={i}>{m}</p>)}</div>}
       {run.status === 'awaiting_kpi_approval' && run.draft && <Gate run={run} config={config} auth={auth} onApproved={refresh} />}
-      {run.basket && <BasketSummary basket={run.basket} />}
+      <BasketSection run={run} />
       {run.versions.length > 0 && <Approved run={run} />}
     </div>
   );
@@ -212,24 +213,6 @@ function Approved({ run }: { run: RunDetail }) {
         <tbody>{v.framework.kpis.map(k => <tr key={k.id}><td>{k.name}{k.isGate ? <span className="badge gate" style={{ marginLeft: 8 }}>Gate</span> : null}</td><td><span className={`badge ${k.method}`}>{methodLabel[k.method]}</span></td><td className="num">{k.weightPercent}</td></tr>)}</tbody>
       </table>
       {v.exclusions.length > 0 && <p className="muted" style={{ marginTop: 12 }}>Exclusions: {v.exclusions.join(', ')}</p>}
-    </section>
-  );
-}
-
-function BasketSummary({ basket }: { basket: NonNullable<RunDetail['basket']> }) {
-  const f = basket.funnel;
-  return (
-    <section className="card" data-testid="basket">
-      <div className="card-head">
-        <div><p className="card-title">Provisional basket</p><p className="card-sub">Provisional until a reviewer gate exists. Unknown KPIs are treated as {basket.unknownMode === 'strict' ? 'level 0' : 'missing, and the other weights are renormalised'}.</p></div>
-        <span className="pill warn">Provisional</span>
-      </div>
-      <p className="muted tnum" data-testid="funnel" style={{ margin: '12px 0' }}>{f.universe} listings, {f.screened} screened in, {f.candidates} scored, {f.gateFailed} failed the gate, {f.gateUnknown} had no evidence on the gate KPI, {f.zeroScore} scored zero, {f.selected} selected{f.belowCutoff ? `, ${f.belowCutoff} below the cutoff` : ''}.</p>
-      {basket.cap.relaxed && <div className="banner info" data-testid="cap-relaxed">Only {f.selected} names qualified, so the per-name cap of {basket.cap.requestedPercent}% was raised to {basket.cap.usedPercent}% to reach a total of 100%.</div>}
-      <table className="frozen">
-        <thead><tr><th className="rank">#</th><th>Name</th><th className="num">Score</th><th className="num">Confidence</th><th className="num">Weight %</th></tr></thead>
-        <tbody>{basket.members.map(m => <tr key={m.symbol} data-testid={`basket-row-${m.symbol}`}><td className="rank">{m.rank}</td><td>{m.name} <span className="muted">{m.symbol}</span></td><td className="num">{m.score.toFixed(3)}</td><td className="num">{m.confidence.toFixed(2)}</td><td className="num">{m.weightPercent.toFixed(2)}{m.atCap ? ' (cap)' : ''}</td></tr>)}</tbody>
-      </table>
     </section>
   );
 }

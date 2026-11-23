@@ -189,3 +189,9 @@ table.frozen td.num, table.frozen th.num { text-align: right; font-variant-numer
 
 /* Rank column of the basket table: left aligned, with room before the name. */
 .frozen th.rank, .frozen td.rank { text-align: left; width: 2.75rem; color: var(--muted, #6b6b6b); font-variant-numeric: tabular-nums; }
+
+table.basket button.link { text-align: left; }
+.quote { margin: 8px 0; padding: 6px 12px; border-left: 3px solid var(--line, #ccc); }
+.quote[data-verified="false"] { border-left-color: var(--warn, #b45309); }
+.quote footer { font-size: 0.85em; margin-top: 4px; }
+.rationale-text { color: var(--ink-2); font-size: 13px; margin: 6px 0 0; }

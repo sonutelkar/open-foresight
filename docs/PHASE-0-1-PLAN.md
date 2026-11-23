@@ -203,11 +203,12 @@ For every performance check, measure the same command on trunk first, with the s
 
 ### PR 16. Basket UI and evidence
 
-- [ ] Depends on 14 and 15. Files: `apps/web`, `apps/api`, `packages/core`.
-- [ ] Display the provisional basket, scores, weights, and per-name KPI evidence with source links and the phase 1 review limitation.
-- [ ] Unit: cover empty and failed runs, score rendering, and evidence links.
-- [ ] Live: open the recorded 50-stock basket in a browser and trace a displayed quote to the stored source.
-- [ ] Perf: measure local API response for a 50-name basket over 100 requests; fail above 10 seconds total.
+- [x] Depends on 14 and 15. Files: `apps/web`, `apps/api`, `packages/core`.
+- [x] Display the provisional basket, scores, weights, and per-name KPI evidence with source links and the phase 1 review limitation.
+- [x] Scope. Add `GET /api/runs/:id/members/:symbol/evidence`, which returns each KPI's latest valid score with its rationale and cited quotes. Each quote carries a link to its SEC or ESEF source and a flag for whether it appears verbatim in the stored passage. The pure helpers `basketView`, `formatScore`, `quoteInPassage` and `esefReportLink` are in `packages/core/src/evidence.ts`. The run page lists the basket with the review limitation, and a name opens its KPI evidence on click. No migration and no new stored data.
+- [x] Unit: cover empty and failed runs, score rendering, and evidence links. `packages/core/src/evidence.test.ts` covers the helpers and `apps/api/src/basket.test.ts` covers the endpoint on Postgres, including a quote that is not in its passage, an empty basket, and unknown names and run ids. The web app has no component test harness, so rendering is checked in the live step.
+- [x] Live: open the recorded 50-stock basket in a browser and trace a displayed quote to the stored source. `apps/web/scripts/browser-live-basket.ts` opened the stored PR 15 run (14 members) in Chromium, expanded the top name, and matched its displayed quote to the cited chunk text and its link to the stored filing URL. The 14-member basket is the one the PR 15 live run produced. Screenshots are `docs/screenshots/pr16-1-basket.png` and `pr16-2-evidence.png`. It did not open the linked SEC page, which is a live external site.
+- [x] Perf: measure local API response for a 50-name basket over 100 requests; fail above 10 seconds total. The basket and evidence endpoints took 810 ms for 100 requests each, a median of 4 ms each.
 - [ ] Obtain operator review of the interaction before merge.
 
 ### PR 17. Pilot and phase gate
