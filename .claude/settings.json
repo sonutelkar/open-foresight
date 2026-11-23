@@ -1,5 +1,6 @@
 {
   "enabledPlugins": {
-    "pstack@cursor-plugins": true
+    "pstack@cursor-plugins": true,
+    "impeccable@impeccable": true
   }
 }
