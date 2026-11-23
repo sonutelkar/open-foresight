@@ -1,7 +1,7 @@
 import { and, desc, eq, inArray, sql } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import {
-  briefSchema, exchangeOf, exchanges, packageBasket, unknownModeFor, type Brief, type Framework, type Region, type ScoreLevel,
+  briefSchema, defaultMinKnownWeight, exchangeOf, exchanges, packageBasket, unknownModeFor, type Brief, type Framework, type Region, type ScoreLevel,
   type BasketCandidate, type BasketKpi, type SourceId,
 } from '@open-foresight/core';
 import { buildUniverse, fxToUsdAsOf } from '@open-foresight/data';
@@ -221,7 +221,7 @@ const packageStage: Stage = async ({ db }, run) => {
     securityId: u.securityId!, symbol: u.symbol, name: u.name ?? u.symbol, marketCapUsd: Number(u.marketCapUsd ?? 0), advUsd: Number(u.advUsd ?? 0),
     scores: Object.fromEntries(kpis.flatMap(k => { const v = best.get(`${u.securityId}|${k.id}`); return v ? [[k.id, v]] : []; })),
   }));
-  const rules = { size: brief.basketSize, weightCapPercent: brief.weightCapPercent, weighting: brief.weighting, unknownMode: unknownModeFor(brief.exposureStyle) };
+  const rules = { size: brief.basketSize, weightCapPercent: brief.weightCapPercent, weighting: brief.weighting, unknownMode: unknownModeFor(brief.exposureStyle), minKnownWeight: defaultMinKnownWeight };
   const basket = packageBasket({ candidates, kpis, rules });
   const allRows = await db.select({ included: runUniverse.included }).from(runUniverse).where(eq(runUniverse.runId, run.id));
   const funnel = { universe: allRows.length, screened: allRows.filter(r => r.included).length, ...basket.funnel };

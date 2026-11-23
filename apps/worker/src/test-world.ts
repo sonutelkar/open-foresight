@@ -104,8 +104,8 @@ export const answers: Record<string, { extracted: number; level: '0' | '1' | '2'
   'Alpha Energy Inc': { extracted: 0.4, level: '4' }, 'Beta Grid Corp': { extracted: 0.3, level: '2' },
   'Gamma Oil Co': { extracted: 0.005, level: '4' }, 'Delta Electrique SA': { extracted: 0.12, level: '3' },
 };
-const PASSAGE = 'Our grid products segment generated $3.1 billion of revenue, or 26% of total revenue, in fiscal 2025. We also sell storage systems.';
-const quote = 'generated $3.1 billion of revenue, or 26% of total revenue';
+const PASSAGE = 'Our grid products segment generated $3.1 billion of revenue, or 26% of total revenue, in fiscal 2025. We also sell storage systems, drives, controls and building automation.';
+const quote = 'grid products segment generated $3.1 billion of revenue, or 26% of total revenue, in fiscal 2025. We also sell storage systems, drives, controls and building automation.';
 
 /** A gateway that writes an llm_calls row like the real one. `failAfter` makes call number N+1 and later throw, to stand in for an outage. */
 export function fakeGateway(db: PostgresJsDatabase) {

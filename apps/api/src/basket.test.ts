@@ -53,7 +53,7 @@ integration('Basket evidence API on Postgres', () => {
     await db.insert(kpiScores).values([
       { ...base, kpiId: textKpi.id, attempt: 1, level: '2', valid: true, rationale: 'First attempt.', citations: [] },
       { ...base, kpiId: textKpi.id, attempt: 2, level: '3', valid: true, rationale: 'The filing reports deployed storage.', citations: [cite('e1', '7.2 GW of  energy storage assets deployed', secChunk, 'sec_filing', sec!.id), cite('e2', 'ASML supplies lithography systems', esefChunk, 'esef_filing', esef!.id), cite('e3', 'a sentence the passage never contains', secChunk, 'sec_filing', sec!.id)] },
-      { ...base, kpiId: otherKpi.id, attempt: 1, level: 'unknown', valid: true, rationale: 'No passages were available.', citations: [] },
+      { ...base, kpiId: otherKpi.id, attempt: 1, level: '2', valid: true, rationale: 'The quote names no defined offering.', citations: [], adjustments: [{ code: 'no_definition_term', from: '4', to: '2', message: 'No cited quote names an offering from the KPI definition, so level 4 was lowered to 2.' }] },
     ]);
     return { secUrl: src!.url };
   }
@@ -70,7 +70,8 @@ integration('Basket evidence API on Postgres', () => {
     expect(text.citations[0].sourceUrl).toBe(secUrl);
     expect(text.citations[0].sourceLabel).toContain('10-K');
     expect(text.citations[1].sourceUrl).toBe('https://filings.xbrl.org/LEI123/2025-12-31/ESEF/NL/0/a/reports/a.xhtml');
-    expect(body.kpis.find(k => k.kpiId === otherKpi.id)).toMatchObject({ level: 'unknown', citations: [] });
+    expect(body.kpis.find(k => k.kpiId === otherKpi.id)).toMatchObject({ level: '2', citations: [], adjustments: [{ code: 'no_definition_term', from: '4', to: '2' }] });
+    expect(text.adjustments).toEqual([]);
     expect(body.kpis.filter(k => !k.scored).length).toBe(framework.kpis.length - 2);
   });
 

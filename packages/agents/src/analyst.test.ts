@@ -64,7 +64,7 @@ integration('Analyst on Postgres', () => {
     db, gateway, retriever, runId: s.runId, frameworkDraftId: s.draftId, snapshotId: s.snapshotId, asOf: '2026-11-01',
     security: { id: s.securityId, name: 'Alpha Energy Inc', symbol: 'ALPH.US', ciks: ['0000000001'], issuerKeys: [issuer] }, ...over,
   });
-  const goodCitations = [{ evidenceId: 'e1', quote: 'generated $3.1 billion of revenue, or 26% of total revenue' }];
+  const goodCitations = [{ evidenceId: 'e1', quote: 'grid products segment generated $3.1 billion of revenue, or 26% of total revenue' }];
 
   it('scores a judgement KPI from cited passages and saves a traceable attempt', async () => {
     const s = await setup();
@@ -117,6 +117,17 @@ integration('Analyst on Postgres', () => {
     const [row] = await db.select().from(kpiScores).where(eq(kpiScores.id, outcome.scoreId));
     expect(row).toMatchObject({ llmCallId: null, promptVersion: null, rationale: 'No passages were available within the lookback window.' });
     expect(Number(row?.confidence)).toBe(0.2);
+  });
+
+  it('lowers a level 4 whose quote names no offering from the KPI definition and keeps the original in the audit row', async () => {
+    const s = await setup();
+    const unrelated = [{ evidenceId: 'e1', quote: 'in fiscal 2025' }];
+    const g = stubGateway(s.runId, [{ level: '4', citations: unrelated, rationale: 'Most revenue.', conflicts: [] }]);
+    const outcome = await scoreKpi(ctxFor(s, g.generator, stubSearcher([evidenceHit()]).retriever), judgeKpi);
+    expect(outcome).toMatchObject({ level: '2', valid: true });
+    const [row] = await db.select().from(kpiScores).where(eq(kpiScores.id, outcome.scoreId));
+    expect(row).toMatchObject({ level: '2', adjustments: [{ code: 'no_definition_term', from: '4', to: '2' }] });
+    expect((row?.raw as { level: string }).level).toBe('4');
   });
 
   it('repairs a non verbatim quote once and saves both attempts', async () => {

@@ -16,7 +16,7 @@ export function BasketSection({ run }: { run: RunDetail }) {
         <span className="pill warn">Provisional</span>
       </div>
       <div className="banner info" data-testid="review-limitation" style={{ marginTop: 12 }}>{reviewLimitation}</div>
-      <p className="muted tnum" data-testid="funnel" style={{ margin: '12px 0' }}>{f.universe} listings, {f.screened} screened in, {f.candidates} scored, {f.gateFailed} failed the gate, {f.gateUnknown} had no evidence on the gate KPI, {f.zeroScore} scored zero, {f.selected} selected{f.belowCutoff ? `, ${f.belowCutoff} below the cutoff` : ''}.</p>
+      <p className="muted tnum" data-testid="funnel" style={{ margin: '12px 0' }}>{f.universe} listings, {f.screened} screened in, {f.candidates} scored, {f.gateFailed} failed the gate, {f.gateUnknown} had no evidence on the gate KPI, {f.thinEvidence ? `${f.thinEvidence} had too little known KPI weight, ` : ''}{f.zeroScore} scored zero, {f.selected} selected{f.belowCutoff ? `, ${f.belowCutoff} below the cutoff` : ''}.</p>
       {basket.cap.relaxed && <div className="banner info" data-testid="cap-relaxed">Only {f.selected} names qualified, so the per-name cap of {basket.cap.requestedPercent}% was raised to {basket.cap.usedPercent}% to reach a total of 100%.</div>}
       {view === 'empty'
         ? <p className="banner warn" data-testid="basket-empty">No names qualified for this basket. See the funnel above for where names dropped out.</p>
@@ -62,6 +62,7 @@ function KpiBlock({ kpi: k, contribution }: { kpi: KpiEvidence; contribution: Me
     <article className="kpi" data-testid={`kpi-evidence-${k.kpiId}`}>
       <div className="kpi-head"><div className="kpi-title"><strong>{k.name}</strong> <span className="badge">{k.method.replaceAll('_', ' ')}</span></div>
         <span className="tnum">{k.scored ? levelText(k.level ?? 'unknown') : 'Not scored'}{contribution ? ` · adds ${contribution.contribution.toFixed(3)}` : ''}</span></div>
+      {k.adjustments?.map(a => <p key={a.code} className="warn" data-testid="adjustment">{a.message}</p>)}
       {k.scored && k.rationale && <p className="rationale-text">{k.rationale}</p>}
       {k.extractedValue != null && <p className="muted">Extracted value {k.extractedValue}{k.unit ? ` ${k.unit}` : ''}</p>}
       {k.quantValue != null && <p className="muted">Computed value {k.quantValue}</p>}

@@ -145,7 +145,7 @@ export function createApp(deps: AppDeps) {
         const r = latest.get(k.id);
         if (!r) return { kpiId: k.id, name: k.name, method: k.method, scored: false };
         return {
-          kpiId: k.id, name: k.name, method: r.method, scored: true, level: r.level, confidence: Number(r.confidence), valid: r.valid, rationale: r.rationale, conflicts: r.conflicts,
+          kpiId: k.id, name: k.name, method: r.method, scored: true, level: r.level, adjustments: r.adjustments, confidence: Number(r.confidence), valid: r.valid, rationale: r.rationale, conflicts: r.conflicts,
           extractedValue: r.extractedValue === null ? null : Number(r.extractedValue), unit: r.unit, quantValue: r.quantValue === null ? null : Number(r.quantValue), quantInputs: r.quantInputs,
           citations: (r.citations as Cited[]).map(x => {
             const text = chunkText.get(x.chunkId), src = source.get(x.docId);
