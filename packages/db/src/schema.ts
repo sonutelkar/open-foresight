@@ -268,6 +268,10 @@ export const kpiScores = pgTable('kpi_scores', {
   citations: jsonb('citations').notNull(), rationale: text('rationale').notNull(), conflicts: jsonb('conflicts').notNull(),
   /** The passages offered to the model, with their labels, so every citation can be traced back. */
   evidence: jsonb('evidence').notNull(), raw: jsonb('raw'),
+  /** How the `jev-first` path produced the row: `jev`, or `luna-fallback` for a pair Jev answered unknown. Null for every other row. `method` names the KPI's method and `raw` holds the Analyst's output, so neither can carry it. */
+  route: text('route'),
+  /** Jev's answer with its level, reason and probabilities. Kept on a fallback row so the route can be audited, and on a `jev` row as the score itself. */
+  jevAnswer: jsonb('jev_answer'),
   /** Changes code made to the model's level after validation, each with the original level. `level` holds the changed one. */
   adjustments: jsonb('adjustments').notNull().default([]),
   confidence: numeric('confidence').notNull(), valid: boolean('valid').notNull(), errors: jsonb('errors').notNull(),

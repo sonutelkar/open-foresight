@@ -91,6 +91,43 @@ integration('run orchestration on Postgres', () => {
       .toEqual(['draft', 'universe_built', 'designing', 'awaiting_kpi_approval', 'prescreening', 'analysing', 'packaging', 'done']);
   });
 
+  it('with Jev first scoring on, carries the Luna fallback flag into the basket and keeps Jev\'s unknown answer, and with it off adds no flag', async () => {
+    const { deps, gateway } = depsFor();
+    const jevFirst = { async decide(input: { state: string }) {
+      const known = (JSON.parse(input.state) as { company: string }).company === 'Alpha Energy Inc';
+      return { id: 'jev-dec', answers: { level: { type: 'score' as const, score: 3, legend: {}, probabilities: { '3': 1 }, confidence: 0.9 }, known: { type: 'noul' as const, noul: known ? 0.95 : 0.1 } }, usage: { input_tokens: 1, output_tokens: 1, cost: 0 } };
+    } };
+    const judgementIds = framework.kpis.filter(k => k.method === 'judgement').map(k => k.id);
+    const runId = await createRun(db);
+    await drive(deps, runId);
+    await approve(db, runId);
+    expect(await drive({ ...deps, jevFirst }, runId)).toBe('done');
+    // Alpha's judgement KPIs come from Jev. The other three names fall back, so the Analyst scores their judgement KPIs and every name's extraction KPI.
+    expect(gateway.state.calls).toBe(4 + 3 * judgementIds.length);
+    const rows = await db.select().from(kpiScores).where(eq(kpiScores.runId, runId));
+    const universe = await db.select().from(runUniverse).where(eq(runUniverse.runId, runId));
+    const alpha = universe.find(u => u.symbol === 'ALPH.US')!.securityId, beta = universe.find(u => u.symbol === 'BETA.US')!.securityId;
+    expect(rows.filter(r => r.securityId === alpha && judgementIds.includes(r.kpiId)).map(r => r.route)).toEqual(judgementIds.map(() => 'jev'));
+    const fallbackRows = rows.filter(r => r.securityId === beta && judgementIds.includes(r.kpiId));
+    expect(fallbackRows).toHaveLength(judgementIds.length);
+    for (const r of fallbackRows) expect(r).toMatchObject({ route: 'luna-fallback', jevAnswer: { level: 'unknown', reason: 'unknown_rule' } });
+    expect(rows.filter(r => !judgementIds.includes(r.kpiId)).every(r => r.route === null)).toBe(true);
+    const [basket] = await db.select().from(baskets).where(eq(baskets.runId, runId));
+    const members = await db.select().from(basketMembers).where(eq(basketMembers.basketId, basket!.id));
+    const routes = (symbol: string) => (members.find(m => m.symbol === symbol)!.contributions as Array<{ kpiId: string; route?: string }>).filter(c => c.route).map(c => c.route);
+    expect(routes('ALPH.US')).toEqual(judgementIds.map(() => 'jev'));
+    expect(routes('BETA.US')).toEqual(judgementIds.map(() => 'luna-fallback'));
+
+    const off = await createRun(db);
+    await drive(deps, off);
+    await approve(db, off);
+    await drive(deps, off);
+    const [offBasket] = await db.select().from(baskets).where(eq(baskets.runId, off));
+    const offMembers = await db.select().from(basketMembers).where(eq(basketMembers.basketId, offBasket!.id));
+    expect(JSON.stringify(offMembers.map(m => m.contributions))).not.toContain('route');
+    expect((await db.select().from(kpiScores).where(eq(kpiScores.runId, off))).every(r => r.route === null && r.jevAnswer === null)).toBe(true);
+  });
+
   it('with the exposure check on, settles a name plainly outside the theme as a known gate failure and spends no Analyst call on its gate KPI', async () => {
     const { deps, gateway } = depsFor();
     const asked: string[] = [];

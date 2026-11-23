@@ -1,13 +1,14 @@
 import { and, eq } from 'drizzle-orm';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import {
-  capUnsupportedLevel, computeConfidence, extractionOutputSchema, judgementOutputSchema, quantLevel, validateScore,
+  capUnsupportedLevel, computeConfidence, extractionOutputSchema, judgementOutputSchema, lunaFallbackConfidenceFactor, quantLevel, validateScore,
   type DocKind, type EvidenceItem, type Framework, type Kpi, type ResolvedCitation, type ScoreError, type ScoreLevel,
 } from '@open-foresight/core';
 import { computeQuant } from '@open-foresight/data';
 import { kpiScores, llmCalls } from '@open-foresight/db';
 import { loadPrompt, render } from '@open-foresight/prompts';
 import type { StructuredGenerator } from './designer.js';
+import { scoreWithJev, type JevScore, type ScoreJudge } from './jev-scorer.js';
 import { verifyClaim, type SpanJudge } from './verifier.js';
 
 /** The part of retrieval the Analyst uses. `createRetriever` from `@open-foresight/retrieval` satisfies it. */
@@ -25,6 +26,8 @@ export type AnalystContext = {
   evidenceLimit?: number;
   /** Optional. When set, a level 3 or 4 is checked against its stored spans and lowered if they do not support it. */
   judge?: SpanJudge;
+  /** Optional. When set, a judgement KPI is scored by Jev first, and by the Analyst only when Jev's level is unknown. The worker sets it unless it starts with JEV_FIRST_SCORING=0. */
+  jevFirst?: ScoreJudge;
 };
 export type ScoreOutcome = {
   scoreId: string; kpiId: string; level: ScoreLevel; extractedValue: number | null; quantValue: number | null; confidence: number;
@@ -74,11 +77,12 @@ const evidenceRefs = (evidence: EvidenceItem[]) => evidence.map(e => ({ id: e.id
  * Scores a non-quant KPI from the given passages. An invalid answer is repaired once by listing every error.
  * Every attempt is saved. A score that never validates is saved as unknown with its errors.
  */
-export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, { method: 'quant' }>, evidence: EvidenceItem[], options: { maxAttempts?: number } = {}): Promise<ScoreOutcome> {
+export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, { method: 'quant' }>, evidence: EvidenceItem[], options: { maxAttempts?: number; /** Jev's unknown answer. Every row is then a `luna-fallback` row that keeps it, and a valid score's confidence is discounted. */ fallbackFrom?: JevScore } = {}): Promise<ScoreOutcome> {
   const maxAttempts = options.maxAttempts ?? 2;
+  const fallback = options.fallbackFrom ? { route: 'luna-fallback' as const, jevAnswer: options.fallbackFrom } : {};
   let attempt = await nextAttempt(ctx, kpi.id);
   if (evidence.length === 0) {
-    const row = await save(ctx, kpi, attempt, { level: 'unknown', confidence: computeConfidence({ method: kpi.method, valid: true, level: 'unknown', citations: [], conflicts: [], asOf: ctx.asOf }).toString(), valid: true, rationale: 'No passages were available within the lookback window.' });
+    const row = await save(ctx, kpi, attempt, { ...fallback, level: 'unknown', confidence: computeConfidence({ method: kpi.method, valid: true, level: 'unknown', citations: [], conflicts: [], asOf: ctx.asOf }).toString(), valid: true, rationale: 'No passages were available within the lookback window.' });
     return asOutcome(row, false);
   }
   const prompt = loadPrompt(kpi.method === 'judgement' ? 'analyst-judgement' : 'analyst-extraction', 'v1');
@@ -96,12 +100,12 @@ export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, {
     const [call] = await ctx.db.select({ id: llmCalls.id }).from(llmCalls).where(eq(llmCalls.id, auditId));
     if (!call) throw new Error('The gateway did not report an audit record for the Analyst call');
     const check = validateScore({ kpi, output, evidence, asOf: ctx.asOf, allowedIssuerKeys: ctx.security.issuerKeys });
-    const base = { promptVersion: prompt.promptVersion, llmCallId: auditId, evidence: evidenceRefs(evidence), raw: output as object, rationale: (output as { rationale: string }).rationale, conflicts: (output as { conflicts: string[] }).conflicts, unit: kpi.method === 'extract_then_quant' ? kpi.extraction.unit : null };
+    const base = { ...fallback, promptVersion: prompt.promptVersion, llmCallId: auditId, evidence: evidenceRefs(evidence), raw: output as object, rationale: (output as { rationale: string }).rationale, conflicts: (output as { conflicts: string[] }).conflicts, unit: kpi.method === 'extract_then_quant' ? kpi.extraction.unit : null };
     if (check.ok) {
       const capped = capUnsupportedLevel({ kpi, level: check.level, citations: check.citations });
       const checked = ctx.judge ? await verifyClaim({ db: ctx.db, judge: ctx.judge, runId: ctx.runId, asOf: ctx.asOf, security: ctx.security }, kpi, capped.level, check.citations) : { level: capped.level, adjustment: null };
       const adjustments = [capped.adjustment, checked.adjustment].filter((a): a is NonNullable<typeof a> => a !== null);
-      const confidence = computeConfidence({ method: kpi.method, valid: true, level: checked.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf });
+      const confidence = computeConfidence({ method: kpi.method, valid: true, level: checked.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf }) * (options.fallbackFrom ? lunaFallbackConfidenceFactor : 1);
       row = await save(ctx, kpi, attempt, { ...base, level: checked.level, adjustments, extractedValue: check.extractedValue === null ? null : String(check.extractedValue), citations: check.citations, confidence: String(confidence), valid: true });
       return asOutcome(row, false);
     }
@@ -114,6 +118,21 @@ export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, {
 }
 
 /**
+ * The `jev-first` path for a judgement KPI. Jev scores it from the same passages. A level from Jev is saved as `jev` and the Analyst is not called.
+ * An unknown level goes to the Analyst, and its row is saved as `luna-fallback` with Jev's unknown answer beside it. If the Analyst is unknown too, the KPI stays unknown.
+ * A failed Jev call throws and saves nothing, so a retry runs it again. Jev cites no passages, so the citation checks of the Analyst's path do not apply to its level.
+ */
+async function scoreJevFirst(ctx: AnalystContext, judge: ScoreJudge, kpi: Extract<Kpi, { method: 'judgement' }>, evidence: EvidenceItem[]): Promise<ScoreOutcome> {
+  const jev = await scoreWithJev(judge, { runId: ctx.runId, company: ctx.security.name, asOf: ctx.asOf, kpi, passages: evidence });
+  if (jev.level === 'unknown') return scoreWithEvidence(ctx, kpi, evidence, { fallbackFrom: jev });
+  const row = await save(ctx, kpi, await nextAttempt(ctx, kpi.id), {
+    route: 'jev', jevAnswer: jev, promptVersion: jev.version, evidence: evidenceRefs(evidence), level: jev.level, confidence: String(jev.confidence), valid: true,
+    rationale: `Scored by Jev (${jev.version}) from the passages offered to the Analyst. Jev cites no passages.`,
+  });
+  return asOutcome(row, false);
+}
+
+/**
  * Scores one KPI for the context's security. Quant KPIs run a registered function in code with no model call.
  * A KPI that already has a valid score for this run and security returns it without work.
  */
@@ -121,6 +140,7 @@ export async function scoreKpi(ctx: AnalystContext, kpi: Kpi): Promise<ScoreOutc
   const existing = await ctx.db.select().from(kpiScores).where(and(eq(kpiScores.runId, ctx.runId), eq(kpiScores.securityId, ctx.security.id), eq(kpiScores.kpiId, kpi.id)));
   const reusable = existing.find(r => r.valid);
   if (reusable) return asOutcome(reusable, true);
+  if (kpi.method === 'judgement' && ctx.jevFirst) return scoreJevFirst(ctx, ctx.jevFirst, kpi, await retrieveEvidence(ctx, kpi));
   if (kpi.method !== 'quant') return scoreWithEvidence(ctx, kpi, await retrieveEvidence(ctx, kpi));
   const result = await computeQuant({ db: ctx.db, snapshotId: ctx.snapshotId, asOf: ctx.asOf, quantId: kpi.quantQuery, symbol: ctx.security.symbol, ciks: ctx.security.ciks });
   const level = quantLevel(kpi, result.value);

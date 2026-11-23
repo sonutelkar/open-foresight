@@ -17,13 +17,16 @@ export type RunDetail = {
   universe: { total: number; included: number; withFilings: number };
   basket: Basket | null;
 };
+export type ScoreRoute = 'jev' | 'luna-fallback';
 /** What stands behind a basket member, counted by the API from its latest valid scores. */
 export type EvidenceSummary = { kpis: number; quotes: number; unverified: number; unknownKpis: number; lowered: number };
 export type Basket = {
   status: 'provisional'; unknownMode: 'strict' | 'lenient';
+  /** Present only when a score came from the Luna fallback. */
+  fallbackNote?: string;
   funnel: { universe: number; screened: number; candidates: number; gateFailed: number; gateUnknown: number; thinEvidence?: number; zeroScore: number; eligible: number; selected: number; belowCutoff: number };
   cap: { requestedPercent: number; usedPercent: number; relaxed: boolean };
-  members: Array<{ evidence: EvidenceSummary; rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; capAdjustment: number; contributions: Array<{ kpiId: string; level: string; weight: number; contribution: number }> }>;
+  members: Array<{ evidence: EvidenceSummary; rank: number; symbol: string; name: string; score: number; confidence: number; weightPercent: number; atCap: boolean; unknownWeight: number; capAdjustment: number; contributions: Array<{ kpiId: string; level: string; route?: ScoreRoute; weight: number; contribution: number }> }>;
 };
 export type Auth = { analyst: string; token: string };
 export class ApiError extends Error {
@@ -44,6 +47,6 @@ export const createRun = (brief: Brief | Record<string, unknown>, a: Auth) => ca
 export const approveRun = (id: string, body: { framework: Framework; exclusions: string[]; reason?: string }, a: Auth) => call<{ versionId: string; version: number; status: string }>(`/api/runs/${id}/approve`, { method: 'POST', headers: headers(a), body: JSON.stringify(body) });
 export type Citation = { evidenceId: string; quote: string; section: string; availableOn: string; docKind: string; chunkId: string; startOffset: number; endOffset: number; sourceLabel: string | null; sourceUrl: string | null; quoteVerified: boolean };
 export type Adjustment = { code: string; from: string; to: string; message: string };
-export type KpiEvidence = { kpiId: string; name: string; method: string; scored: boolean; level?: string; adjustments?: Adjustment[]; confidence?: number; valid?: boolean; rationale?: string; conflicts?: string[]; extractedValue?: number | null; unit?: string | null; quantValue?: number | null; citations?: Citation[] };
+export type KpiEvidence = { kpiId: string; name: string; method: string; scored: boolean; route?: ScoreRoute; jevAnswer?: { level: string; reason: string; answer: { known: number } | null }; level?: string; adjustments?: Adjustment[]; confidence?: number; valid?: boolean; rationale?: string; conflicts?: string[]; extractedValue?: number | null; unit?: string | null; quantValue?: number | null; citations?: Citation[] };
 export type MemberEvidence = { symbol: string; name: string; kpis: KpiEvidence[] };
 export const getEvidence = (runId: string, symbol: string) => call<MemberEvidence>(`/api/runs/${runId}/members/${encodeURIComponent(symbol)}/evidence`);

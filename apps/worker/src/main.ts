@@ -2,6 +2,7 @@
 // It drives runs through the stages the API queues: universe, Designer, then, after gate 1, prescreening, scoring and packaging.
 // The Jev check of the stored spans behind level 3 and 4 scores is on. JEV_SPAN_CHECK=0 turns it off.
 // The Jev check that settles the gate KPI at level 0 for names outside the theme is on. JEV_EXPOSURE_CHECK=0 turns it off.
+// Jev first scoring of judgement KPIs, with the Analyst as a flagged fallback for a KPI Jev answers unknown, is on. JEV_FIRST_SCORING=0 turns it off.
 // It reads only the local Postgres store, and its only outside calls are the model and embedding calls through packages/llm.
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
@@ -26,7 +27,7 @@ const stamp = () => new Date().toISOString().slice(11, 19);
 const worker = await startWorker({
   connectionString,
   deps: {
-    db, gateway, retriever, availableSources, judge: process.env.JEV_SPAN_CHECK === '0' ? undefined : gateway, exposureJudge: process.env.JEV_EXPOSURE_CHECK === '0' ? undefined : gateway, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
+    db, gateway, retriever, availableSources, judge: process.env.JEV_SPAN_CHECK === '0' ? undefined : gateway, exposureJudge: process.env.JEV_EXPOSURE_CHECK === '0' ? undefined : gateway, jevFirst: process.env.JEV_FIRST_SCORING === '0' ? undefined : gateway, scoreConcurrency: Number(process.env.SCORE_CONCURRENCY ?? 3),
     design: ({ runId, input }) => runDesigner({ db, gateway, runId, input, availableSources }),
     log: message => console.log(`${stamp()} ${message}`),
   },

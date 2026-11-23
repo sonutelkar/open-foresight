@@ -150,6 +150,7 @@ input.weight { width: 3.8rem; height: 30px; text-align: right; padding: 3px 8px;
 .badge { font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 6px; background: var(--soft); color: var(--ink-2); border: 1px solid var(--line); white-space: nowrap; }
 .badge.quant { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
 .badge.extract_then_quant { background: var(--info-bg); color: var(--info); border-color: transparent; }
+.badge.route.luna-fallback { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 .badge.gate { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
 .dot-error { width: 8px; height: 8px; border-radius: 50%; background: var(--bad); display: inline-block; }
 .problems { margin: 0 0 14px; padding: 10px 14px 10px 30px; border-radius: var(--radius-sm); background: var(--bad-bg); color: var(--bad); font-size: 13px; }
