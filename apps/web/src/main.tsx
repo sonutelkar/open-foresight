@@ -29,7 +29,7 @@ function App() {
       </nav>
       <main>
         {error && <div className="page"><div className="banner bad" role="alert">{error}</div></div>}
-        {config && (runId ? <RunPage key={runId} id={runId} config={config} auth={auth} /> : <BriefForm config={config} auth={auth} onCreated={id => { window.location.hash = `#/runs/${id}`; }} />)}
+        {config && (runId ? <RunPage key={runId} id={runId} config={config} auth={auth} onAuth={update} /> : <BriefForm config={config} auth={auth} onCreated={id => { window.location.hash = `#/runs/${id}`; }} />)}
       </main>
     </>
   );

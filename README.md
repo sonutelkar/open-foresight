@@ -48,7 +48,7 @@ This is the whole path from a clean checkout to a basket you can inspect. Each s
    bun apps/worker/src/main.ts
    ```
    Both Jev checks are on by default. Start the worker with `JEV_SPAN_CHECK=0` or `JEV_EXPOSURE_CHECK=0` to turn one off.
-6. **Run a theme in the browser.** Open `http://127.0.0.1:8787`. Enter your name and the `APPROVAL_TOKEN` value in the top bar. Write a brief and submit it. After about a minute the run reaches gate 1, where you can edit the KPI weights and rubrics and approve. The worker then scores every name, which takes about 6 minutes for 30 names, and the page shows the provisional basket. Click a name to see each KPI level with its quote and a link to the source.
+6. **Run a theme in the browser.** Open `http://127.0.0.1:8787`. Enter your name and the `APPROVAL_TOKEN` value in the top bar. Write a brief and submit it. After about a minute the run reaches gate 1, where you can edit the KPI weights and rubrics and approve. The worker then scores every name, which takes about 6 minutes for 30 names, and the page shows the provisional basket. Each basket row shows how many quotes stand behind it and flags any that are not word for word, lowered or unknown. The top name opens by itself. Click any name to see each KPI level with its quotes, where each came from, and a link to the source. At gate 1 the approval bar says what approving freezes and starts, and what you changed from the draft.
 7. **Measure the run.** The pilot report checks that every citation is real and writes a versioned JSON document to `docs/pilot/`. It needs the run id from the page address. Run it from the repository root with `DATABASE_URL` pointing at the same database.
    ```sh
    RUN_ID=<run id> bun apps/worker/scripts/pilot-report.ts

@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { afterAll, describe, expect, it } from 'vitest';
-import { count, eq } from 'drizzle-orm';
+import { count, eq, like, sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { enabledSources, validateFramework, type FrameworkDraft } from '@open-foresight/core';
@@ -44,7 +44,8 @@ integration('API on Postgres', () => {
   const make = () => createApp({ db, token: TOKEN, availableSources: sources, today: () => '2026-11-22', enqueue });
   const post = (app: ReturnType<typeof make>['app'], path: string, body: unknown, over: Record<string, string> = {}) =>
     app.request(path, { method: 'POST', headers: { ...headers, ...over }, body: typeof body === 'string' ? body : JSON.stringify(body) });
-  const runCount = async () => Number((await db.select({ n: count() }).from(runs))[0]?.n);
+  /** Counts only the runs this file creates, because other test files insert runs into the same database at the same time. */
+  const runCount = async () => Number((await db.select({ n: count() }).from(runs).where(like(sql`${runs.settings}->>'brief'`, `${brief.brief.slice(0, 40)}%`)))[0]?.n);
 
   async function readyRun(api = make()) {
     const res = await post(api.app, '/api/runs', brief);
