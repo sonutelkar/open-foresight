@@ -9,7 +9,7 @@ import {
   basketMembers, baskets, createSnapshot, esefFilingsAsOf, exchangeListings, figiMappings, filingsAsOf, kpiFrameworkVersions, kpiScores, priceBars,
   runUniverse, runs, secListings, securities,
 } from '@open-foresight/db';
-import { scoreFramework, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
+import { scoreFramework, type SpanJudge, type DesignerInput, type DesignerResult, type EvidenceSearcher, type StructuredGenerator } from '@open-foresight/agents';
 import { issuerKeysForSecurity } from '@open-foresight/retrieval';
 
 export type RunStatus = typeof runs.$inferSelect['status'];
@@ -19,6 +19,8 @@ export type WorkerDeps = {
   design: (args: { runId: string; input: DesignerInput }) => Promise<DesignerResult>;
   gateway: StructuredGenerator;
   retriever: EvidenceSearcher;
+  /** Optional Jev span check for level 3 and 4 scores. Off unless the worker is started with JEV_SPAN_CHECK=1. */
+  judge?: SpanJudge;
   availableSources: readonly SourceId[];
   /** Securities scored at once. Each runs a few KPIs at once, so this multiplies the model calls in flight. Default 3. */
   scoreConcurrency?: number;
@@ -182,7 +184,7 @@ const frameworkVersionOf = async (db: PostgresJsDatabase, run: Run) => {
 };
 
 /** Scores every KPI for every included name. Scores already saved for this run are reused, so a retry only does the work that is left. */
-const analyseStage: Stage = async ({ db, gateway, retriever, scoreConcurrency, log }, run) => {
+const analyseStage: Stage = async ({ db, gateway, retriever, judge, scoreConcurrency, log }, run) => {
   const brief = briefOf(run.settings);
   if (!run.snapshotId) throw new StageFailure('The run has no data snapshot');
   const version = await frameworkVersionOf(db, run);
@@ -191,7 +193,7 @@ const analyseStage: Stage = async ({ db, gateway, retriever, scoreConcurrency, l
   let done = 0;
   await pool(rows, scoreConcurrency ?? 3, async row => {
     await scoreFramework({
-      db, gateway, retriever, runId: run.id, frameworkDraftId: version.sourceDraftId, snapshotId: run.snapshotId!, asOf: brief.asOf,
+      db, gateway, retriever, judge, runId: run.id, frameworkDraftId: version.sourceDraftId, snapshotId: run.snapshotId!, asOf: brief.asOf,
       security: { id: row.securityId!, name: row.name ?? row.symbol, symbol: row.symbol, ciks: (row.ciks as string[] | null) ?? [], issuerKeys: (row.issuerKeys as string[] | null) ?? [] },
     }, framework, { concurrency: 3 });
     log?.(`scored ${row.symbol} (${++done}/${rows.length})`);

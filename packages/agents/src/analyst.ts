@@ -8,6 +8,7 @@ import { computeQuant } from '@open-foresight/data';
 import { kpiScores, llmCalls } from '@open-foresight/db';
 import { loadPrompt, render } from '@open-foresight/prompts';
 import type { StructuredGenerator } from './designer.js';
+import { verifyClaim, type SpanJudge } from './verifier.js';
 
 /** The part of retrieval the Analyst uses. `createRetriever` from `@open-foresight/retrieval` satisfies it. */
 export type EvidenceSearcher = {
@@ -22,6 +23,8 @@ export type AnalystContext = {
   security: { id: string; name: string; symbol: string; /** SEC filers for quant functions. */ ciks: string[]; /** Issuers whose filings are evidence for this security. */ issuerKeys: string[] };
   /** Passages offered to the model per KPI. Default 10. */
   evidenceLimit?: number;
+  /** Optional. When set, a level 3 or 4 is checked against its stored spans and lowered if they do not support it. */
+  judge?: SpanJudge;
 };
 export type ScoreOutcome = {
   scoreId: string; kpiId: string; level: ScoreLevel; extractedValue: number | null; quantValue: number | null; confidence: number;
@@ -95,8 +98,10 @@ export async function scoreWithEvidence(ctx: AnalystContext, kpi: Exclude<Kpi, {
     const base = { promptVersion: prompt.promptVersion, llmCallId: auditId, evidence: evidenceRefs(evidence), raw: output as object, rationale: (output as { rationale: string }).rationale, conflicts: (output as { conflicts: string[] }).conflicts, unit: kpi.method === 'extract_then_quant' ? kpi.extraction.unit : null };
     if (check.ok) {
       const capped = capUnsupportedLevel({ kpi, level: check.level, citations: check.citations });
-      const confidence = computeConfidence({ method: kpi.method, valid: true, level: capped.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf });
-      row = await save(ctx, kpi, attempt, { ...base, level: capped.level, adjustments: capped.adjustment ? [capped.adjustment] : [], extractedValue: check.extractedValue === null ? null : String(check.extractedValue), citations: check.citations, confidence: String(confidence), valid: true });
+      const checked = ctx.judge ? await verifyClaim({ db: ctx.db, judge: ctx.judge, runId: ctx.runId, asOf: ctx.asOf, security: ctx.security }, kpi, capped.level, check.citations) : { level: capped.level, adjustment: null };
+      const adjustments = [capped.adjustment, checked.adjustment].filter((a): a is NonNullable<typeof a> => a !== null);
+      const confidence = computeConfidence({ method: kpi.method, valid: true, level: checked.level, citations: check.citations, conflicts: base.conflicts, asOf: ctx.asOf });
+      row = await save(ctx, kpi, attempt, { ...base, level: checked.level, adjustments, extractedValue: check.extractedValue === null ? null : String(check.extractedValue), citations: check.citations, confidence: String(confidence), valid: true });
       return asOutcome(row, false);
     }
     row = await save(ctx, kpi, attempt, { ...base, level: 'unknown', confidence: '0', valid: false, errors: check.errors });
