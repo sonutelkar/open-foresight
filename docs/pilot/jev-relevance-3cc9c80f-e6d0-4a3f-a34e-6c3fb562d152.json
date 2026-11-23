@@ -1,0 +1,1535 @@
+{
+ "schemaVersion": 1,
+ "runId": "3cc9c80f-e6d0-4a3f-a34e-6c3fb562d152",
+ "recordedAt": "2026-11-23T16:18:24.135Z",
+ "promptVersion": "passage-relevance@v1",
+ "summary": {
+  "cases": 12,
+  "threshold": 0.5,
+  "reproducedOffered": 12,
+  "citedPassages": 13,
+  "citedKeptPr11": 13,
+  "citedKeptFiltered": 11,
+  "citedKeptReranked": 11,
+  "meanCitedRankPr11": 4.62,
+  "meanCitedRankFiltered": 2.64,
+  "meanCitedRankReranked": 2.55,
+  "passagesPr11": 120,
+  "passagesFiltered": 65,
+  "fromBeyondTop10": 19,
+  "medianPr11Ms": 462,
+  "medianFilteredMs": 953,
+  "medianJudgeMs": 396,
+  "maxCallMs": 1302,
+  "jevCalls": 48,
+  "jevErrors": 0,
+  "jevCostUsd": 0.008208
+ },
+ "cases": [
+  {
+   "symbol": "AAPL.US",
+   "kpiId": "smart_energy_revenue_share",
+   "method": "extract_then_quant",
+   "level": "unknown",
+   "reproducesOffered": true,
+   "cited": [
+    "cb110524-6d53-4e41-ad1d-212f9b4c31ab"
+   ],
+   "pr11": {
+    "ids": [
+     "104a8d80-64c8-4e86-bae3-8a4d8215caa8",
+     "797cd847-d083-4c72-8d04-30705f2f9b06",
+     "8714cf22-6924-464c-9057-8b9d5e0d0b27",
+     "29258180-4c84-447c-90cb-fff4b65825a6",
+     "d85486a8-ffd1-4fde-89f8-50593ff4428c",
+     "ee235728-49ad-466a-8daa-bab9e3eeea9f",
+     "cb110524-6d53-4e41-ad1d-212f9b4c31ab",
+     "c8dbeb8a-1100-46cf-bab5-1ee38c05de2a",
+     "168da105-de79-4c54-97d3-673e6d73f33f",
+     "dc3e8323-4389-48b9-9e5a-b2633a82b0e7"
+    ],
+    "citedRanks": [
+     7
+    ],
+    "ms": 462
+   },
+   "filtered": {
+    "ids": [
+     "104a8d80-64c8-4e86-bae3-8a4d8215caa8",
+     "797cd847-d083-4c72-8d04-30705f2f9b06",
+     "cb110524-6d53-4e41-ad1d-212f9b4c31ab"
+    ],
+    "citedRanks": [
+     3
+    ],
+    "searchMs": 767,
+    "judgeMs": 614
+   },
+   "rerankedCitedRanks": [
+    3
+   ],
+   "fromBeyondTop10": 0,
+   "dropped": [
+    {
+     "chunkId": "8714cf22-6924-464c-9057-8b9d5e0d0b27",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "29258180-4c84-447c-90cb-fff4b65825a6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "d85486a8-ffd1-4fde-89f8-50593ff4428c",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ee235728-49ad-466a-8daa-bab9e3eeea9f",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "c8dbeb8a-1100-46cf-bab5-1ee38c05de2a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "168da105-de79-4c54-97d3-673e6d73f33f",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "dc3e8323-4389-48b9-9e5a-b2633a82b0e7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7130a727-0157-4376-ab62-8b5530b14528",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "84150366-43ea-4ee8-83f4-a1db91f8def2",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0ea7c75b-2e64-485a-93af-d7068776c9b3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "19500203-e603-4807-b655-9dc16590a9f0",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0c0a2ae6-7e59-4718-8f1c-965ed6e1d26c",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "4544fd46-fb72-4b12-9f4f-f640b8ba1403",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "685a1400-8d1c-4571-841e-f0c4178e3e86",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "eed85ecb-719d-462b-a92f-7f2371abd381",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "95a5586a-3f53-4792-ae90-bae182885d14",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "be41c484-9f04-474d-83b5-52fcfac1b892",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "104a8d80-64c8-4e86-bae3-8a4d8215caa8": 0.58,
+    "797cd847-d083-4c72-8d04-30705f2f9b06": 0.56,
+    "8714cf22-6924-464c-9057-8b9d5e0d0b27": 0.34,
+    "29258180-4c84-447c-90cb-fff4b65825a6": 0.28,
+    "d85486a8-ffd1-4fde-89f8-50593ff4428c": 0.19,
+    "7130a727-0157-4376-ab62-8b5530b14528": 0.04,
+    "84150366-43ea-4ee8-83f4-a1db91f8def2": 0.04,
+    "0ea7c75b-2e64-485a-93af-d7068776c9b3": 0.13,
+    "19500203-e603-4807-b655-9dc16590a9f0": 0.11,
+    "0c0a2ae6-7e59-4718-8f1c-965ed6e1d26c": 0.05,
+    "4544fd46-fb72-4b12-9f4f-f640b8ba1403": 0.04,
+    "685a1400-8d1c-4571-841e-f0c4178e3e86": 0.04,
+    "eed85ecb-719d-462b-a92f-7f2371abd381": 0.05,
+    "95a5586a-3f53-4792-ae90-bae182885d14": 0.06,
+    "be41c484-9f04-474d-83b5-52fcfac1b892": 0.05,
+    "ee235728-49ad-466a-8daa-bab9e3eeea9f": 0.11,
+    "cb110524-6d53-4e41-ad1d-212f9b4c31ab": 0.5,
+    "c8dbeb8a-1100-46cf-bab5-1ee38c05de2a": 0.48,
+    "168da105-de79-4c54-97d3-673e6d73f33f": 0.32,
+    "dc3e8323-4389-48b9-9e5a-b2633a82b0e7": 0.32
+   },
+   "failure": null
+  },
+  {
+   "symbol": "ALO.PA",
+   "kpiId": "smart_energy_committed_investment",
+   "method": "judgement",
+   "level": "1",
+   "reproducesOffered": true,
+   "cited": [
+    "8aacd74a-e8e9-4a77-b540-776d7d1b2d31"
+   ],
+   "pr11": {
+    "ids": [
+     "0d65c925-d705-4106-bc72-df56e1af9bb1",
+     "34128bcd-65ef-4fea-80e3-de66726d057d",
+     "36f23fd6-20ae-46f0-b293-035393e436cd",
+     "8aacd74a-e8e9-4a77-b540-776d7d1b2d31",
+     "b5d5d0f3-7be2-43fd-8628-f7778b723e59",
+     "773275ef-2af9-4ec5-a783-b02e7f86c358",
+     "311049ea-a277-485c-90b3-6fbdc6ebc648",
+     "bdfae72b-41f5-4fcb-94b9-dedfce73d860",
+     "2d04cf9d-af69-44bd-af25-78520ad46090",
+     "b4d761ff-d733-4c5b-913e-42d0ec36695c"
+    ],
+    "citedRanks": [
+     4
+    ],
+    "ms": 495
+   },
+   "filtered": {
+    "ids": [
+     "c57e95cc-073d-456e-8e72-8581db3e5326",
+     "0de4ec00-c7ec-4e1b-b623-e65f5625b0e1"
+    ],
+    "citedRanks": [],
+    "searchMs": 518,
+    "judgeMs": 435
+   },
+   "rerankedCitedRanks": [],
+   "fromBeyondTop10": 2,
+   "dropped": [
+    {
+     "chunkId": "0d65c925-d705-4106-bc72-df56e1af9bb1",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "34128bcd-65ef-4fea-80e3-de66726d057d",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "36f23fd6-20ae-46f0-b293-035393e436cd",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8aacd74a-e8e9-4a77-b540-776d7d1b2d31",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b5d5d0f3-7be2-43fd-8628-f7778b723e59",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "773275ef-2af9-4ec5-a783-b02e7f86c358",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "311049ea-a277-485c-90b3-6fbdc6ebc648",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "bdfae72b-41f5-4fcb-94b9-dedfce73d860",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2d04cf9d-af69-44bd-af25-78520ad46090",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b4d761ff-d733-4c5b-913e-42d0ec36695c",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "1245bec9-591c-45cc-8482-ffa614c3a31b",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0a3057f2-91ad-4e14-b316-0ef25d20b2e4",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "21402706-b7e1-4b9e-820f-b7eb33367515",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "16114442-4bb2-4e0a-9d93-0e612a321831",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "e9a66b0f-6cd5-439b-ba7b-76487adfcba3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "82f4900a-622d-438d-b055-671d70d3559e",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ff7f6341-f928-4170-a24e-e80ae7800ba5",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "72aaab27-8628-4ba0-b6da-cde060443d3c",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "1245bec9-591c-45cc-8482-ffa614c3a31b": 0.04,
+    "c57e95cc-073d-456e-8e72-8581db3e5326": 0.61,
+    "0a3057f2-91ad-4e14-b316-0ef25d20b2e4": 0.44,
+    "21402706-b7e1-4b9e-820f-b7eb33367515": 0.04,
+    "16114442-4bb2-4e0a-9d93-0e612a321831": 0.2,
+    "773275ef-2af9-4ec5-a783-b02e7f86c358": 0.17,
+    "311049ea-a277-485c-90b3-6fbdc6ebc648": 0.35,
+    "bdfae72b-41f5-4fcb-94b9-dedfce73d860": 0.04,
+    "2d04cf9d-af69-44bd-af25-78520ad46090": 0.04,
+    "b4d761ff-d733-4c5b-913e-42d0ec36695c": 0.31,
+    "0d65c925-d705-4106-bc72-df56e1af9bb1": 0.08,
+    "34128bcd-65ef-4fea-80e3-de66726d057d": 0.17,
+    "36f23fd6-20ae-46f0-b293-035393e436cd": 0.13,
+    "8aacd74a-e8e9-4a77-b540-776d7d1b2d31": 0.49,
+    "b5d5d0f3-7be2-43fd-8628-f7778b723e59": 0.05,
+    "e9a66b0f-6cd5-439b-ba7b-76487adfcba3": 0.06,
+    "82f4900a-622d-438d-b055-671d70d3559e": 0.31,
+    "ff7f6341-f928-4170-a24e-e80ae7800ba5": 0.04,
+    "0de4ec00-c7ec-4e1b-b623-e65f5625b0e1": 0.68,
+    "72aaab27-8628-4ba0-b6da-cde060443d3c": 0.24
+   },
+   "failure": null
+  },
+  {
+   "symbol": "AMZN.US",
+   "kpiId": "digital_grid_software_exposure",
+   "method": "judgement",
+   "level": "unknown",
+   "reproducesOffered": true,
+   "cited": [
+    "a558ddc3-86a6-42b0-94ec-746d01c6da4e"
+   ],
+   "pr11": {
+    "ids": [
+     "13dd1b84-c69d-4f74-bf9d-5a50776caba8",
+     "a558ddc3-86a6-42b0-94ec-746d01c6da4e",
+     "af6ffa0a-fb1a-45b6-a30e-cd02f0796aa6",
+     "2ca70373-a923-4d11-be7c-0b3fb0d27a2f",
+     "f7469980-def7-4c0b-bc79-0523c7e0fbd4",
+     "0a3ddf0f-36dd-451c-8737-dde455733b77",
+     "f76ec35b-3eff-4589-9f11-441973304749",
+     "4329af83-a1d6-4a25-af77-495abc9f64c6",
+     "8c17b2eb-2b97-4548-aa5c-ed0f577505a3",
+     "ed191fbd-7f43-48ff-80fd-4861973f9c0b"
+    ],
+    "citedRanks": [
+     2
+    ],
+    "ms": 384
+   },
+   "filtered": {
+    "ids": [
+     "a558ddc3-86a6-42b0-94ec-746d01c6da4e"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "searchMs": 585,
+    "judgeMs": 1046
+   },
+   "rerankedCitedRanks": [
+    1
+   ],
+   "fromBeyondTop10": 0,
+   "dropped": [
+    {
+     "chunkId": "13dd1b84-c69d-4f74-bf9d-5a50776caba8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "af6ffa0a-fb1a-45b6-a30e-cd02f0796aa6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2ca70373-a923-4d11-be7c-0b3fb0d27a2f",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f7469980-def7-4c0b-bc79-0523c7e0fbd4",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0a3ddf0f-36dd-451c-8737-dde455733b77",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f76ec35b-3eff-4589-9f11-441973304749",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "4329af83-a1d6-4a25-af77-495abc9f64c6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8c17b2eb-2b97-4548-aa5c-ed0f577505a3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ed191fbd-7f43-48ff-80fd-4861973f9c0b",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "5e69299f-d812-4c26-9ae8-80dd078cb6f8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "eb8ede77-9bb0-4e96-a180-64e573a93a00",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2520385e-617d-4585-95be-86a65351fef2",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7abd27f0-5b78-445d-bd42-6ec8b42ab5ce",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0919ee99-2d4d-4205-b484-141865878b4d",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "1773b699-64b3-4269-8948-399b60ab8642",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "e440f4c7-6891-485b-9685-0b40b587bdb6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f870ed23-023a-42fe-8b2c-05a8fd852c23",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "1ccc07c7-6736-4287-a671-c98e92f9b4e5",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b12712b5-3723-4abf-acd6-f08aeb47b102",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "13dd1b84-c69d-4f74-bf9d-5a50776caba8": 0.47,
+    "a558ddc3-86a6-42b0-94ec-746d01c6da4e": 0.51,
+    "af6ffa0a-fb1a-45b6-a30e-cd02f0796aa6": 0.41,
+    "2ca70373-a923-4d11-be7c-0b3fb0d27a2f": 0.44,
+    "f7469980-def7-4c0b-bc79-0523c7e0fbd4": 0.47,
+    "1773b699-64b3-4269-8948-399b60ab8642": 0.09,
+    "e440f4c7-6891-485b-9685-0b40b587bdb6": 0.1,
+    "f870ed23-023a-42fe-8b2c-05a8fd852c23": 0.3,
+    "1ccc07c7-6736-4287-a671-c98e92f9b4e5": 0.14,
+    "b12712b5-3723-4abf-acd6-f08aeb47b102": 0.14,
+    "0a3ddf0f-36dd-451c-8737-dde455733b77": 0.14,
+    "f76ec35b-3eff-4589-9f11-441973304749": 0.48,
+    "4329af83-a1d6-4a25-af77-495abc9f64c6": 0.11,
+    "8c17b2eb-2b97-4548-aa5c-ed0f577505a3": 0.22,
+    "ed191fbd-7f43-48ff-80fd-4861973f9c0b": 0.19,
+    "5e69299f-d812-4c26-9ae8-80dd078cb6f8": 0.13,
+    "eb8ede77-9bb0-4e96-a180-64e573a93a00": 0.12,
+    "2520385e-617d-4585-95be-86a65351fef2": 0.11,
+    "7abd27f0-5b78-445d-bd42-6ec8b42ab5ce": 0.09,
+    "0919ee99-2d4d-4205-b484-141865878b4d": 0.25
+   },
+   "failure": null
+  },
+  {
+   "symbol": "BE.US",
+   "kpiId": "smart_energy_committed_investment",
+   "method": "judgement",
+   "level": "2",
+   "reproducesOffered": true,
+   "cited": [
+    "0415e884-39a7-4963-8cfe-94bb36c457cd"
+   ],
+   "pr11": {
+    "ids": [
+     "4569d693-c500-441a-836e-813e13564df3",
+     "772435e4-77fc-4012-aa3c-c518d21964ed",
+     "292a79bb-6cb5-43ad-9294-f78f9dbf2f60",
+     "3261437a-f815-4a16-a861-954c1daa4a22",
+     "aac9961c-d94e-482c-bfab-2388d2dea6b5",
+     "b0f2f057-0370-4c80-a2a2-eb18dc782729",
+     "0415e884-39a7-4963-8cfe-94bb36c457cd",
+     "f4496a06-a4f0-41ee-8f12-0aad379a0e53",
+     "71fa2842-1968-4a8a-9539-02bac1fda804",
+     "9a007b39-2e31-44b0-9f0c-56c13f2723f7"
+    ],
+    "citedRanks": [
+     7
+    ],
+    "ms": 552
+   },
+   "filtered": {
+    "ids": [
+     "3261437a-f815-4a16-a861-954c1daa4a22",
+     "aac9961c-d94e-482c-bfab-2388d2dea6b5",
+     "0415e884-39a7-4963-8cfe-94bb36c457cd",
+     "f4496a06-a4f0-41ee-8f12-0aad379a0e53",
+     "5c99bced-2665-43be-8920-473267f0214e"
+    ],
+    "citedRanks": [
+     3
+    ],
+    "searchMs": 504,
+    "judgeMs": 516
+   },
+   "rerankedCitedRanks": [
+    2
+   ],
+   "fromBeyondTop10": 1,
+   "dropped": [
+    {
+     "chunkId": "4569d693-c500-441a-836e-813e13564df3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "772435e4-77fc-4012-aa3c-c518d21964ed",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "292a79bb-6cb5-43ad-9294-f78f9dbf2f60",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b0f2f057-0370-4c80-a2a2-eb18dc782729",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "71fa2842-1968-4a8a-9539-02bac1fda804",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "9a007b39-2e31-44b0-9f0c-56c13f2723f7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "6fc99cb4-7230-454d-84b2-ab25918f4515",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f4049945-c2f4-4367-88fc-d431dc9254d8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "124cfa53-67d2-4c85-975f-5b3e9e4bfb54",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2a9dd511-8586-45b1-847c-93ddf46b0b1d",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ae5e58ef-e931-4e0a-8af3-bb301b10171f",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ba46ca2f-b0f0-4aa2-a0f8-9ae1c8bc1358",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "dc5e0f50-2b32-4140-918c-1c84b12a2fc8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7f61ddb2-44e8-43f5-9292-44d4350779a3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f3320e1a-1fd8-4394-807d-c7863c3f130b",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "4569d693-c500-441a-836e-813e13564df3": 0.39,
+    "772435e4-77fc-4012-aa3c-c518d21964ed": 0.35,
+    "292a79bb-6cb5-43ad-9294-f78f9dbf2f60": 0.32,
+    "3261437a-f815-4a16-a861-954c1daa4a22": 0.65,
+    "aac9961c-d94e-482c-bfab-2388d2dea6b5": 0.64,
+    "b0f2f057-0370-4c80-a2a2-eb18dc782729": 0.34,
+    "0415e884-39a7-4963-8cfe-94bb36c457cd": 0.69,
+    "f4496a06-a4f0-41ee-8f12-0aad379a0e53": 0.73,
+    "71fa2842-1968-4a8a-9539-02bac1fda804": 0.17,
+    "9a007b39-2e31-44b0-9f0c-56c13f2723f7": 0.14,
+    "ba46ca2f-b0f0-4aa2-a0f8-9ae1c8bc1358": 0.17,
+    "5c99bced-2665-43be-8920-473267f0214e": 0.52,
+    "dc5e0f50-2b32-4140-918c-1c84b12a2fc8": 0.05,
+    "7f61ddb2-44e8-43f5-9292-44d4350779a3": 0.47,
+    "f3320e1a-1fd8-4394-807d-c7863c3f130b": 0.05,
+    "6fc99cb4-7230-454d-84b2-ab25918f4515": 0.2,
+    "f4049945-c2f4-4367-88fc-d431dc9254d8": 0.19,
+    "124cfa53-67d2-4c85-975f-5b3e9e4bfb54": 0.21,
+    "2a9dd511-8586-45b1-847c-93ddf46b0b1d": 0.13,
+    "ae5e58ef-e931-4e0a-8af3-bb301b10171f": 0.17
+   },
+   "failure": null
+  },
+  {
+   "symbol": "ENPH.US",
+   "kpiId": "digital_grid_software_exposure",
+   "method": "judgement",
+   "level": "3",
+   "reproducesOffered": true,
+   "cited": [
+    "8d5d998f-39e7-4cc0-8569-6d1f80aa95b8"
+   ],
+   "pr11": {
+    "ids": [
+     "8d5d998f-39e7-4cc0-8569-6d1f80aa95b8",
+     "91519626-667f-4ec4-9a04-d61c37b7a6d0",
+     "8c389f5e-c1a0-41a2-8862-33e088787387",
+     "96b821c1-64a2-49d0-adcb-c3776d89aafb",
+     "3515757c-e344-4098-85c0-4a7f0fb1cc3a",
+     "e6e43571-6d82-4946-b73f-2400d3d98b2e",
+     "21a82a62-c9db-40b3-96b4-5396df0d7adc",
+     "241dda8a-dce1-4ab8-a955-c72532aaa2f6",
+     "9aab646f-b00d-4593-bf90-cd64951fa7b7",
+     "e5ac7bb9-c565-4141-9b12-b269cd53f597"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "ms": 533
+   },
+   "filtered": {
+    "ids": [
+     "8d5d998f-39e7-4cc0-8569-6d1f80aa95b8",
+     "91519626-667f-4ec4-9a04-d61c37b7a6d0",
+     "8c389f5e-c1a0-41a2-8862-33e088787387",
+     "96b821c1-64a2-49d0-adcb-c3776d89aafb",
+     "3515757c-e344-4098-85c0-4a7f0fb1cc3a",
+     "e6e43571-6d82-4946-b73f-2400d3d98b2e",
+     "21a82a62-c9db-40b3-96b4-5396df0d7adc",
+     "241dda8a-dce1-4ab8-a955-c72532aaa2f6",
+     "9aab646f-b00d-4593-bf90-cd64951fa7b7",
+     "e5ac7bb9-c565-4141-9b12-b269cd53f597"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "searchMs": 422,
+    "judgeMs": 1305
+   },
+   "rerankedCitedRanks": [
+    3
+   ],
+   "fromBeyondTop10": 0,
+   "dropped": [
+    {
+     "chunkId": "3c9f2dbb-f7f9-4cca-9127-090933153ab6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "fa1f5843-268f-439a-949d-febe38e65725",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "9c3331ca-61a8-497e-81e2-e312f227e7dc",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "bbf93a0d-130e-4ed9-8acf-00a50c896d62",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "d1e3b43e-4bb2-451d-a79f-3b7c1497a291",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "d8b2e22e-6e3b-410d-8ffc-d07eb9ee0652",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "8d5d998f-39e7-4cc0-8569-6d1f80aa95b8": 0.97,
+    "91519626-667f-4ec4-9a04-d61c37b7a6d0": 0.95,
+    "8c389f5e-c1a0-41a2-8862-33e088787387": 0.97,
+    "96b821c1-64a2-49d0-adcb-c3776d89aafb": 0.97,
+    "3515757c-e344-4098-85c0-4a7f0fb1cc3a": 0.97,
+    "e6e43571-6d82-4946-b73f-2400d3d98b2e": 0.98,
+    "21a82a62-c9db-40b3-96b4-5396df0d7adc": 0.93,
+    "241dda8a-dce1-4ab8-a955-c72532aaa2f6": 0.98,
+    "9aab646f-b00d-4593-bf90-cd64951fa7b7": 0.97,
+    "e5ac7bb9-c565-4141-9b12-b269cd53f597": 0.93,
+    "3c9f2dbb-f7f9-4cca-9127-090933153ab6": 0.1,
+    "fa1f5843-268f-439a-949d-febe38e65725": 0.09,
+    "9c3331ca-61a8-497e-81e2-e312f227e7dc": 0.24,
+    "bbf93a0d-130e-4ed9-8acf-00a50c896d62": 0.2,
+    "955404ed-d104-4b99-8095-0f469ee2224c": 0.96,
+    "c47e07e7-5662-4422-bcfe-9c59714d1c34": 0.97,
+    "92f19189-adfa-45f6-802c-40a17382ae6b": 0.73,
+    "c9923179-c91e-47e0-bed5-59d064bfbe6a": 0.5,
+    "d1e3b43e-4bb2-451d-a79f-3b7c1497a291": 0.35,
+    "d8b2e22e-6e3b-410d-8ffc-d07eb9ee0652": 0.29
+   },
+   "failure": null
+  },
+  {
+   "symbol": "GOOGL.US",
+   "kpiId": "smart_energy_revenue_share",
+   "method": "extract_then_quant",
+   "level": "unknown",
+   "reproducesOffered": true,
+   "cited": [
+    "26c9576c-3893-40d0-9b01-1951add14bdb"
+   ],
+   "pr11": {
+    "ids": [
+     "17768fa4-0dab-4850-a229-c58c315b93e7",
+     "615501e3-9c1f-4096-a8b5-ecaadf36343a",
+     "8d6a87d1-023e-42dd-a1c9-66dda79544de",
+     "26c9576c-3893-40d0-9b01-1951add14bdb",
+     "e47ba8b5-a767-4326-981b-33e7b7eaf7f6",
+     "9a2ec1a4-41ab-44a9-8517-7f9c8f23e655",
+     "03c69eaf-875d-42dd-89ef-0fd71398642c",
+     "232b9c73-bf37-48a8-9014-11e6c91a4507",
+     "778b9848-7f4f-48b9-95c7-0032c489ba69",
+     "8ebd3a57-b834-4736-984c-b67f2d517c35"
+    ],
+    "citedRanks": [
+     4
+    ],
+    "ms": 426
+   },
+   "filtered": {
+    "ids": [
+     "21b094bc-85fc-4c94-8dd1-a0b3c3bf1c16"
+    ],
+    "citedRanks": [],
+    "searchMs": 421,
+    "judgeMs": 396
+   },
+   "rerankedCitedRanks": [],
+   "fromBeyondTop10": 1,
+   "dropped": [
+    {
+     "chunkId": "17768fa4-0dab-4850-a229-c58c315b93e7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "615501e3-9c1f-4096-a8b5-ecaadf36343a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8d6a87d1-023e-42dd-a1c9-66dda79544de",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "26c9576c-3893-40d0-9b01-1951add14bdb",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "e47ba8b5-a767-4326-981b-33e7b7eaf7f6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "9a2ec1a4-41ab-44a9-8517-7f9c8f23e655",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "03c69eaf-875d-42dd-89ef-0fd71398642c",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "232b9c73-bf37-48a8-9014-11e6c91a4507",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "778b9848-7f4f-48b9-95c7-0032c489ba69",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8ebd3a57-b834-4736-984c-b67f2d517c35",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7260fa7e-1297-4553-b173-d668be223d0a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7c1fabd1-9d9d-40e6-a83c-1ca7c6af2d74",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ca31af01-7c47-4780-89a9-e2b5781331da",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "c5dd0b52-bc42-4f6f-af35-2b88cb700a04",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "3656a133-0591-4db7-aa9c-668d55e2fe40",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ca7f1945-cbc0-4fb9-9623-3ece36e0e5aa",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "1dc43868-9e20-4027-9ae8-fa4b8692ce1d",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ab5f3978-30aa-4152-8787-4fd667e613c8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "49e4f2a9-6f62-463a-9481-8db90757cd79",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "17768fa4-0dab-4850-a229-c58c315b93e7": 0.3,
+    "615501e3-9c1f-4096-a8b5-ecaadf36343a": 0.29,
+    "8d6a87d1-023e-42dd-a1c9-66dda79544de": 0.24,
+    "26c9576c-3893-40d0-9b01-1951add14bdb": 0.18,
+    "e47ba8b5-a767-4326-981b-33e7b7eaf7f6": 0.22,
+    "21b094bc-85fc-4c94-8dd1-a0b3c3bf1c16": 0.51,
+    "7260fa7e-1297-4553-b173-d668be223d0a": 0.49,
+    "7c1fabd1-9d9d-40e6-a83c-1ca7c6af2d74": 0.45,
+    "ca31af01-7c47-4780-89a9-e2b5781331da": 0.38,
+    "c5dd0b52-bc42-4f6f-af35-2b88cb700a04": 0.36,
+    "9a2ec1a4-41ab-44a9-8517-7f9c8f23e655": 0.16,
+    "03c69eaf-875d-42dd-89ef-0fd71398642c": 0.05,
+    "232b9c73-bf37-48a8-9014-11e6c91a4507": 0.05,
+    "778b9848-7f4f-48b9-95c7-0032c489ba69": 0.06,
+    "8ebd3a57-b834-4736-984c-b67f2d517c35": 0.04,
+    "3656a133-0591-4db7-aa9c-668d55e2fe40": 0.04,
+    "ca7f1945-cbc0-4fb9-9623-3ece36e0e5aa": 0.06,
+    "1dc43868-9e20-4027-9ae8-fa4b8692ce1d": 0.26,
+    "ab5f3978-30aa-4152-8787-4fd667e613c8": 0.09,
+    "49e4f2a9-6f62-463a-9481-8db90757cd79": 0.22
+   },
+   "failure": null
+  },
+  {
+   "symbol": "KO.US",
+   "kpiId": "smart_energy_committed_investment",
+   "method": "judgement",
+   "level": "unknown",
+   "reproducesOffered": true,
+   "cited": [
+    "38fc4e97-fba4-41a4-a3c7-d0c230ac20fe"
+   ],
+   "pr11": {
+    "ids": [
+     "427163f0-8051-42bf-84ca-f65a6f0aa197",
+     "4d89bad3-3ac0-45e8-98c6-a22cec49e0e2",
+     "38fc4e97-fba4-41a4-a3c7-d0c230ac20fe",
+     "7941d696-f231-4064-a880-78e0a0ad849a",
+     "7a0a30bc-e416-4035-81eb-1dd285421c53",
+     "ee44f2b4-be79-4d59-bfb6-8d791772ad4d",
+     "0df74ee3-3437-44ae-8f53-d16d2fbf2dd5",
+     "3fb867f5-8f58-4766-af75-d0ff214f1383",
+     "7d25c248-ad7b-403f-8aa4-5dbf4f0ea753",
+     "c60f754c-906a-4f37-b9dd-25ce29ce1fe4"
+    ],
+    "citedRanks": [
+     3
+    ],
+    "ms": 762
+   },
+   "filtered": {
+    "ids": [
+     "38fc4e97-fba4-41a4-a3c7-d0c230ac20fe",
+     "ee44f2b4-be79-4d59-bfb6-8d791772ad4d",
+     "3fb867f5-8f58-4766-af75-d0ff214f1383",
+     "c60f754c-906a-4f37-b9dd-25ce29ce1fe4"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "searchMs": 681,
+    "judgeMs": 394
+   },
+   "rerankedCitedRanks": [
+    1
+   ],
+   "fromBeyondTop10": 0,
+   "dropped": [
+    {
+     "chunkId": "427163f0-8051-42bf-84ca-f65a6f0aa197",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "4d89bad3-3ac0-45e8-98c6-a22cec49e0e2",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7941d696-f231-4064-a880-78e0a0ad849a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7a0a30bc-e416-4035-81eb-1dd285421c53",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "0df74ee3-3437-44ae-8f53-d16d2fbf2dd5",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7d25c248-ad7b-403f-8aa4-5dbf4f0ea753",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "020f8a5c-ccc5-4ef4-8a10-128595a5b753",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8d830c80-00e0-4971-950b-d15e2a267daf",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "74164bb5-25cf-4aea-9b78-f1825101dde7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f0343e79-c66b-48a6-884b-afc2bbc8962a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "78f9f985-12a9-4c34-ab54-702edb06295b",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "7b15eb6f-f7cd-47ed-b11d-9676c617815d",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "d4640fe7-b346-4ae1-b434-6b5281602460",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "e8f7cc08-6b19-4ed3-8283-3a2c3e4a351e",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "64f54b3f-2d88-4f56-b71f-ff9026de9af8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b4f16ad1-dd95-4b6c-8a5a-e2417886a5d0",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "427163f0-8051-42bf-84ca-f65a6f0aa197": 0.06,
+    "4d89bad3-3ac0-45e8-98c6-a22cec49e0e2": 0.07,
+    "38fc4e97-fba4-41a4-a3c7-d0c230ac20fe": 0.91,
+    "7941d696-f231-4064-a880-78e0a0ad849a": 0.04,
+    "7a0a30bc-e416-4035-81eb-1dd285421c53": 0.05,
+    "ee44f2b4-be79-4d59-bfb6-8d791772ad4d": 0.9,
+    "0df74ee3-3437-44ae-8f53-d16d2fbf2dd5": 0.04,
+    "3fb867f5-8f58-4766-af75-d0ff214f1383": 0.73,
+    "7d25c248-ad7b-403f-8aa4-5dbf4f0ea753": 0.04,
+    "c60f754c-906a-4f37-b9dd-25ce29ce1fe4": 0.67,
+    "020f8a5c-ccc5-4ef4-8a10-128595a5b753": 0.03,
+    "8d830c80-00e0-4971-950b-d15e2a267daf": 0.29,
+    "74164bb5-25cf-4aea-9b78-f1825101dde7": 0.03,
+    "f0343e79-c66b-48a6-884b-afc2bbc8962a": 0.25,
+    "78f9f985-12a9-4c34-ab54-702edb06295b": 0.07,
+    "7b15eb6f-f7cd-47ed-b11d-9676c617815d": 0.04,
+    "d4640fe7-b346-4ae1-b434-6b5281602460": 0.06,
+    "e8f7cc08-6b19-4ed3-8283-3a2c3e4a351e": 0.04,
+    "64f54b3f-2d88-4f56-b71f-ff9026de9af8": 0.03,
+    "b4f16ad1-dd95-4b6c-8a5a-e2417886a5d0": 0.06
+   },
+   "failure": null
+  },
+  {
+   "symbol": "NOKIA.HE",
+   "kpiId": "efficiency_demand_response_exposure",
+   "method": "judgement",
+   "level": "1",
+   "reproducesOffered": true,
+   "cited": [
+    "db2b59a7-fcf0-46e6-a007-95e9645c2167",
+    "6ebf20f9-4a5c-4373-b358-5e475efe45ac"
+   ],
+   "pr11": {
+    "ids": [
+     "6bb23481-4ec2-4490-b6ed-90be7e91abea",
+     "db2b59a7-fcf0-46e6-a007-95e9645c2167",
+     "6ebf20f9-4a5c-4373-b358-5e475efe45ac",
+     "8072e0f3-ada3-445a-beb4-546e4c3c0ce0",
+     "b6d34335-ca20-455f-8532-1b52197a2a51",
+     "deb9911d-5680-40e1-994b-2491dff6b643",
+     "e91b7174-e53e-4290-807f-33658215e371",
+     "f09e1df6-e85d-4b99-b75a-e59280deddf2",
+     "2ca21865-d4a7-46d5-a76f-e32456691ceb",
+     "fe2d0916-ffd3-41c3-b8f4-d6791055e294"
+    ],
+    "citedRanks": [
+     2,
+     3
+    ],
+    "ms": 408
+   },
+   "filtered": {
+    "ids": [
+     "6bb23481-4ec2-4490-b6ed-90be7e91abea",
+     "db2b59a7-fcf0-46e6-a007-95e9645c2167",
+     "6ebf20f9-4a5c-4373-b358-5e475efe45ac",
+     "9754fe3d-195f-465d-86ff-8727fc6c9734"
+    ],
+    "citedRanks": [
+     2,
+     3
+    ],
+    "searchMs": 505,
+    "judgeMs": 353
+   },
+   "rerankedCitedRanks": [
+    1,
+    3
+   ],
+   "fromBeyondTop10": 1,
+   "dropped": [
+    {
+     "chunkId": "8072e0f3-ada3-445a-beb4-546e4c3c0ce0",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "b6d34335-ca20-455f-8532-1b52197a2a51",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "deb9911d-5680-40e1-994b-2491dff6b643",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "e91b7174-e53e-4290-807f-33658215e371",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f09e1df6-e85d-4b99-b75a-e59280deddf2",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2ca21865-d4a7-46d5-a76f-e32456691ceb",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "fe2d0916-ffd3-41c3-b8f4-d6791055e294",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "39df3204-04a7-4053-ad08-e5cb1f24ada6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "77c8dc62-1c16-4132-879a-7d847aa5d8b2",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2f031ef3-c5c2-4349-8a78-4ae670bd77f3",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "481d6c82-ccaf-4807-aeee-0e77e57a11ae",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "aeb44ff3-b95e-4aa1-aecf-94c4705fff86",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "42c2f760-afd2-425d-8f7d-2a73a97bb966",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "80906ef9-6ff1-4089-b240-52166ef9b498",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8039ce9f-7fd0-4c15-9b81-3ad435fdfcd7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "85fd1564-da01-452b-9ebc-84749d7fbd15",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "6bb23481-4ec2-4490-b6ed-90be7e91abea": 0.88,
+    "db2b59a7-fcf0-46e6-a007-95e9645c2167": 0.89,
+    "6ebf20f9-4a5c-4373-b358-5e475efe45ac": 0.78,
+    "8072e0f3-ada3-445a-beb4-546e4c3c0ce0": 0.36,
+    "b6d34335-ca20-455f-8532-1b52197a2a51": 0.32,
+    "deb9911d-5680-40e1-994b-2491dff6b643": 0.27,
+    "e91b7174-e53e-4290-807f-33658215e371": 0.4,
+    "f09e1df6-e85d-4b99-b75a-e59280deddf2": 0.47,
+    "2ca21865-d4a7-46d5-a76f-e32456691ceb": 0.06,
+    "fe2d0916-ffd3-41c3-b8f4-d6791055e294": 0.38,
+    "9754fe3d-195f-465d-86ff-8727fc6c9734": 0.62,
+    "42c2f760-afd2-425d-8f7d-2a73a97bb966": 0.15,
+    "80906ef9-6ff1-4089-b240-52166ef9b498": 0.18,
+    "8039ce9f-7fd0-4c15-9b81-3ad435fdfcd7": 0.11,
+    "85fd1564-da01-452b-9ebc-84749d7fbd15": 0.06,
+    "39df3204-04a7-4053-ad08-e5cb1f24ada6": 0.09,
+    "77c8dc62-1c16-4132-879a-7d847aa5d8b2": 0.17,
+    "2f031ef3-c5c2-4349-8a78-4ae670bd77f3": 0.05,
+    "481d6c82-ccaf-4807-aeee-0e77e57a11ae": 0.39,
+    "aeb44ff3-b95e-4aa1-aecf-94c4705fff86": 0.13
+   },
+   "failure": null
+  },
+  {
+   "symbol": "PLUG.US",
+   "kpiId": "grid_equipment_automation_exposure",
+   "method": "judgement",
+   "level": "1",
+   "reproducesOffered": true,
+   "cited": [
+    "6116dd26-3c32-4e25-8b7e-9d3c57169415"
+   ],
+   "pr11": {
+    "ids": [
+     "13db9e1e-1b13-4878-b774-3dc50d2d4521",
+     "df5da41c-4f10-4946-8ef8-8f3dabb8b774",
+     "426266f9-caa7-4dbb-8bd7-846ad2d75cb0",
+     "ffafaac1-5d71-4756-8b12-402cf35741c7",
+     "36266808-53e3-4dc5-b960-e324635a77f9",
+     "938e3b97-16e6-4fc3-ab44-4aaab4529c81",
+     "6116dd26-3c32-4e25-8b7e-9d3c57169415",
+     "15b2a80a-334b-4f7e-9f20-8fa088acf6f8",
+     "2030fafa-e42a-478f-9655-4ef85fd23aa4",
+     "8fb8c5ae-2861-4d9e-8538-51a070784247"
+    ],
+    "citedRanks": [
+     7
+    ],
+    "ms": 436
+   },
+   "filtered": {
+    "ids": [
+     "13db9e1e-1b13-4878-b774-3dc50d2d4521",
+     "df5da41c-4f10-4946-8ef8-8f3dabb8b774",
+     "426266f9-caa7-4dbb-8bd7-846ad2d75cb0",
+     "ffafaac1-5d71-4756-8b12-402cf35741c7",
+     "36266808-53e3-4dc5-b960-e324635a77f9",
+     "6116dd26-3c32-4e25-8b7e-9d3c57169415",
+     "2030fafa-e42a-478f-9655-4ef85fd23aa4",
+     "a3c5878a-c173-45ad-a1b0-189bfa88c8fe",
+     "ce9fc394-29dc-4f54-a741-a58eb587e580",
+     "4d019fe2-a1b8-4020-84dc-def5e4cd5a2a"
+    ],
+    "citedRanks": [
+     6
+    ],
+    "searchMs": 452,
+    "judgeMs": 353
+   },
+   "rerankedCitedRanks": [
+    2
+   ],
+   "fromBeyondTop10": 3,
+   "dropped": [
+    {
+     "chunkId": "938e3b97-16e6-4fc3-ab44-4aaab4529c81",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "15b2a80a-334b-4f7e-9f20-8fa088acf6f8",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8fb8c5ae-2861-4d9e-8538-51a070784247",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "124696bb-58fa-4697-a9c7-2577d2d756a9",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "a3483614-90b9-4d1b-b7f9-f524019cc14a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "484fe83b-a6d0-4e18-82a4-fd57c24ffb0a",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "52eaa07c-8e44-49e9-bab8-d40c6a636619",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "938e3b97-16e6-4fc3-ab44-4aaab4529c81": 0.48,
+    "6116dd26-3c32-4e25-8b7e-9d3c57169415": 0.77,
+    "15b2a80a-334b-4f7e-9f20-8fa088acf6f8": 0.44,
+    "2030fafa-e42a-478f-9655-4ef85fd23aa4": 0.6,
+    "8fb8c5ae-2861-4d9e-8538-51a070784247": 0.48,
+    "13db9e1e-1b13-4878-b774-3dc50d2d4521": 0.75,
+    "df5da41c-4f10-4946-8ef8-8f3dabb8b774": 0.74,
+    "426266f9-caa7-4dbb-8bd7-846ad2d75cb0": 0.69,
+    "ffafaac1-5d71-4756-8b12-402cf35741c7": 0.73,
+    "36266808-53e3-4dc5-b960-e324635a77f9": 0.57,
+    "a3c5878a-c173-45ad-a1b0-189bfa88c8fe": 0.82,
+    "ce9fc394-29dc-4f54-a741-a58eb587e580": 0.58,
+    "4d019fe2-a1b8-4020-84dc-def5e4cd5a2a": 0.63,
+    "ead0239d-4d93-4291-adc5-9bf48288963a": 0.61,
+    "124696bb-58fa-4697-a9c7-2577d2d756a9": 0.04,
+    "a3483614-90b9-4d1b-b7f9-f524019cc14a": 0.05,
+    "484fe83b-a6d0-4e18-82a4-fd57c24ffb0a": 0.07,
+    "c0dcc834-8727-450f-8b88-ec35749d7081": 0.69,
+    "52eaa07c-8e44-49e9-bab8-d40c6a636619": 0.05,
+    "fb577450-dbe3-4151-80b4-7ad10921849a": 0.67
+   },
+   "failure": null
+  },
+  {
+   "symbol": "RWE.XETRA",
+   "kpiId": "smart_energy_committed_investment",
+   "method": "judgement",
+   "level": "3",
+   "reproducesOffered": true,
+   "cited": [
+    "df8c28d9-d752-424c-a074-9fd8f4f5cd9d"
+   ],
+   "pr11": {
+    "ids": [
+     "23ae1b7e-34d4-4095-aa01-4e0dd1ff68f1",
+     "a584e108-ad13-4749-8227-5a06c386fc18",
+     "3bf2ef81-98c5-4220-ae10-edb0a9afe5ff",
+     "39263ece-f769-4500-8f0a-586313cfa109",
+     "b27760da-fbc3-462b-bcca-0dfe815de75d",
+     "f69b5c35-f5f3-42a2-99d0-9ae7c39a0adc",
+     "38d89bc5-b956-4379-905f-b249d9b5eecb",
+     "6d97d613-44c4-49ff-8263-d0bee1fd8115",
+     "df8c28d9-d752-424c-a074-9fd8f4f5cd9d",
+     "32d69d8c-f696-4a33-ac3a-092f8b640bb5"
+    ],
+    "citedRanks": [
+     9
+    ],
+    "ms": 378
+   },
+   "filtered": {
+    "ids": [
+     "23ae1b7e-34d4-4095-aa01-4e0dd1ff68f1",
+     "3bf2ef81-98c5-4220-ae10-edb0a9afe5ff",
+     "39263ece-f769-4500-8f0a-586313cfa109",
+     "b27760da-fbc3-462b-bcca-0dfe815de75d",
+     "f69b5c35-f5f3-42a2-99d0-9ae7c39a0adc",
+     "6d97d613-44c4-49ff-8263-d0bee1fd8115",
+     "df8c28d9-d752-424c-a074-9fd8f4f5cd9d",
+     "32d69d8c-f696-4a33-ac3a-092f8b640bb5",
+     "a760b0d9-a0e5-4515-bf80-88188fbdebd3",
+     "1be9f5a7-edb1-4541-9dba-0917b6f5fe1f"
+    ],
+    "citedRanks": [
+     7
+    ],
+    "searchMs": 485,
+    "judgeMs": 330
+   },
+   "rerankedCitedRanks": [
+    10
+   ],
+   "fromBeyondTop10": 2,
+   "dropped": [
+    {
+     "chunkId": "a584e108-ad13-4749-8227-5a06c386fc18",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "38d89bc5-b956-4379-905f-b249d9b5eecb",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "5bdd9496-f65a-4dc1-8012-db60cc743ea6",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8d9a3f93-c36f-4095-ab74-4d4ef76da78f",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "16778714-5b44-46e9-92d9-b85641f3c718",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "91e045da-e235-48fd-b23e-9d650f7c2302",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "f69b5c35-f5f3-42a2-99d0-9ae7c39a0adc": 0.83,
+    "38d89bc5-b956-4379-905f-b249d9b5eecb": 0.12,
+    "6d97d613-44c4-49ff-8263-d0bee1fd8115": 0.72,
+    "df8c28d9-d752-424c-a074-9fd8f4f5cd9d": 0.83,
+    "32d69d8c-f696-4a33-ac3a-092f8b640bb5": 0.88,
+    "23ae1b7e-34d4-4095-aa01-4e0dd1ff68f1": 0.77,
+    "a584e108-ad13-4749-8227-5a06c386fc18": 0.13,
+    "3bf2ef81-98c5-4220-ae10-edb0a9afe5ff": 0.84,
+    "39263ece-f769-4500-8f0a-586313cfa109": 0.87,
+    "b27760da-fbc3-462b-bcca-0dfe815de75d": 0.86,
+    "5bdd9496-f65a-4dc1-8012-db60cc743ea6": 0.13,
+    "8d9a3f93-c36f-4095-ab74-4d4ef76da78f": 0.31,
+    "16778714-5b44-46e9-92d9-b85641f3c718": 0.2,
+    "a760b0d9-a0e5-4515-bf80-88188fbdebd3": 0.87,
+    "1be9f5a7-edb1-4541-9dba-0917b6f5fe1f": 0.61,
+    "91129723-074a-4609-b07e-faa0b726ca32": 0.89,
+    "b2581fa9-acf8-485a-ae8f-f1b8880f5861": 0.59,
+    "91e045da-e235-48fd-b23e-9d650f7c2302": 0.2,
+    "605e06d3-461b-4b6a-9f2d-28a9585e3bec": 0.9,
+    "3a1b5a22-0d72-46f1-89c5-23f34f1f2f27": 0.88
+   },
+   "failure": null
+  },
+  {
+   "symbol": "SHLS.US",
+   "kpiId": "digital_grid_software_exposure",
+   "method": "judgement",
+   "level": "2",
+   "reproducesOffered": true,
+   "cited": [
+    "2955cc4f-5f51-4259-ab18-e1ed9f48dd14"
+   ],
+   "pr11": {
+    "ids": [
+     "3b809044-4ec5-406e-a768-2c757da7164e",
+     "f7ebd597-9ef3-4286-bb06-23779178eaf4",
+     "262ac1c9-9d3c-436c-82ba-cad842cfb3c7",
+     "2955cc4f-5f51-4259-ab18-e1ed9f48dd14",
+     "8413823d-4954-48de-aea1-d5323a326c01",
+     "9419881b-2c19-4644-8c17-745f3e2e821b",
+     "5da19ac2-a138-4ac8-a6e3-928d4576b6fb",
+     "65c85daa-f250-41f3-8f9c-edbae9589a47",
+     "b296eabd-a126-49b6-a382-ab19d3b66018",
+     "e1bc3ee6-e89e-4d82-8262-4d6d927e453f"
+    ],
+    "citedRanks": [
+     4
+    ],
+    "ms": 391
+   },
+   "filtered": {
+    "ids": [
+     "2955cc4f-5f51-4259-ab18-e1ed9f48dd14",
+     "9419881b-2c19-4644-8c17-745f3e2e821b",
+     "5da19ac2-a138-4ac8-a6e3-928d4576b6fb",
+     "b296eabd-a126-49b6-a382-ab19d3b66018",
+     "e1bc3ee6-e89e-4d82-8262-4d6d927e453f",
+     "4be865db-0bc5-48c9-9779-a9cf0e50116d",
+     "5df9296a-77d3-4cfa-8e77-584da8a1832f",
+     "790ed962-273d-4c49-92b4-bd84c9015b10",
+     "dfb7d871-5d4f-456f-a87b-5e1bf40acb72",
+     "44b5d62f-c4f4-4a10-b196-d7871cddc78e"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "searchMs": 355,
+    "judgeMs": 326
+   },
+   "rerankedCitedRanks": [
+    1
+   ],
+   "fromBeyondTop10": 5,
+   "dropped": [
+    {
+     "chunkId": "3b809044-4ec5-406e-a768-2c757da7164e",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "f7ebd597-9ef3-4286-bb06-23779178eaf4",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "262ac1c9-9d3c-436c-82ba-cad842cfb3c7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "8413823d-4954-48de-aea1-d5323a326c01",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "65c85daa-f250-41f3-8f9c-edbae9589a47",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "35f9c274-0f11-4542-94fb-6356049a06e5",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "6e3747ea-af2b-4d3a-aac7-27d4407c3fa5",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "3f12b7e1-c59b-433e-8b8b-1202704aaa13",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "c3e7da39-2b82-43ad-a315-cf314c8b19c0",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "3b809044-4ec5-406e-a768-2c757da7164e": 0.38,
+    "f7ebd597-9ef3-4286-bb06-23779178eaf4": 0.3,
+    "262ac1c9-9d3c-436c-82ba-cad842cfb3c7": 0.36,
+    "2955cc4f-5f51-4259-ab18-e1ed9f48dd14": 0.9,
+    "8413823d-4954-48de-aea1-d5323a326c01": 0.35,
+    "4be865db-0bc5-48c9-9779-a9cf0e50116d": 0.76,
+    "5df9296a-77d3-4cfa-8e77-584da8a1832f": 0.66,
+    "790ed962-273d-4c49-92b4-bd84c9015b10": 0.64,
+    "dfb7d871-5d4f-456f-a87b-5e1bf40acb72": 0.76,
+    "35f9c274-0f11-4542-94fb-6356049a06e5": 0.33,
+    "9419881b-2c19-4644-8c17-745f3e2e821b": 0.88,
+    "5da19ac2-a138-4ac8-a6e3-928d4576b6fb": 0.8,
+    "65c85daa-f250-41f3-8f9c-edbae9589a47": 0.47,
+    "b296eabd-a126-49b6-a382-ab19d3b66018": 0.75,
+    "e1bc3ee6-e89e-4d82-8262-4d6d927e453f": 0.51,
+    "6e3747ea-af2b-4d3a-aac7-27d4407c3fa5": 0.39,
+    "3f12b7e1-c59b-433e-8b8b-1202704aaa13": 0.04,
+    "c3e7da39-2b82-43ad-a315-cf314c8b19c0": 0.04,
+    "44b5d62f-c4f4-4a10-b196-d7871cddc78e": 0.67,
+    "cb9193f0-2758-4970-9d3c-a199d3010ed2": 0.66
+   },
+   "failure": null
+  },
+  {
+   "symbol": "SIE.XETRA",
+   "kpiId": "storage_inverter_exposure",
+   "method": "judgement",
+   "level": "1",
+   "reproducesOffered": true,
+   "cited": [
+    "b99f9e6a-23f4-42d4-8740-5b2b15f4d340"
+   ],
+   "pr11": {
+    "ids": [
+     "13c77c4b-c535-48c0-a854-ce154e4af418",
+     "fce7e38e-c008-4b0f-b8e8-c2063af44468",
+     "2af18ea5-1e4d-48e8-b73c-b1d7ce3d2a33",
+     "c31d34c1-8adc-4a1c-b75f-515362b12c08",
+     "06bf0921-5265-49fe-b2b8-72c169495d88",
+     "6e5d1ed5-187f-4c7c-a395-fd8a4a247d12",
+     "b99f9e6a-23f4-42d4-8740-5b2b15f4d340",
+     "ead04de8-7c74-4626-883e-9f468de5c6d4",
+     "ea0f44bb-8cf3-42af-9427-0deac47dc924",
+     "edfe3367-4030-4f8e-8102-835981f559b7"
+    ],
+    "citedRanks": [
+     7
+    ],
+    "ms": 607
+   },
+   "filtered": {
+    "ids": [
+     "b99f9e6a-23f4-42d4-8740-5b2b15f4d340",
+     "9a7e3db8-f2cd-4e8e-9318-63cd76309157",
+     "61601e18-b7b0-4c4d-b55f-9f89a4f1801a",
+     "59caa9e8-f2e4-4cf0-96aa-7756a956fc7d",
+     "f07b5894-833a-4050-89ee-b8f55083f230"
+    ],
+    "citedRanks": [
+     1
+    ],
+    "searchMs": 392,
+    "judgeMs": 390
+   },
+   "rerankedCitedRanks": [
+    1
+   ],
+   "fromBeyondTop10": 4,
+   "dropped": [
+    {
+     "chunkId": "13c77c4b-c535-48c0-a854-ce154e4af418",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "fce7e38e-c008-4b0f-b8e8-c2063af44468",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2af18ea5-1e4d-48e8-b73c-b1d7ce3d2a33",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "c31d34c1-8adc-4a1c-b75f-515362b12c08",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "06bf0921-5265-49fe-b2b8-72c169495d88",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "6e5d1ed5-187f-4c7c-a395-fd8a4a247d12",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ead04de8-7c74-4626-883e-9f468de5c6d4",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "ea0f44bb-8cf3-42af-9427-0deac47dc924",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "edfe3367-4030-4f8e-8102-835981f559b7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "a56a3a3b-01fe-4a9a-89b5-b9087ec95da1",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "bc2f7cfa-af1a-41b1-92cc-80e829d779d0",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "d63a5f1a-8f30-4440-804c-949a3fa0be37",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "43e97d5d-89d4-4716-a9de-c6f74f75a2e7",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "a76f062c-835d-4f06-b581-2d6849b9a105",
+     "reason": "irrelevant"
+    },
+    {
+     "chunkId": "2032e21e-c4f8-4f65-b54e-9bf1f8fd939f",
+     "reason": "irrelevant"
+    }
+   ],
+   "probabilities": {
+    "13c77c4b-c535-48c0-a854-ce154e4af418": 0.16,
+    "fce7e38e-c008-4b0f-b8e8-c2063af44468": 0.11,
+    "2af18ea5-1e4d-48e8-b73c-b1d7ce3d2a33": 0.27,
+    "c31d34c1-8adc-4a1c-b75f-515362b12c08": 0.47,
+    "06bf0921-5265-49fe-b2b8-72c169495d88": 0.09,
+    "6e5d1ed5-187f-4c7c-a395-fd8a4a247d12": 0.1,
+    "b99f9e6a-23f4-42d4-8740-5b2b15f4d340": 0.79,
+    "ead04de8-7c74-4626-883e-9f468de5c6d4": 0.09,
+    "ea0f44bb-8cf3-42af-9427-0deac47dc924": 0.46,
+    "edfe3367-4030-4f8e-8102-835981f559b7": 0.11,
+    "a56a3a3b-01fe-4a9a-89b5-b9087ec95da1": 0.07,
+    "9a7e3db8-f2cd-4e8e-9318-63cd76309157": 0.75,
+    "bc2f7cfa-af1a-41b1-92cc-80e829d779d0": 0.46,
+    "d63a5f1a-8f30-4440-804c-949a3fa0be37": 0.25,
+    "43e97d5d-89d4-4716-a9de-c6f74f75a2e7": 0.18,
+    "a76f062c-835d-4f06-b581-2d6849b9a105": 0.13,
+    "61601e18-b7b0-4c4d-b55f-9f89a4f1801a": 0.57,
+    "59caa9e8-f2e4-4cf0-96aa-7756a956fc7d": 0.71,
+    "f07b5894-833a-4050-89ee-b8f55083f230": 0.65,
+    "2032e21e-c4f8-4f65-b54e-9bf1f8fd939f": 0.08
+   },
+   "failure": null
+  }
+ ]
+}
