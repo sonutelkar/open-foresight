@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "flat-type-hierarchy",
+        "value": "*",
+        "files": [
+          "packages/data/fixtures/web-reports/report.html"
+        ],
+        "createdAt": "2026-11-23T12:35:00.457Z",
+        "reason": "assistant decision, not user confirmed: test fixture HTML served to the web report fetcher in unit tests, never rendered as UI"
+      }
+    ]
+  }
+}
