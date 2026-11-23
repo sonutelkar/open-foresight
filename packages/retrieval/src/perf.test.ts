@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { createSnapshot, figiMappings, secFilings, secListings, secSourceDocuments, securities } from '@open-foresight/db';
+import { filterByRelevance, type RelevanceJudge } from './relevance.js';
 import { search } from './search.js';
 
 const url = process.env.TEST_DATABASE_URL;
@@ -70,9 +71,36 @@ enabled('retrieval performance', () => {
       if (JSON.stringify(vectorOnly.map(h => h.chunkId)) !== JSON.stringify(expected)) mismatches++;
     }
     process.stdout.write(`${JSON.stringify({ perf: '100 searches over 10,000 chunks (1,000 eligible per security)', totalMs: Math.round(total), medianMs: Math.round(timings[50] ?? 0), p95Ms: Math.round(timings[95] ?? 0), buildMs: Math.round(buildMs), vectorRankingMismatchesOf20: mismatches, emptyResults: empty })}\n`);
+
+    // The Jev relevance path on the same queries: 20 candidates, then the filter. Each query runs both paths, and which runs first alternates, so cache warmth and drift favour neither.
+    // The recorded judge answers at once and keeps about half the passages, so this times the filter's own work and excludes provider latency.
+    const judge: RelevanceJudge = { async decide(input) { return { id: 'perf', answers: Object.fromEntries(input.inputEvidenceIds.map((id, i) => [`relevant_p${i + 1}`, { type: 'noul' as const, noul: id.charCodeAt(0) % 2 ? 0.9 : 0.1 }])) }; } };
+    const scope = { judge, runId: '00000000-0000-0000-0000-000000000000', asOf: '2024-12-31', company: 'Perf Inc', issuerKeys: [`cik:${targetCik}`] };
+    const plain: number[] = [], filtered: number[] = [];
+    let kept = 0, judged = 0;
+    for (let i = 0; i < 100; i++) {
+      const input = { db, snapshotId: snapshot.id, asOf: '2024-12-31', securityId: security!.id, query: words(i), queryEmbedding: queries[i], indexVersion: version, candidates: 50 };
+      const timePlain = async () => { const t = performance.now(); await search({ ...input, limit: 10 }); plain.push(performance.now() - t); };
+      const timeFiltered = async () => {
+        const t = performance.now();
+        const r = await filterByRelevance(scope, words(i), await search({ ...input, limit: 20 }));
+        filtered.push(performance.now() - t);
+        expect(r.failure).toBeUndefined();
+        kept += r.hits.length; judged += Object.keys(r.probabilities).length;
+      };
+      if (i % 2) { await timePlain(); await timeFiltered(); } else { await timeFiltered(); await timePlain(); }
+    }
+    const filteredTotal = filtered.reduce((a, b) => a + b, 0);
+    const median = (xs: number[]) => [...xs].sort((a, b) => a - b)[50]!;
+    process.stdout.write(`${JSON.stringify({ perf: '100 searches through the relevance filter, alternating with plain search', filteredTotalMs: Math.round(filteredTotal), filteredMedianMs: +median(filtered).toFixed(2), plainMedianMs: +median(plain).toFixed(2), judged, kept })}\n`);
     await client.end();
     expect(empty).toBe(0);
     expect(mismatches).toBe(0);
     expect(total).toBeLessThan(60_000);
+    expect(judged).toBe(2000);
+    expect(kept).toBeGreaterThan(0);
+    expect(kept).toBeLessThan(judged);
+    expect(filteredTotal).toBeLessThan(60_000);
+    expect(median(filtered)).toBeLessThan(1.25 * median(plain));
   }, 900_000);
 });
