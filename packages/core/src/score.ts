@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { bucketLevel, type Kpi } from './framework.js';
 
 export type ScoreLevel = '0' | '1' | '2' | '3' | '4' | 'unknown';
-export type DocKind = 'sec_filing' | 'esef_filing';
+export type DocKind = 'sec_filing' | 'esef_filing' | 'web_report';
 
 /** A retrieved passage offered to the Analyst. `id` is a short label such as `e3`, so a model cannot cite an invented identifier. */
 export type EvidenceItem = {

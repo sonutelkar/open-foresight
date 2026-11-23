@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import { enabledSources, validateFramework, type FrameworkDraft } from '@open-foresight/core';
-import { baskets, basketMembers, createSnapshot, documentChunks, esefFilings, kpiFrameworkDrafts, kpiFrameworkVersions, kpiScores, llmCalls, runs, secFilings, secSourceDocuments, securities } from '@open-foresight/db';
+import { baskets, basketMembers, createSnapshot, documentChunks, esefFilings, webDocuments, kpiFrameworkDrafts, kpiFrameworkVersions, kpiScores, llmCalls, runs, secFilings, secSourceDocuments, securities } from '@open-foresight/db';
 import { createApp } from './app.js';
 
 const golden = JSON.parse(readFileSync(new URL('../../../packages/core/fixtures/framework/valid-draft.json', import.meta.url), 'utf8')) as FrameworkDraft;
@@ -47,12 +47,13 @@ integration('Basket evidence API on Postgres', () => {
     const [sec] = await db.insert(secFilings).values({ cik: '0000000001', accession: randomUUID().slice(0, 20), form: '10-K', filedAt: '2026-03-02', primaryDocument: 'a.htm', submissionSourceId: src!.id, documentSourceId: src!.id, ingestedAt: new Date() }).returning({ id: secFilings.id });
     const [esef] = await db.insert(esefFilings).values({ fxoId: randomUUID(), lei: 'LEI123', entityName: 'ASML', country: 'NL', periodEnd: '2025-12-31', availableOn: '2026-03-01', availableSource: 'published', dateAddedAt: new Date(), reportUrl: '/LEI123/2025-12-31/ESEF/NL/0/a/reports/a.xhtml', packageSha256: randomUUID(), ingestedAt: new Date() }).returning({ id: esefFilings.id });
     const chunk = async (docKind: string, docId: string, text: string) => (await db.insert(documentChunks).values({ docKind, docId, issuerKey: 'cik:0000000001', availableOn: '2026-03-02', section: 'ITEM 1. BUSINESS', ordinal: 0, startOffset: 10, endOffset: 10 + text.length, text, embedding: JSON.parse(zeroVector) as number[], indexVersion: `v-${randomUUID()}` }).returning({ id: documentChunks.id }))[0]!.id;
-    const secChunk = await chunk('sec_filing', sec!.id, passage), esefChunk = await chunk('esef_filing', esef!.id, 'ASML supplies lithography systems to chipmakers.');
+    const [web] = await db.insert(webDocuments).values({ url: 'https://www.siemens.com/report.pdf', finalUrl: 'https://assets.siemens.com/Siemens-Annual-Report-2025.pdf', contentType: 'application/pdf', byteSize: 10, rawSha256: randomUUID(), text: 'x', headings: [], extractor: 'test', issuerKey: 'lei:W38RGI023J3WT1HWRP32', entityName: 'Siemens AG', fetchedAt: new Date(), availableOn: '2026-11-20' }).returning({ id: webDocuments.id });
+    const secChunk = await chunk('sec_filing', sec!.id, passage), esefChunk = await chunk('esef_filing', esef!.id, 'ASML supplies lithography systems to chipmakers.'), webChunk = await chunk('web_report', web!.id, 'Siemens sells grid automation software worldwide.');
     const cite = (evidenceId: string, quote: string, chunkId: string, docKind: string, docId: string) => ({ evidenceId, quote, chunkId, docKind, docId, section: 'ITEM 1. BUSINESS', availableOn: '2026-03-02', startOffset: 10, endOffset: 60 });
     const base = { runId: world.runId, frameworkDraftId: world.draftId, snapshotId: snapshot.id, securityId: world.ids[0]!, symbol: 'S0.US', asOf: '2026-11-20', method: 'judgement', confidence: '0.8', errors: [], conflicts: [], evidence: [] };
     await db.insert(kpiScores).values([
       { ...base, kpiId: textKpi.id, attempt: 1, level: '2', valid: true, rationale: 'First attempt.', citations: [] },
-      { ...base, kpiId: textKpi.id, attempt: 2, level: '3', valid: true, rationale: 'The filing reports deployed storage.', citations: [cite('e1', '7.2 GW of  energy storage assets deployed', secChunk, 'sec_filing', sec!.id), cite('e2', 'ASML supplies lithography systems', esefChunk, 'esef_filing', esef!.id), cite('e3', 'a sentence the passage never contains', secChunk, 'sec_filing', sec!.id)] },
+      { ...base, kpiId: textKpi.id, attempt: 2, level: '3', valid: true, rationale: 'The filing reports deployed storage.', citations: [cite('e1', '7.2 GW of  energy storage assets deployed', secChunk, 'sec_filing', sec!.id), cite('e2', 'ASML supplies lithography systems', esefChunk, 'esef_filing', esef!.id), cite('e3', 'a sentence the passage never contains', secChunk, 'sec_filing', sec!.id), cite('e4', 'Siemens sells grid automation software', webChunk, 'web_report', web!.id)] },
       { ...base, kpiId: otherKpi.id, attempt: 1, level: '2', valid: true, rationale: 'The quote names no defined offering.', citations: [], adjustments: [{ code: 'no_definition_term', from: '4', to: '2', message: 'No cited quote names an offering from the KPI definition, so level 4 was lowered to 2.' }] },
     ]);
     return { secUrl: src!.url };
@@ -66,7 +67,8 @@ integration('Basket evidence API on Postgres', () => {
     expect(body.kpis.map(k => k.kpiId)).toEqual(framework.kpis.map(k => k.id));
     const text = body.kpis.find(k => k.kpiId === textKpi.id)!;
     expect(text).toMatchObject({ level: '3', scored: true, rationale: 'The filing reports deployed storage.' });
-    expect(text.citations.map((c: any) => [c.evidenceId, c.quoteVerified])).toEqual([['e1', true], ['e2', true], ['e3', false]]);
+    expect(text.citations.map((c: any) => [c.evidenceId, c.quoteVerified])).toEqual([['e1', true], ['e2', true], ['e3', false], ['e4', true]]);
+    expect(text.citations[3]).toMatchObject({ sourceUrl: 'https://assets.siemens.com/Siemens-Annual-Report-2025.pdf', sourceLabel: 'Siemens AG report fetched 2026-11-20' });
     expect(text.citations[0].sourceUrl).toBe(secUrl);
     expect(text.citations[0].sourceLabel).toContain('10-K');
     expect(text.citations[1].sourceUrl).toBe('https://filings.xbrl.org/LEI123/2025-12-31/ESEF/NL/0/a/reports/a.xhtml');

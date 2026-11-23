@@ -7,7 +7,7 @@ import { Hono } from 'hono';
 import { bodyLimit } from 'hono/body-limit';
 import { z } from 'zod';
 import { availableQuantIds, briefLimits, esefReportLink, frameworkToDraft, exposureStyles, limits, modelProfiles, quantCatalog, quoteInPassage, regionOptions, reviewLevels, sourceCatalog, validateBrief, validateFramework, weightings, type Brief, type Framework, type SourceId } from '@open-foresight/core';
-import { basketMembers, baskets, documentChunks, esefFilings, humanDecisions, kpiScores, secFilings, secSourceDocuments, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
+import { basketMembers, baskets, documentChunks, esefFilings, humanDecisions, kpiScores, secFilings, secSourceDocuments, webDocuments, kpiFrameworkDrafts, kpiFrameworkVersions, runStatusHistory, runUniverse, runs, approveGate } from '@open-foresight/db';
 
 export type AppDeps = {
   db: PostgresJsDatabase;
@@ -130,13 +130,16 @@ export function createApp(deps: AppDeps) {
     const chunks = cited.length ? await deps.db.select({ id: documentChunks.id, text: documentChunks.text }).from(documentChunks).where(inArray(documentChunks.id, [...new Set(cited.map(x => x.chunkId))])) : [];
     const chunkText = new Map(chunks.map(x => [x.id, x.text]));
     const secIds = [...new Set(cited.filter(x => x.docKind === 'sec_filing').map(x => x.docId))], esefIds = [...new Set(cited.filter(x => x.docKind === 'esef_filing').map(x => x.docId))];
-    const [secDocs, esefDocs] = await Promise.all([
+    const webIds = [...new Set(cited.filter(x => x.docKind === 'web_report').map(x => x.docId))];
+    const [secDocs, esefDocs, webDocs] = await Promise.all([
       secIds.length ? deps.db.select({ id: secFilings.id, form: secFilings.form, filedAt: secFilings.filedAt, url: secSourceDocuments.url }).from(secFilings).innerJoin(secSourceDocuments, eq(secSourceDocuments.id, secFilings.documentSourceId)).where(inArray(secFilings.id, secIds)) : [],
       esefIds.length ? deps.db.select({ id: esefFilings.id, entity: esefFilings.entityName, periodEnd: esefFilings.periodEnd, reportUrl: esefFilings.reportUrl }).from(esefFilings).where(inArray(esefFilings.id, esefIds)) : [],
+      webIds.length ? deps.db.select({ id: webDocuments.id, entity: webDocuments.entityName, url: webDocuments.finalUrl, fetchedAt: webDocuments.availableOn }).from(webDocuments).where(inArray(webDocuments.id, webIds)) : [],
     ]);
     const source = new Map<string, { label: string; url: string }>([
       ...secDocs.map(d => [d.id, { label: `SEC ${d.form} filed ${d.filedAt}`, url: d.url }] as const),
       ...esefDocs.map(d => [d.id, { label: `${d.entity} ESEF report for the period ending ${d.periodEnd}`, url: esefReportLink(d.reportUrl) }] as const),
+      ...webDocs.map(d => [d.id, { label: `${d.entity} report fetched ${d.fetchedAt}`, url: d.url }] as const),
     ]);
     const kpis = (version?.framework as Framework | undefined)?.kpis ?? [];
     return c.json({
