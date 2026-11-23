@@ -10,10 +10,13 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 const registrySchema = z.array(z.object({
   role: z.string().min(1),
   model: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
+  /** `warn` lets any provider of the model serve the route, without ZDR, and warns when no ZDR endpoint exists. The Reviewer only, by the operator decision of 2026-11-23. */
+  zdr: z.literal('warn').optional(),
 }).strict()).min(1).superRefine((items, ctx) => {
   const names = new Set<string>();
   for (const item of items) {
     if (names.has(item.role)) ctx.addIssue({ code: z.ZodIssueCode.custom, message: `Duplicate role: ${item.role}` });
+    if (item.zdr === 'warn' && item.role !== 'reviewer') ctx.addIssue({ code: z.ZodIssueCode.custom, message: `Only the reviewer route may run without ZDR, not ${item.role}` });
     names.add(item.role);
   }
 });
@@ -61,7 +64,7 @@ const completionSchema = z.object({
   }).passthrough().optional(),
 }).passthrough();
 
-type GatewayOptions = { apiKey: string; models: ModelConfig[]; db: PostgresJsDatabase; baseURL?: string; concurrency?: number };
+type GatewayOptions = { apiKey: string; models: ModelConfig[]; db: PostgresJsDatabase; baseURL?: string; concurrency?: number; warn?: (message: string) => void };
 type StructuredRequest<T extends ZodTypeAny> = {
   runId: string; role: string; promptVersion: string; system: string; user: string;
   schemaName: string; schema: T; inputEvidenceIds: string[]; seed?: number; maxOutputTokens?: number; onAudit?: (id: string) => void;
@@ -127,7 +130,8 @@ export async function createGateway(options: GatewayOptions) {
   const decisionsClient = new OpenAI({ apiKey: options.apiKey, baseURL: (options.baseURL ?? 'https://openrouter.ai/api/v1').replace(/\/v1\/?$/, ''), maxRetries: 0 });
   const available = modelsSchema.parse(await client.get('/models'));
   const zdr = zdrSchema.parse(await client.get('/endpoints/zdr'));
-  const selectedProviders = new Map<string, { tag: string; temperature: boolean; outputCap?: 'max_tokens' | 'max_completion_tokens' }>();
+  /** `tag` null means the route is not pinned: OpenRouter picks the provider and the response names it. */
+  const selectedProviders = new Map<string, { tag: string | null; temperature: boolean; outputCap?: 'max_tokens' | 'max_completion_tokens' }>();
   for (const config of registry) {
     if (!available.data.some(model => model.id === config.model)) throw new Error(`Unknown model: ${config.model}`);
     const separator = config.model.indexOf('/');
@@ -136,6 +140,18 @@ export async function createGateway(options: GatewayOptions) {
     const endpoints = endpointsSchema.parse(await client.get(`/models/${encodeURIComponent(author)}/${encodeURIComponent(slug)}/endpoints`));
     if (endpoints.data.id !== config.model) throw new Error(`Endpoint model mismatch: ${config.model}`);
     const requiredParameters = ['structured_outputs', 'tools'];
+    if (config.zdr === 'warn') {
+      const eligible = endpoints.data.endpoints.filter(endpoint => endpoint.supported_parameters.includes('structured_outputs'));
+      if (eligible.length === 0) throw new Error(`No provider with structured outputs for ${config.model}`);
+      if (!zdr.data.some(raw => zdrEndpointSchema.safeParse(raw).data?.model_id === config.model)) {
+        (options.warn ?? console.warn)(`No ZDR endpoint for ${config.model}. The ${config.role} route continues without ZDR on any provider, and every call records the provider that served it.`);
+      }
+      // A parameter every eligible endpoint supports is sent, so it never narrows where OpenRouter may route.
+      const everywhere = (parameter: string) => eligible.every(endpoint => endpoint.supported_parameters.includes(parameter));
+      selectedProviders.set(config.role, { tag: null, temperature: everywhere('temperature'),
+        outputCap: everywhere('max_completion_tokens') ? 'max_completion_tokens' : everywhere('max_tokens') ? 'max_tokens' : undefined });
+      continue;
+    }
     const candidates = zdr.data.flatMap(raw => {
       const parsed = zdrEndpointSchema.safeParse(raw);
       if (!parsed.success) return [];
@@ -195,7 +211,7 @@ export async function createGateway(options: GatewayOptions) {
       if (!config) throw new Error(`Unknown model role: ${input.role}`);
       const selected = selectedProviders.get(config.role);
       if (!selected) throw new Error(`No provider selected for ${config.role}`);
-      if (input.maxOutputTokens !== undefined && !selected.outputCap) throw new Error(`Provider ${selected.tag} lacks a supported output token limit for ${config.model}`);
+      if (input.maxOutputTokens !== undefined && !selected.outputCap) throw new Error(`Provider ${selected.tag ?? '(any)'} lacks a supported output token limit for ${config.model}`);
       const tokenLimit = input.maxOutputTokens === undefined ? {} : selected.outputCap === 'max_completion_tokens'
         ? { max_completion_tokens: input.maxOutputTokens }
         : { max_tokens: input.maxOutputTokens };
@@ -220,7 +236,9 @@ export async function createGateway(options: GatewayOptions) {
             ...(input.seed === undefined ? {} : { seed: input.seed }),
             ...tokenLimit, messages: [...messages],
             response_format: { type: 'json_schema' as const, json_schema: { name: input.schemaName, strict: true, schema } },
-            provider: { order: [selected.tag], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true },
+            provider: selected.tag === null
+              ? { allow_fallbacks: true, require_parameters: true, data_collection: 'deny' }
+              : { order: [selected.tag], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true },
             usage: { include: true },
           };
           const hash = requestHash(params);

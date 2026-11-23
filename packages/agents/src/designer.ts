@@ -9,7 +9,7 @@ import { loadPrompt, render } from '@open-foresight/prompts';
 export type StructuredGenerator = {
   generate<T extends ZodTypeAny>(input: {
     runId: string; role: string; promptVersion: string; system: string; user: string;
-    schemaName: string; schema: T; inputEvidenceIds: string[]; maxOutputTokens?: number; onAudit?: (id: string) => void;
+    schemaName: string; schema: T; inputEvidenceIds: string[]; maxOutputTokens?: number; onAudit?: (id: string) => void; cache?: boolean;
   }): Promise<z.infer<T>>;
 };
 

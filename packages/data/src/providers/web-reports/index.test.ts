@@ -6,7 +6,7 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import type { Heading } from '@open-foresight/core';
 import { webDocuments } from '@open-foresight/db';
-import { createWebReportsProvider } from './index.js';
+import { createWebReportsProvider, type StoredPage, type WebPageStore } from './index.js';
 
 const fixture = (name: string) => readFile(new URL(`../../../fixtures/web-reports/${name}`, import.meta.url));
 const pdf = new Uint8Array(await fixture('report.pdf'));
@@ -240,3 +240,28 @@ function makePdf(pages: string[][]) {
   out += `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`;
   return new TextEncoder().encode(out);
 }
+
+describe('a page store and a host policy in place of web_documents and an allow-list', () => {
+  const saved: StoredPage[] = [];
+  const store: WebPageStore = { previous: async () => undefined, save: async page => { saved.push(page); return `page-${saved.length}`; } };
+  const publicOnly = (u: URL) => !/^(localhost|10\.|127\.)/.test(u.hostname);
+
+  it('stores through the store with no database, and checks the policy at every redirect hop', async () => {
+    const start = 'https://news.example.org/story', private_ = 'https://10.0.0.8/report.html', page = 'https://ir.northwind.test/report';
+    const stub = web({
+      [start]: () => ({ status: 302, headers: { location: private_ } }),
+      [page]: htmlReply(html),
+    });
+    const provider = createWebReportsProvider({ userAgent: AGENT, hostAllowed: publicOnly, store, fetch: stub.fetcher, minDelayMs: 0, now: () => new Date('2026-11-24T09:00:00Z') });
+    const report = await provider.sync(input([start, page]));
+    expect(report.rejected).toEqual([{ url: start, reason: 'redirected_off_allow_list' }]);
+    expect(report.stored).toEqual([expect.objectContaining({ url: page, id: 'page-1' })]);
+    expect(saved[0]).toMatchObject({ url: page, contentType: 'text/html', fetchedAt: new Date('2026-11-24T09:00:00Z') });
+    expect(stub.calls.some(c => c.url.startsWith('https://10.0.0.8'))).toBe(false);
+  });
+
+  it('needs a database, a store, an allow-list or a policy', () => {
+    expect(() => createWebReportsProvider({ userAgent: AGENT, allowedDomains: ['northwind.test'] })).toThrow('A database or a store is required');
+    expect(() => createWebReportsProvider({ userAgent: AGENT, store })).toThrow('At least one allowed domain is required');
+  });
+});

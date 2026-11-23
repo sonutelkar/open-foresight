@@ -190,6 +190,20 @@
       "when": 1795454072671,
       "tag": "0026_jev_first_route",
       "breakpoints": true
+    },
+    {
+      "idx": 27,
+      "version": "7",
+      "when": 1795466425070,
+      "tag": "0027_reviews",
+      "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1795470617236,
+      "tag": "0028_label_sources",
+      "breakpoints": true
     }
   ]
 }

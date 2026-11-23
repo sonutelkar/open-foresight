@@ -20,7 +20,9 @@ export const releaseProvenances = ['ai-generated-human-sampled', 'human'] as con
 
 export const flaws = ['wrong_issuer', 'stale_evidence', 'talk_without_numbers', 'none'] as const;
 
-const recordBase = { id, theme: id, symbol: id, snapshotId: id, evidenceIds: z.array(id) };
+/** A stored copy of a public web page that a label cites: the passage, the stored page, its URL, when it was fetched and the sha256 of the fetched bytes. */
+export const webCitationSchema = z.object({ passageId: id, sourceId: id, url: z.string().url(), fetchedAt: z.string().datetime(), sha256 }).strict();
+const recordBase = { id, theme: id, symbol: id, snapshotId: id, evidenceIds: z.array(id), webCitations: z.array(webCitationSchema).optional() };
 
 /** A stock by KPI pair and its label. */
 export const kpiRecordSchema = z.object({ ...recordBase, kpiId: id, level: levelSchema, labelledBy: id, evidenceIds: z.array(id).min(1) }).strict();

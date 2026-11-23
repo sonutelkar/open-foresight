@@ -186,7 +186,7 @@ describe('phase2-eval CLI', () => {
     expect(runPhase2(['--mode', 'validate', '--data', d, '--allow-fixture']).stderr).toMatch(/broken.json: not valid JSON/);
   });
   it('refuses later modes and unknown arguments', () => {
-    expect(runPhase2(['--mode', 'reviewer', '--data', '.']).code).toBe(2);
+    expect(runPhase2(['--mode', 'prescreen', '--data', '.']).code).toBe(2);
     expect(runPhase2(['--bogus']).code).toBe(1);
   });
   it('metrics prints a report and --strict fails on incomplete or failed gates', () => {

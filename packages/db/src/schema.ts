@@ -279,6 +279,20 @@ export const kpiScores = pgTable('kpi_scores', {
 }, table => [uniqueIndex('kpi_scores_attempt').on(table.runId, table.securityId, table.kpiId, table.attempt)]);
 
 /**
+ * One Reviewer verdict on one score attempt. `scoreId` is the `kpi_scores` row, which is one attempt. Rows are never edited.
+ * `model` and `provider` are what served the call, copied from its `llm_calls` row. The Reviewer route is not pinned, so the provider can differ per call.
+ */
+export const reviews = pgTable('reviews', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  runId: uuid('run_id').notNull().references(() => runs.id),
+  scoreId: uuid('score_id').notNull().references(() => kpiScores.id),
+  llmCallId: uuid('llm_call_id').notNull().references(() => llmCalls.id),
+  promptVersion: text('prompt_version').notNull(), model: text('model').notNull(), provider: text('provider'),
+  verdict: text('verdict').notNull(), issue: text('issue').notNull(), note: text('note').notNull(), suggestedLevel: text('suggested_level'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [index('reviews_score').on(table.scoreId)]);
+
+/**
  * The framework a PM approved at gate 1, frozen. Scores reference it. It never changes.
  * `framework` is what was approved, after any edits, and `sourceDraftId` is the model draft it started from.
  */
@@ -383,3 +397,39 @@ export const reportDiscoveryAttempts = pgTable('report_discovery_attempts', {
   tokens: jsonb('tokens'), cost: numeric('cost'), latencyMs: integer('latency_ms'),
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 }, table => [index('report_discovery_issuer').on(table.issuerKey, table.createdAt)]);
+
+/**
+ * A public web page fetched as a cited source for a release evaluation label. It is never evidence for a score: it is in no snapshot,
+ * it is never chunked or indexed, and only the release label generator reads it. A label cites this stored copy, not the live page.
+ */
+export const labelSources = pgTable('label_sources', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  url: text('url').notNull(), finalUrl: text('final_url').notNull(),
+  contentType: text('content_type').notNull(), byteSize: integer('byte_size').notNull(),
+  /** Hash of the fetched bytes. The same URL with new bytes is a new row. */
+  rawSha256: text('raw_sha256').notNull(), etag: text('etag'), lastModified: text('last_modified'),
+  text: text('text').notNull(), headings: jsonb('headings').notNull(), extractor: text('extractor').notNull(),
+  /** The company the label is about. */
+  issuerKey: text('issuer_key').notNull(), entityName: text('entity_name').notNull(),
+  fetchedAt: timestamp('fetched_at', { withTimezone: true }).notNull(),
+  attemptId: uuid('attempt_id'),
+}, table => [uniqueIndex('label_sources_version').on(table.url, table.rawSha256)]);
+
+/**
+ * Every search for the sources of one label subject, with its discovery model call, the URLs it proposed and why each was rejected.
+ * Kept apart from `report_discovery_attempts`, so a label search never puts a company's report discovery into its cooldown.
+ */
+export const labelSourceAttempts = pgTable('label_source_attempts', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  /** `kpi`, `reviewer` or `relevance`, and the manifest record id the sources are for. */
+  subjectKind: text('subject_kind').notNull(), subjectId: text('subject_id').notNull(),
+  issuerKey: text('issuer_key').notNull(), entityName: text('entity_name').notNull(),
+  /** `stored`, `no_candidates`, `all_rejected` or `error`. */
+  outcome: text('outcome').notNull(),
+  candidates: jsonb('candidates').notNull(), rejected: jsonb('rejected').notNull(),
+  promptVersion: text('prompt_version').notNull(), model: text('model'), provider: text('provider'),
+  /** False when the provider could not honor zero data retention and the call went ahead without it. */
+  zdr: boolean('zdr'), params: jsonb('params'), response: jsonb('response'), error: text('error'),
+  tokens: jsonb('tokens'), cost: numeric('cost'), latencyMs: integer('latency_ms'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+}, table => [index('label_source_attempts_subject').on(table.subjectKind, table.subjectId)]);

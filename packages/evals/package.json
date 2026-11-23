@@ -10,6 +10,7 @@
     "eval": "node dist/cli.js"
   },
   "dependencies": {
+    "@open-foresight/core": "workspace:*",
     "zod": "3.25.76"
   },
   "devDependencies": {

@@ -25,6 +25,15 @@ export type WebReportsSyncReport = {
   unchanged: string[];
   rejected: Array<{ url: string; reason: WebReportRejection }>;
 };
+/** A fetched page as it is stored. */
+export type StoredPage = Omit<typeof webDocuments.$inferInsert, 'id'>;
+/** Where fetched pages go. The default is `web_documents`. */
+export type WebPageStore = {
+  /** The validators of the latest stored copy of a URL, for a conditional request. */
+  previous(url: string): Promise<{ etag: string | null; lastModified: string | null } | undefined>;
+  /** Stores a page and returns its id, or null when the same page is already stored. */
+  save(page: StoredPage): Promise<string | null>;
+};
 type Input = z.infer<typeof inputSchema>;
 type Rule = { allow: boolean; pattern: string };
 type Rejected = { reason: WebReportRejection };
@@ -47,9 +56,13 @@ const discard = (response: Response) => response.body?.cancel().catch(() => unde
  * instead of stopping the rest. A report is evidence from the UTC day it was first fetched in that version.
  */
 export function createWebReportsProvider(options: {
-  db: PostgresJsDatabase; userAgent: string;
+  /** Needed unless `store` is given. */
+  db?: PostgresJsDatabase; userAgent: string;
   /** A host matches a domain when it equals it or is a subdomain of it. */
-  allowedDomains: string[];
+  allowedDomains?: string[];
+  /** Replaces the domain allow-list with a policy of its own, checked at every hop like the allow-list. */
+  hostAllowed?: (url: URL) => boolean;
+  store?: WebPageStore;
   fetch?: typeof fetch; now?: () => Date;
   /** Least time between the starts of two requests to one host. Default 2000. */
   minDelayMs?: number;
@@ -57,9 +70,14 @@ export function createWebReportsProvider(options: {
   maxBytes?: number;
 }): DataProvider<WebReportsSyncInput, WebReportsSyncReport> {
   const userAgent = options.userAgent.trim();
-  const domains = options.allowedDomains.map(d => d.trim().toLowerCase().replace(/^\.+|\.+$/g, '')).filter(Boolean);
+  const domains = (options.allowedDomains ?? []).map(d => d.trim().toLowerCase().replace(/^\.+|\.+$/g, '')).filter(Boolean);
   if (!userAgent) throw new Error('A user agent is required');
-  if (domains.length === 0) throw new Error('At least one allowed domain is required');
+  if (domains.length === 0 && !options.hostAllowed) throw new Error('At least one allowed domain is required');
+  const db = options.db;
+  const store: WebPageStore = options.store ?? (db ? {
+    previous: async url => (await db.select({ etag: webDocuments.etag, lastModified: webDocuments.lastModified }).from(webDocuments).where(eq(webDocuments.url, url)).orderBy(desc(webDocuments.fetchedAt)).limit(1))[0],
+    save: async page => (await db.insert(webDocuments).values(page).onConflictDoNothing().returning({ id: webDocuments.id }))[0]?.id ?? null,
+  } : (() => { throw new Error('A database or a store is required'); })());
   const agentToken = (userAgent.split(/[\s/]/)[0] ?? userAgent).toLowerCase();
   const fetcher = options.fetch ?? fetch;
   const now = options.now ?? (() => new Date());
@@ -69,6 +87,7 @@ export function createWebReportsProvider(options: {
   const robots = new Map<string, Promise<Rule[] | 'unreachable'>>();
 
   const allowedHost = (url: URL) => {
+    if (options.hostAllowed) return options.hostAllowed(url);
     const host = url.hostname.replace(/\.$/, '');
     return domains.some(d => host === d || host.endsWith(`.${d}`));
   };
@@ -119,8 +138,7 @@ export function createWebReportsProvider(options: {
     let url: URL;
     try { url = new URL(raw); } catch { return { reason: 'invalid_url' }; }
     url.hash = '';
-    const [previous] = await options.db.select({ etag: webDocuments.etag, lastModified: webDocuments.lastModified }).from(webDocuments)
-      .where(eq(webDocuments.url, url.href)).orderBy(desc(webDocuments.fetchedAt)).limit(1);
+    const previous = await store.previous(url.href);
     const conditional: Record<string, string> = {};
     if (previous?.etag) conditional['if-none-match'] = previous.etag;
     if (previous?.lastModified) conditional['if-modified-since'] = previous.lastModified;
@@ -150,14 +168,14 @@ export function createWebReportsProvider(options: {
     if (!input.mustMention.some(name => head.includes(name.toLowerCase()))) return { reason: 'wrong_company' };
 
     const fetchedAt = now();
-    const [row] = await options.db.insert(webDocuments).values({
+    const id = await store.save({
       url: url.href, finalUrl: finalUrl.href, contentType, byteSize, rawSha256,
       etag: response.headers.get('etag'), lastModified: response.headers.get('last-modified'),
       text, headings, extractor: kind === 'pdf' ? `unpdf@${unpdfVersion}` : 'core-html',
       issuerKey: input.issuerKey, entityName: input.entityName, periodEnd: input.periodEnd ?? null,
       fetchedAt, availableOn: fetchedAt.toISOString().slice(0, 10), attemptId: input.attemptId ?? null,
-    }).onConflictDoNothing().returning({ id: webDocuments.id });
-    return row ? { url: raw, id: row.id, pages, chars: text.length } : 'unchanged';
+    });
+    return id ? { url: raw, id, pages, chars: text.length } : 'unchanged';
   }
 
   return {
