@@ -185,6 +185,30 @@ describe('the offline fixture path', () => {
   });
 });
 
+it('retries rejected labels without reissuing accepted records', async () => {
+  const work = fresh();
+  const { run, inputs, labels, sources } = await offlineRun(work);
+  const before = labels('reviewer');
+  const rejected = before.rejected[0];
+  expect(rejected).toBeDefined();
+  if (!rejected) throw new Error('Fixture needs a rejected reviewer label');
+  const item = flawedFileSchema.parse(readJson(join(work, 'flawed.json'))).items.find(i => i.id === rejected.id);
+  if (!item) throw new Error('Missing fixture item');
+  const responsesPath = join(inputs, 'responses.json');
+  const answers = recordedResponsesSchema.parse(readJson(responsesPath));
+  const web = sources('reviewer').entries[item.id]?.sources.flatMap(s => s.passages) ?? [];
+  answers.responses[`reviewer:${item.id}`] = JSON.stringify({ flaw: item.flaw, evidence: [item.citations[0]!.evidenceId, ...(web.length ? ['w1'] : [])], rationale: 'The cited passages support the label.' });
+  const accepted = before.records[0];
+  if (!accepted) throw new Error('Fixture needs an accepted reviewer label');
+  answers.responses[`reviewer:${accepted.id}`] = 'not JSON';
+  writeFileSync(responsesPath, JSON.stringify(answers));
+  await run('label', '--manifest-kind', 'reviewer', '--responses', responsesPath, '--retry-rejected');
+  const after = labels('reviewer');
+  expect(after.records.some(r => r.id === item.id)).toBe(true);
+  expect(after.rejected.some(r => r.id === item.id)).toBe(false);
+  expect(after.records.find(r => r.id === accepted.id)).toEqual(accepted);
+});
+
 describe('assembling short or unchecked sets', () => {
   it('refuses to assemble when drops leave fewer than 100 flawed scores, and writes nothing', async () => {
     const work = fresh();

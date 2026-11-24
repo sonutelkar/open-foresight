@@ -29,10 +29,11 @@ async function fixture(mode: 'ok' | 'retry' | 'missing' | 'no-zdr', kind: 'noul'
   if (!address || typeof address === 'string') throw new Error('Missing server address');
   const values = vi.fn((_value: { params: { provider: unknown }; requestHash: string }) => ({ returning: async () => [{ id: 'audit' }] }));
   const db = { insert: vi.fn(() => ({ values })) } as unknown as PostgresJsDatabase;
-  const gateway = await createGateway({ apiKey: 'fixture', models: [{ role: 'designer', model: 'test/model' }], db, baseURL: `http://127.0.0.1:${address.port}/v1` });
+  const warn = vi.fn();
+  const gateway = await createGateway({ apiKey: 'fixture', models: [{ role: 'designer', model: 'test/model' }], db, warn, baseURL: `http://127.0.0.1:${address.port}/v1` });
   const input = { runId: 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', role: 'jev-evaluation', promptVersion: 'v1', model: 'typesafe/jev-1.14' as const, state: saved.request.state, questions: saved.request.questions, inputEvidenceIds: ['e1'] };
   const close = () => new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve()));
-  return { gateway, input, calls, values, close };
+  return { gateway, input, calls, values, warn, close };
 }
 
 for (const kind of ['noul', 'choice', 'score'] as const) it(`validates and audits recorded ${kind} answers`, async () => {
@@ -61,8 +62,14 @@ it('rejects missing probabilities without retrying', async () => {
   finally { await f.close(); }
 });
 
-it('fails closed when the ZDR catalog does not list Jev', async () => {
+it('warns and continues with the pinned Jev provider when it is not in the ZDR catalog', async () => {
   const f = await fixture('no-zdr');
-  try { await expect(f.gateway.decide(f.input)).rejects.toThrow('No verified ZDR provider'); expect(f.calls).toHaveLength(0); }
+  try {
+    await f.gateway.decide(f.input);
+    expect(f.calls).toHaveLength(1);
+    expect(f.warn).toHaveBeenCalledOnce();
+    expect(f.values.mock.calls[0]?.[0].params.provider).toMatchObject({ order: ['typesafe'], allow_fallbacks: false, require_parameters: true, data_collection: 'deny' });
+    expect(f.values.mock.calls[0]?.[0].params.provider).not.toHaveProperty('zdr', true);
+  }
   finally { await f.close(); }
 });

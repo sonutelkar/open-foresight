@@ -7,9 +7,11 @@ import { eq } from 'drizzle-orm';
 export * from './loop.js';
 import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 
+const providerTag = /^[a-zA-Z0-9][a-zA-Z0-9._-]*(?:\/[a-zA-Z0-9][a-zA-Z0-9._-]*)*$/;
 const registrySchema = z.array(z.object({
   role: z.string().min(1),
   model: z.string().regex(/^[^/\s]+\/[^/\s]+$/),
+  provider: z.string().regex(providerTag).optional(),
   /** `warn` lets any provider of the model serve the route, without ZDR, and warns when no ZDR endpoint exists. The Reviewer only, by the operator decision of 2026-11-23. */
   zdr: z.literal('warn').optional(),
 }).strict()).min(1).superRefine((items, ctx) => {
@@ -17,6 +19,7 @@ const registrySchema = z.array(z.object({
   for (const item of items) {
     if (names.has(item.role)) ctx.addIssue({ code: z.ZodIssueCode.custom, message: `Duplicate role: ${item.role}` });
     if (item.zdr === 'warn' && item.role !== 'reviewer') ctx.addIssue({ code: z.ZodIssueCode.custom, message: `Only the reviewer route may run without ZDR, not ${item.role}` });
+    if (item.zdr === 'warn' && item.provider) ctx.addIssue({ code: z.ZodIssueCode.custom, message: 'The unpinned reviewer route cannot select a provider' });
     names.add(item.role);
   }
 });
@@ -28,7 +31,6 @@ const endpointsSchema = z.object({ data: z.object({ id: z.string(), endpoints: z
 const zdrSchema = z.object({ data: z.array(z.unknown()) });
 const zdrEndpointSchema = z.object({ model_id: z.string(), tag: z.string(), supported_parameters: z.array(z.string()), pricing: z.unknown().optional() });
 const pricingSchema = z.object({ prompt: z.union([z.string(), z.number()]), completion: z.union([z.string(), z.number()]), request: z.union([z.string(), z.number()]).optional() });
-const providerTag = /^[a-zA-Z0-9][a-zA-Z0-9._-]*(?:\/[a-zA-Z0-9][a-zA-Z0-9._-]*)*$/;
 type Fraction = { numerator: bigint; denominator: bigint };
 function parsePrice(value: string | number): Fraction | undefined {
   const text = String(value);
@@ -130,6 +132,7 @@ export async function createGateway(options: GatewayOptions) {
   const decisionsClient = new OpenAI({ apiKey: options.apiKey, baseURL: (options.baseURL ?? 'https://openrouter.ai/api/v1').replace(/\/v1\/?$/, ''), maxRetries: 0 });
   const available = modelsSchema.parse(await client.get('/models'));
   const zdr = zdrSchema.parse(await client.get('/endpoints/zdr'));
+  let warnedJevPrivacy = false;
   /** `tag` null means the route is not pinned: OpenRouter picks the provider and the response names it. */
   const selectedProviders = new Map<string, { tag: string | null; temperature: boolean; outputCap?: 'max_tokens' | 'max_completion_tokens' }>();
   for (const config of registry) {
@@ -156,7 +159,7 @@ export async function createGateway(options: GatewayOptions) {
       const parsed = zdrEndpointSchema.safeParse(raw);
       if (!parsed.success) return [];
       const item = parsed.data;
-      if (item.model_id !== config.model || !providerTag.test(item.tag) || !requiredParameters.every(parameter => item.supported_parameters.includes(parameter))) return [];
+      if (item.model_id !== config.model || (config.provider && item.tag !== config.provider) || !providerTag.test(item.tag) || !requiredParameters.every(parameter => item.supported_parameters.includes(parameter))) return [];
       if (!endpoints.data.endpoints.some(endpoint => endpoint.tag === item.tag && requiredParameters.every(parameter => endpoint.supported_parameters.includes(parameter)))) return [];
       const pricing = pricingSchema.safeParse(item.pricing);
       if (!pricing.success) return [];
@@ -180,8 +183,12 @@ export async function createGateway(options: GatewayOptions) {
   return {
     async decide(input: DecisionRequest): Promise<DecisionResult> {
       const parsed = decisionRequestSchema.parse(input);
-      if (!zdr.data.some(raw => { const item = zdrEndpointSchema.safeParse(raw); return item.success && item.data.model_id === parsed.model && item.data.tag === 'typesafe'; })) throw new Error('No verified ZDR provider for decision model');
-      const params = { model: parsed.model, state: parsed.state, questions: parsed.questions, provider: { order: ['typesafe'], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true } };
+      const hasZdr = zdr.data.some(raw => { const item = zdrEndpointSchema.safeParse(raw); return item.success && item.data.model_id === parsed.model && item.data.tag === 'typesafe'; });
+      if (!hasZdr && !warnedJevPrivacy) {
+        (options.warn ?? console.warn)('Jev has no verified ZDR endpoint; continuing with the pinned provider without a ZDR requirement.');
+        warnedJevPrivacy = true;
+      }
+      const params = { model: parsed.model, state: parsed.state, questions: parsed.questions, provider: { order: ['typesafe'], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', ...(hasZdr ? { zdr: true } : {}) } };
       const hash = requestHash({ capability: 'decide', endpoint: '/alpha/decisions', ...params });
       for (let attempt = 0; attempt < 2; attempt++) {
         const started = performance.now();

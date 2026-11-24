@@ -4,6 +4,7 @@
 - All LLM calls go through packages/llm (openai SDK → OpenRouter, pinned provider,
   allow_fallbacks=false, require_parameters=true, zdr=true).
 - Exception, Reviewer only (operator decision 2026-11-23): the `reviewer` route (`zdr: 'warn'`) is unpinned and does not require ZDR; the gateway warns when no ZDR endpoint exists and records the served provider.
+- Exception, Jev decisions only (operator decision 2026-11-23): keep the TypeSafe provider pinned and deny data collection, but warn and proceed without requiring ZDR when its endpoint is not listed as ZDR. Record the provider and routing parameters.
 - Agents read only the local Postgres store; never call external APIs from agent tools.
 - EODHD adapter must stay optional (disabled without EODHD_API_KEY).
 - Tests use recorded fixtures; never hit paid APIs in tests.

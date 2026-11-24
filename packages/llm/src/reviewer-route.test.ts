@@ -4,7 +4,7 @@ import type { PostgresJsDatabase } from 'drizzle-orm/postgres-js';
 import { afterEach, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 import { llmCalls } from '@open-foresight/db';
-import { createGateway } from './index.js';
+import { createGateway, type ModelConfig } from './index.js';
 
 const reviewerModel = 'deepseek/deepseek-v4.1-flash-1017';
 const params = ['structured_outputs', 'tools', 'temperature', 'max_tokens'];
@@ -12,16 +12,17 @@ const closers: Array<() => Promise<void>> = [];
 afterEach(async () => { for (const close of closers.splice(0)) await close(); });
 
 /** A fixture OpenRouter with a pinned ZDR analyst model and a Reviewer model served by two providers. */
-async function fixture(options: { reviewerZdr?: boolean; reviewerEndpoints?: Array<{ tag: string; supported_parameters: string[] }> } = {}) {
+async function fixture(options: { reviewerZdr?: boolean; reviewerEndpoints?: Array<{ tag: string; supported_parameters: string[] }>; analystSecondProvider?: boolean } = {}) {
   const requests: Array<Record<string, unknown>> = [];
   const server = createServer(async (req, res) => {
     res.setHeader('content-type', 'application/json');
     if (req.url === '/v1/models') return res.end(JSON.stringify({ data: [{ id: 'test/analyst' }, { id: reviewerModel }] }));
     if (req.url === '/v1/endpoints/zdr') return res.end(JSON.stringify({ data: [
       { model_id: 'test/analyst', tag: 'zdr-tag', supported_parameters: params, pricing: { prompt: '0', completion: '0' } },
+      ...(options.analystSecondProvider ? [{ model_id: 'test/analyst', tag: 'zdr-standard', supported_parameters: params, pricing: { prompt: '1', completion: '1' } }] : []),
       ...(options.reviewerZdr ? [{ model_id: reviewerModel, tag: 'deepinfra/fp8', supported_parameters: params, pricing: { prompt: '0', completion: '0' } }] : []),
     ] }));
-    if (req.url === '/v1/models/test/analyst/endpoints') return res.end(JSON.stringify({ data: { id: 'test/analyst', endpoints: [{ tag: 'zdr-tag', supported_parameters: params }] } }));
+    if (req.url === '/v1/models/test/analyst/endpoints') return res.end(JSON.stringify({ data: { id: 'test/analyst', endpoints: [{ tag: 'zdr-tag', supported_parameters: params }, ...(options.analystSecondProvider ? [{ tag: 'zdr-standard', supported_parameters: params }] : [])] } }));
     if (req.url === `/v1/models/${reviewerModel}/endpoints`) return res.end(JSON.stringify({ data: { id: reviewerModel, endpoints: options.reviewerEndpoints ?? [{ tag: 'deepinfra/fp8', supported_parameters: params }, { tag: 'novita', supported_parameters: params }] } }));
     let body = '';
     for await (const part of req) body += part;
@@ -43,7 +44,7 @@ async function fixture(options: { reviewerZdr?: boolean; reviewerEndpoints?: Arr
     } }),
   } as unknown as PostgresJsDatabase;
   const warn = vi.fn();
-  const create = (models = [{ role: 'analyst', model: 'test/analyst' }, { role: 'reviewer', model: reviewerModel, zdr: 'warn' as const }]) =>
+  const create = (models: ModelConfig[] = [{ role: 'analyst', model: 'test/analyst' }, { role: 'reviewer', model: reviewerModel, zdr: 'warn' as const }]) =>
     createGateway({ apiKey: 'fixture', models, db, warn, baseURL: `http://127.0.0.1:${address.port}/v1` });
   return { requests, audits, warn, create };
 }
@@ -67,6 +68,14 @@ it('keeps every scoring route pinned to its ZDR provider in the same gateway', a
   await gateway.generate(request('analyst'));
   expect(f.requests[0]?.provider).toEqual({ order: ['zdr-tag'], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true });
   expect(f.audits[0]).toMatchObject({ role: 'analyst', provider: 'ZdrProvider' });
+});
+
+it('uses an explicitly selected ZDR provider and rejects an unavailable selection', async () => {
+  const f = await fixture({ analystSecondProvider: true });
+  const gateway = await f.create([{ role: 'analyst', model: 'test/analyst', provider: 'zdr-standard' }]);
+  await gateway.generate(request('analyst'));
+  expect(f.requests[0]?.provider).toEqual({ order: ['zdr-standard'], allow_fallbacks: false, require_parameters: true, data_collection: 'deny', zdr: true });
+  await expect(f.create([{ role: 'analyst', model: 'test/analyst', provider: 'missing' }])).rejects.toThrow('No eligible ZDR provider');
 });
 
 it('does not warn when a ZDR endpoint exists, and still does not pin the Reviewer', async () => {

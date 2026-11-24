@@ -56,7 +56,7 @@ type Env = Readonly<Record<string, string | undefined>>;
 export const labelsUsage = `Usage: phase2-labels.ts <command> [--work <dir>] ...
   build-flawed --snapshot <id>... --run <theme>=<runId>... [--seed N] [--flawed 100] [--clean 100] --yes-write
   collect-sources --manifest-kind kpi|reviewer|relevance [--snapshot <id>... --run <theme>=<runId>...] [--seed N] [--count N] --yes-spend
-  label --manifest-kind kpi|reviewer|relevance [--snapshot <id>... --run <theme>=<runId>...] [--seed N] [--count N] [--concurrency 4] --yes-spend
+  label --manifest-kind kpi|reviewer|relevance [--snapshot <id>... --run <theme>=<runId>...] [--seed N] [--count N] [--concurrency 4] [--retry-rejected] --yes-spend
   sample-human [--seed N]
   record-human-check --kind kpi|reviewer|relevance --sheet <returned.csv> --reviewer <name>...
   assemble --out <dir> [--allow-fixture]
@@ -67,7 +67,7 @@ Themes: ${releaseThemeIds.join(', ')}. Give one --run per theme or more, and --s
 type Options = {
   command: string; work: string; snapshots: string[]; runs: ThemeRun[]; seed: number; flawed: number; clean: number; count?: number;
   manifestKind?: ManifestKind; kind?: ManifestKind; from?: string; responses?: string; searches?: string; pages?: string; sheet?: string; reviewers: string[]; out?: string;
-  yesSpend: boolean; yesWrite: boolean; allowFixture: boolean; concurrency: number;
+  yesSpend: boolean; yesWrite: boolean; allowFixture: boolean; retryRejected: boolean; concurrency: number;
 };
 
 class UsageError extends Error {}
@@ -75,7 +75,7 @@ const themeIds = new Set<string>(releaseThemeIds);
 function parseOptions(args: readonly string[]): Options {
   const [command, ...rest] = args;
   if (!command || command.startsWith('--')) throw new UsageError('Name a command.');
-  const o: Options = { command, work: 'docs/evaluation/labelling', snapshots: [], runs: [], seed: defaultLabelSeed, flawed: 100, clean: 100, reviewers: [], yesSpend: false, yesWrite: false, allowFixture: false, concurrency: 4 };
+  const o: Options = { command, work: 'docs/evaluation/labelling', snapshots: [], runs: [], seed: defaultLabelSeed, flawed: 100, clean: 100, reviewers: [], yesSpend: false, yesWrite: false, allowFixture: false, retryRejected: false, concurrency: 4 };
   const value = (i: number) => { const v = rest[i + 1]; if (v === undefined || v.startsWith('--')) throw new UsageError(`${rest[i]} needs a value.`); return v; };
   const whole = (i: number, min: number) => { const n = Number(value(i)); if (!Number.isSafeInteger(n) || n < min) throw new UsageError(`${rest[i]} takes a whole number of at least ${min}.`); return n; };
   const kind = (i: number) => { const v = value(i); if (!(releaseKinds as readonly string[]).includes(v)) throw new UsageError(`${rest[i]} takes kpi, reviewer or relevance.`); return v as ManifestKind; };
@@ -104,6 +104,7 @@ function parseOptions(args: readonly string[]): Options {
     else if (a === '--yes-spend') o.yesSpend = true;
     else if (a === '--yes-write') o.yesWrite = true;
     else if (a === '--allow-fixture') o.allowFixture = true;
+    else if (a === '--retry-rejected') o.retryRejected = true;
     else throw new UsageError(`Unknown argument ${a}.`);
   }
   return o;
@@ -437,7 +438,7 @@ async function label(o: Options, env: Env, deps: LabelsDeps): Promise<LabelsResu
   if (existing && (existing.kind !== kind || existing.labeller.model !== labeller.model || existing.labeller.promptVersion !== prompt.promptVersion || existing.sampling.seed !== seed)) {
     return fail(`${path} was labelled by ${existing.labeller.model} with ${existing.labeller.promptVersion} and seed ${existing.sampling.seed}. Move it away to label with ${labeller.model}, ${prompt.promptVersion} and seed ${seed}.`);
   }
-  const done = new Set([...(existing?.records ?? []), ...(existing?.dropped ?? []), ...(existing?.rejected ?? [])].map(r => r.id));
+  const done = new Set([...(existing?.records ?? []), ...(existing?.dropped ?? []), ...(o.retryRejected ? [] : existing?.rejected ?? [])].map(r => r.id));
 
   if (!fixture) {
     const reasons = liveBlockers(o, env, { key: true, snapshot: kind !== 'reviewer', flag: '--yes-spend' });
@@ -498,11 +499,12 @@ async function label(o: Options, env: Env, deps: LabelsDeps): Promise<LabelsResu
       return file as LabelFile;
     };
 
-    const labelOne = async (s: Subject) => {
+    const labelOne = async (s: Subject, retryingRejected: boolean) => {
       const web = webOf(s);
       const raw = await generatorFor(s.id).generate({
         runId: auditRunId, role: 'labeller', promptVersion: prompt.promptVersion, system: prompt.system, schemaName, schema: s.schema, maxOutputTokens: 8000,
-        user: s.user(joinPassages(web.map(w => `[${w.label}] ${w.source.finalUrl} | stored copy fetched ${w.source.fetchedAt}\n${w.passage.text}`), '(none: no public web page about this company could be stored)')),
+        user: s.user(joinPassages(web.map(w => `[${w.label}] ${w.source.finalUrl} | stored copy fetched ${w.source.fetchedAt}\n${w.passage.text}`), '(none: no public web page about this company could be stored)'))
+          + (retryingRejected ? '\nThe previous answer failed citation validation. Name only passage labels shown above, and include a web passage label when one is shown.' : ''),
         inputEvidenceIds: [...s.evidenceIds, ...web.map(w => w.passage.id)],
       });
       const parsed = s.parse(raw);
@@ -531,7 +533,7 @@ async function label(o: Options, env: Env, deps: LabelsDeps): Promise<LabelsResu
     await Promise.all(Array.from({ length: Math.min(o.concurrency, todo.length) }, async () => {
       while (next < todo.length) {
         const s = todo[next++]!;
-        try { await labelOne(s); failed.delete(s.id); } catch (error) { failed.set(s.id, error instanceof Error ? error.message : String(error)); }
+        try { const retryingRejected = rejected.delete(s.id); await labelOne(s, retryingRejected); failed.delete(s.id); } catch (error) { failed.set(s.id, error instanceof Error ? error.message : String(error)); }
         save(false);
       }
     }));
